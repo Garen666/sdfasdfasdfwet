@@ -39,6 +39,29 @@ class shop_lot_type extends Engine_Class {
 
             $this->setValue('lotTypeAllArray', $lotTypeAllArray);
 
+            $gameFilter = $lotType->getAllFilterName();
+            $gameFilterNameArray = array();
+            while ($x = $gameFilter->getNext()) {
+                $gameFilterNameArray[] = array(
+                    'id' => $x->getId(),
+                    'name' => $x->getName()
+                );
+            }
+
+            $gameFilterValue = $game->getAllFilterValue();
+            $gameFilterValueArray = array();
+
+            while ($x = $gameFilterValue->getNext()) {
+                $gameFilterValueArray[$x->getGameFilterId()][] = array(
+                    'id' => $x->getId(),
+                    'value' => $x->getValue()
+                );
+            }
+
+            $this->setValue('gameFilterNameArray', $gameFilterNameArray);
+            $this->setValue('gameFilterValueArray', $gameFilterValueArray);
+
+
             $this->setValue('description', $lotType->getDescription());
 
 

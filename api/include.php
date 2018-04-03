@@ -78,7 +78,7 @@ if (PackageLoader::Get()->getMode('development') && isset($connection)) {
     // отключаем кешироание вообще
 
     // игры
-    $table = SQLObject_Config::Get()->addClass('XShopGame', 'shopGame');
+    $table = SQLObject_Config::Get()->addClass('XGame', 'game');
     $table->addField('id', 'int(11)', 'auto_increment');
     $table->addIndexPrimary('id');
     $table->addField('name', 'varchar(255)');
@@ -93,6 +93,27 @@ if (PackageLoader::Get()->getMode('development') && isset($connection)) {
     $table->addField('seoh1', 'varchar(255)'); // seo h1 title у товара
     $table->addField('seocontent', 'text'); // seo текст
     $table->addField('seokeywords', 'varchar(255)'); // seo ключевые слова
+
+    $table = SQLObject_Config::Get()->addClass('XGameFilter', 'gameFilter');
+    $table->addField('id', 'int(11)', 'auto_increment');
+    $table->addIndexPrimary('id');
+    $table->addField('name', 'varchar(255)');
+    $table->addField('gameId', 'int(11)');
+    $table->addField('hidden', 'tinyint(1)');
+    $table->addField('deleted', 'tinyint(1)');
+
+    $table = SQLObject_Config::Get()->addClass('XGameLotTypeFilter', 'gameLotTypeFilter');
+    $table->addField('id', 'int(11)', 'auto_increment');
+    $table->addIndexPrimary('id');
+    $table->addField('lotTypeId', 'int(11)');
+    $table->addField('gameFilterId', 'tinyint(1)');
+
+    $table = SQLObject_Config::Get()->addClass('XGameFilterValue', 'gameFilterValue');
+    $table->addField('id', 'int(11)', 'auto_increment');
+    $table->addIndexPrimary('id');
+    $table->addField('gameId', 'int(11)');
+    $table->addField('gameFilterId', 'int(11)');
+    $table->addField('value', 'varchar(255)');
 
     // типы лотов в играх
     $table = SQLObject_Config::Get()->addClass('XLotType', 'lotType');
@@ -114,6 +135,8 @@ if (PackageLoader::Get()->getMode('development') && isset($connection)) {
     $table->addField('lotTypeId', 'int(11)');
     $table->addField('hidden', 'tinyint(1)'); // cкрытая категория
     $table->addField('deleted', 'tinyint(1)'); // cкрытая категория
+
+
 
     $table = SQLObject_Config::Get()->addClass('XLotFilterValue', 'lotFilterValue');
     $table->addField('id', 'int(11)', 'auto_increment');

@@ -40,7 +40,7 @@ class games_index extends Engine_Class {
         $_SESSION['categoryid'] = $this->getArgumentSecure('categoryid');
 
 
-        // массовые операции над товарами
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         $massAction =
             $this->getArgumentSecure('hide')
             || $this->getArgumentSecure('delete')
@@ -62,12 +62,12 @@ class games_index extends Engine_Class {
     }
 
     /**
-     * @return ShopGame
+     * @return Game
      */
     private function _getOpenGame() {
         $openCategory = false;
         $categoryid = $this->getArgumentSecure('categoryid');
-        if ($categoryid === '0') { // товары без категории
+        if ($categoryid === '0') { // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
             return 0;
         } else if ( $categoryid ) {
             $this->setValue('openCategoryId',$categoryid);
@@ -83,17 +83,17 @@ class games_index extends Engine_Class {
     }
 
     /**
-     * Делаем массив категорий для папок и устанавливаем продуктам категорию
+     * пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
      * @param ShopProduct $product
      * @param array $arguments
      * @return array
      */
     private function _makeCategoryArrayForFolders(ShopProduct $product, $arguments = array()) {
 
-        // Если нет категории и фильтров, выводим категории верхнего уровня
+        // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
         if ( !$openCategory && empty($arguments)) {
             $product->setCategoryid(0);
-            // С категориями
+            // пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
             if ($openCategory !== 0) {
                 $category = Shop::Get()->getShopService()->getCategoryAll();
                 $category->setParentid(0);
@@ -107,7 +107,7 @@ class games_index extends Engine_Class {
                     );
                 }
             }
-        } else if ($openCategory || !empty($arguments)) { // Если есть категория, или фильтры
+        } else if ($openCategory || !empty($arguments)) { // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
             $orArr = array();
             $level = 1;
             $openCategoryId = false;
@@ -119,7 +119,7 @@ class games_index extends Engine_Class {
             }
 
             try {
-                // выбрана категория
+                // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
                 if ($openCategoryId != false) {
                     $parentCategory = $openCategory->getParent();
                     $this->setValue('openCategory', array(
@@ -136,21 +136,21 @@ class games_index extends Engine_Class {
                 ));
             }
             if ($openCategoryId) {
-                // Ищим продукты во всех вложенных категориях
+                // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
                 for ($i = $level; $i <= 10; $i++ ) {
                     $orArr[] = "category{$i}id = {$openCategoryId}";
                 }
                 $product->addWhereQuery("(" . implode(' OR ', $orArr) . ")");
             }
 
-            // Определяем категории в которые входят найденные продукты
+            // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
             while ($p = $product->getNext()) {
                 try {
                     $category = $p->getCategory();
-                    // если выбрана категория и она не верхняя
+                    // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
                     if ($openCategoryId !== false && $category->getParentid() != $openCategoryId) {
-                        $category = $this->_getTopParentCategory($category, $level + 1); // Категория на уровень ниже
-                    } else if ($openCategoryId === false) { // Если не выбрана категория
+                        $category = $this->_getTopParentCategory($category, $level + 1); // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
+                    } else if ($openCategoryId === false) { // пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
                         $category = $this->_getTopParentCategory($category);
                     }
 
@@ -166,8 +166,8 @@ class games_index extends Engine_Class {
                 }
             }
 
-            unset($a[$openCategoryId]); // удаляем текущую категорию с вывода
-            $product->setCategoryid($openCategoryId); // выводим товары только текущей категории
+            unset($a[$openCategoryId]); // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+            $product->setCategoryid($openCategoryId); // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         }
 
         return  $a;
@@ -176,7 +176,7 @@ class games_index extends Engine_Class {
     /**
      * @return array|int
      */
-    private function _getProductsArray(ShopGame $game) {
+    private function _getProductsArray(Game $game) {
 
         $gamesArray = array();
         while ($x = $game->getNext()) {
@@ -224,7 +224,7 @@ class games_index extends Engine_Class {
 
 
     /**
-     * Массовые операции над товарами
+     * пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
      */
     private function _productsMassActions() {
         $tagsToAdd = $this->getArgumentSecure('changeaddtags', 'string');
@@ -245,10 +245,10 @@ class games_index extends Engine_Class {
 
                     if ($this->getControlValue('delete') == 'delete') {
                         try {
-                            // пытаемся удалить полностью
+                            // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
                             Shop::Get()->getShopService()->deleteProduct($product);
                         } catch (Exception $deleteEx) {
-                            // если не получилось - то помечаем как удаленный
+                            // пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ - пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
                             $product->setDeleted(1);
                         }
                     } elseif ($this->getControlValue('delete') == 'undelete') {
@@ -287,7 +287,7 @@ class games_index extends Engine_Class {
     }
 
     /**
-     * Добавление товаров в существующий заказ
+     * пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
      */
     private function _addProductsExistOrder() {
         try {
@@ -319,7 +319,7 @@ class games_index extends Engine_Class {
     }
 
     /**
-     * Добавление товаров в новый заказ
+     * пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
      */
     private function _addProductsToOrder() {
         try {
@@ -333,7 +333,7 @@ class games_index extends Engine_Class {
                             'currencyid' => $product->getCurrencyid(),
                             'price' => $product->getPrice(),
                             'taxrate' => $product->getTaxrate(),
-                            'amount' => 1, // количество товаров
+                            'amount' => 1, // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
                         );
                     } catch (Exception $pe) {
 
@@ -358,7 +358,7 @@ class games_index extends Engine_Class {
     }
 
     /**
-     *  Перемещение товаров
+     *  пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
      */
     private function _productsChange() {
         try {

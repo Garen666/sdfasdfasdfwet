@@ -3,10 +3,10 @@ class Shop_GameService extends ServiceUtils_AbstractService {
 
     /**
      * @param int $id
-     * @return ShopGame
+     * @return Game
      */
     public function getGameByID($id) {
-        return $this->getObjectByID($id, 'ShopGame');
+        return $this->getObjectByID($id, 'Game');
     }
 
 
@@ -17,7 +17,7 @@ class Shop_GameService extends ServiceUtils_AbstractService {
      * Найти категорию по URL-префиксу
      *
      * @param string $url
-     * @return ShopGame
+     * @return Game
      */
     public function getGameByURL($url) {
         $url = trim($url);
@@ -25,23 +25,23 @@ class Shop_GameService extends ServiceUtils_AbstractService {
             throw new ServiceUtils_Exception('Empty url');
         }
 
-        return $this->getObjectByField('url', $url, 'ShopGame', false);
+        return $this->getObjectByField('url', $url, 'Game', false);
     }
 
     /**
-     * @return ShopGame
+     * @return Game
      */
     public function getAllGames() {
-        $games = new ShopGame();
+        $games = new Game();
         $games->setDeleted(0);
         return $games;
     }
 
     /**
-     * @return ShopGame
+     * @return Game
      */
     public function getAllPublicGames() {
-        $games = new ShopGame();
+        $games = new Game();
         $games->setHidden(0);
         $games->setDeleted(0);
         return $games;
@@ -61,7 +61,7 @@ class Shop_GameService extends ServiceUtils_AbstractService {
      * @param $seocontent
      * @param $seokeywords
      * @param $linkkey
-     * @return ShopGame
+     * @return Game
      */
     public function addGame($name) {
         try {
@@ -79,7 +79,7 @@ class Shop_GameService extends ServiceUtils_AbstractService {
             $url = Shop::Get()->getShopService()->buildURL($name);
 
 
-            $game = new ShopGame();
+            $game = new Game();
             $game->setName($name);
             $game->setHidden(1);
             $game->setUrl($url);
@@ -100,7 +100,7 @@ class Shop_GameService extends ServiceUtils_AbstractService {
 
 
     /**
-     * @param ShopGame $game
+     * @param Game $game
      * @param $name
      * @param $description
      * @param $image
@@ -116,7 +116,7 @@ class Shop_GameService extends ServiceUtils_AbstractService {
      * @throws SQLObject_Exception
      */
     public function updateGame(
-        ShopGame $game, $name, $description, $image, $hidden, $seodescription, $seotitle, $seoh1,
+        Game $game, $name, $description, $image, $hidden, $seodescription, $seotitle, $seoh1,
         $seocontent, $seokeywords, $deleteImage
     ) {
         try {

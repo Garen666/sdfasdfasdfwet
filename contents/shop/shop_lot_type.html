@@ -9,3 +9,19 @@
     </ul>
 
 </div>
+
+
+<div>
+    {|foreach from=$gameFilterNameArray item="gfm"|}
+        <label>{|$gfm.name|}</label>
+        <select>
+            <option value="0">---</option>
+            {|foreach from=$gameFilterValueArray[$gfm.id] item="gfmv"|}
+                <option value="">{|$gfmv.value|}</option>
+            {|/foreach|}
+        </select>
+
+        <br>
+        <br>
+    {|/foreach|}
+</div>

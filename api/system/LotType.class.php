@@ -27,6 +27,12 @@ class LotType extends XLotType {
         );
     }
 
+    public function getAllFilterName() {
+        $gameFilter = new XGameFilter();
+        $gameFilter->addWhereQuery('`id` IN(SELECT `gameFilterId` FROM `gameLotTypeFilter` WHERE `lotTypeId` = '.$this->getId().')');
+
+        return $gameFilter;
+    }
 
     public function buildUrl() {
         $game = Shop::Get()->getGameService()->getGameByID($this->getGameId());

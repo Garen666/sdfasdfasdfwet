@@ -1,6 +1,6 @@
 <?php
 
-class ShopGame extends XShopGame {
+class Game extends XGame {
 
     public function __construct($id = 0) {
         parent::__construct($id);
@@ -8,17 +8,17 @@ class ShopGame extends XShopGame {
     }
 
     /**
-     * @return ShopGame
+     * @return Game
      */
     public function getNext($exception = false) {
         return parent::getNext($exception);
     }
 
     /**
-     * @return ShopGame
+     * @return Game
      */
     public static function Get($key) {
-        return self::GetObject('ShopGame', $key);
+        return self::GetObject('Game', $key);
     }
 
     public function getAllLotType() {
@@ -26,6 +26,20 @@ class ShopGame extends XShopGame {
         $lotType->setGameId($this->getId());
 
         return $lotType;
+    }
+
+    public function getAllFilterName() {
+        $gameFilter = new XGameFilter();
+        $gameFilter->setGameId($this->getId());
+
+        return $gameFilter;
+    }
+
+    public function getAllFilterValue() {
+        $gameFilterValue = new XGameFilterValue();
+        $gameFilterValue->setGameId($this->getId());
+
+        return $gameFilterValue;
     }
 
     /**
