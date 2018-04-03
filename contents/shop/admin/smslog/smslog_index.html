@@ -1,0 +1,26 @@
+<div class="shop-tabs fixed">
+    <a href="" class="selected">{|$translate_history_of_sent_SMS|}</a>
+    <div class="clear"></div>
+</div>
+<div class="shop-tabs-place"></div>
+
+{|if $false|}
+
+    <div class="shop-message-light">
+        Интеграция с TurboSms не настроена.<br />
+        Настройка аккаунта в магазине - <a class=" ob-link-dashed" href="/admin/shop/settings/Интеграции/">Перейти</a>.<br />
+        Сайт сервиса TurboSms - <a class=" ob-link-dashed" href="http://turbosms.ua/">Перейти</a>.<br />
+    </div>
+
+{|else|}
+    {|if $balance|}
+        Осталось кредитов: {|$balance|}
+        <a href="http://turbosms.ua/"> Пополнить счет</a>
+        <br /><br />
+    {|elseif $errorAuth|}
+        Ошибка авторизации. Проверьте данные для интеграции.<br /><br />
+    {|/if|}
+
+    {|$table|}
+{|/if|}
+

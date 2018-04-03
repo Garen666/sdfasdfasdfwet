@@ -1,0 +1,67 @@
+{|if $image|}
+    <div class="image">
+        <a href="{|$url|}"><img src="{|$image|}" alt="{|$name|}" width="200" /></a>
+    </div>
+{|/if|}
+<div class="name">
+    <a href="{|$url|}"><strong>{|$name|}</strong></a><br />
+</div>
+
+{|if $description|}
+    <div class="description">
+        {|$description|}
+    </div>
+{|/if|}
+
+<table class="list">
+    {|if $price|}
+        <tr>
+            <td>Цена:</td>
+            <td>
+                {|$price|} {|$currency|}
+            </td>
+        </tr>
+    {|/if|}
+    {|if $pricebase|}
+        <tr>
+            <td>Себестоимость:</td>
+            <td>
+                {|$pricebase|} {|$currency|}
+            </td>
+        </tr>
+    {|/if|}
+    {|if $id|}
+        <tr>
+            <td>ID:</td>
+            <td>
+                {|$id|}
+            </td>
+        </tr>
+    {|/if|}
+    {|if $code1c|}
+        <tr>
+            <td>Код:</td>
+            <td>
+                {|$code1c|}
+            </td>
+        </tr>
+    {|/if|}
+    {|if $articul|}
+        <tr>
+            <td>Артикул:</td>
+            <td>
+                {|$articul|}
+            </td>
+        </tr>
+    {|/if|}
+    <tr>
+        <td></td>
+        <td>
+            {|*|}
+                <a id="outBasket" href="javascript:void(0);" onclick="shop_basket_load_product({|$id|}, 1, 1);" {|if !$inBasket|}style="display: none;"{|/if|}>Убрать из корзины</a>
+                <a id="inBasket" href="javascript:void(0);" onclick="shop_basket_load_product({|$id|}, 1);" {|if $inBasket|}style="display: none;"{|/if|}>Добавить в корзину</a>
+            {|*|}
+            <a href="{|$urlBarcode|}" onclick="shop_product_barcode('{|$urlBarcode|}'); return false;">Штрих-код</a>
+        </td>
+    </tr>
+</table>

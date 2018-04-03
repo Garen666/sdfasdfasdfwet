@@ -1,0 +1,78 @@
+{|$block_menu|}
+
+{|if $message == 'ok' OR $arg_message == 'ok'|}
+    <div class="shop-message-success">
+        {|$translate_order_update_success|}.
+    </div>
+{|/if|}
+
+{|if not $canEdit|}
+    <div class="shop-message-info">
+        {|$translate_order_cant_edit_mess|}.
+    </div>
+{|/if|}
+
+<form action="" method="post" enctype="multipart/form-data">
+    <div class="ob-order-content">
+        {|$block_info|}
+
+        {|$block_product_list|}
+
+        {|$block_comment|}
+    </div>
+
+    {|if $canEdit|}
+        <div class="ob-button-fixed">
+            <input type="hidden" name="ok" value="1" />
+            <input type="submit" value="Сохранить" class="ob-button button-green" onclick="shopWaitShow('Выполняется сохранение заказа.');" />
+
+            {|if not $isIssue|}
+                <a class="ob-button" href="./printing/">{|$translate_print|}</a>
+                <input class="ob-button" type="button" name="name" onclick="$j('#js-text-order-popup').fadeToggle();" value="Текст заказа" />
+            {|/if|}
+        </div>
+        <div class="ob-button-fixed-place"></div>
+    {|/if|}
+
+    <div class="shop-popup-block" id="js-text-order-popup" style="display: none;">
+        <div class="dark"></div>
+        <div class="popupblock">
+            <a href="#" class="close" onclick="$j('#js-text-order-popup').fadeToggle();"></a>
+            <div class="shop-tabs">
+                <span>Текст заказа</span>
+            </div>
+            <div class="window-content">
+                <div class="fake-textarea" contenteditable>
+                    <table style="width: 100%; border-spacing: 2px; table-layout: fixed">
+                        <tr>
+                            <td colspan="4">
+                                Заказ: {|$orderName|}
+                            </td>
+                        </tr>
+                        {|foreach from=$productsArray item="p"|}
+                            <tr>
+                                <td class="va-top">{|if $p.suppliercode|}{|$p.suppliercode|}{|else|}{|$p.productid|}{|/if|}</td>
+                                <td class="va-top">{|$p.name|}</td>
+                                <td class="va-top">{|$p.count|} шт</td>
+                                <td class="va-top">{|$p.price*$p.count|} {|$p.currencySym|}</td>
+                            </tr>
+                        {|/foreach|}
+                        {|if $deliveryPrice>0|}
+                            <tr>
+                                <td colspan="4" class="va-top">Доставка {|if $deliveryPrice|}{|$deliveryPrice|}{|/if|} {|$currency|} {|if $payDelivery|}(не учитывается){|/if|}</td>
+                            </tr>
+                        {|/if|}
+                        {|if $discountSum>0|}
+                            <tr>
+                                <td colspan="4" class="va-top">Скидка {|$discountSum|} {|$currency|}</td>
+                            </tr>
+                        {|/if|}
+                        <tr>
+                            <td colspan="4" class="va-top">Итого: {|$totalSum|} {|$currency|}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

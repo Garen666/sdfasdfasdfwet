@@ -1,0 +1,58 @@
+<div class="shop-tabs fixed">
+    <a href="/admin/shop/games/">Игры</a>
+    <a href="/admin/shop/games/manage/" class="selected">Менеджер игр</a>
+    <a href="/admin/shop/games/add/">Добавить игру</a>
+    <div class="clear"></div>
+</div>
+<div class="shop-tabs-place"></div>
+
+{|if $successDel|}
+    <div class="shop-message-success">
+        {|$successName|}
+    </div>
+{|else|}
+    {|if $success|}
+        <div class="shop-message-success">
+            {|$successName|}
+        </div>
+    {|/if|}
+    <ol class="shop-categorymanage-block js-category-sortable">
+        {|foreach from=$categoryArray item=e|}
+
+            <li id="list_{|$e.id|}" class="{|if $e.childsArray|}shop-admin-nestedSortable-branch shop-admin-nestedSortable-collapsed{|else|}shop-admin-nestedSortable-leaf{|/if|}">
+                <div {|if $e.hidden == 1|}class="hidden"{|/if|}>
+                    <span class="check"><input type="checkbox" name="id[]" value="{|$e.id|}" class="js-checkbox" data-level="1"></span>
+                    <a href="{|$e.editURL|}" class="edit" target="_blank" title="{|$translate_edit|}">&nbsp;</a>
+                    <span class="disclose">
+                        <span></span>
+                    </span>
+                    <a href="{|$e.editURL|}" target="_blank" title="{|$e.name|}">{|$e.name|}</a>
+                    {|if $e.hidden == 1|}
+                        (скрытая категория)
+                    {|/if|}
+                </div>
+            </li>
+        {|/foreach|}
+    </ol>
+
+    <div class="shop-right-sidebar">
+        <div class="toggle"></div>
+        <form action="" method="post">
+            <input type="hidden" id="id-category" name="moveids" />
+
+            <div class="element">
+                <input type="submit" name="do-action-hidden" value="Скрыть" class="ob-button" />
+            </div>
+
+            <div class="element">
+                <input type="submit" name="do-action" value="Открыть" class="ob-button" />
+            </div>
+
+            <div class="element">
+                <input class="ob-button" type="submit" name="delete" value="Удалить" />
+            </div>
+            <div class="clear"></div>
+            <div class="element"></div>
+        </form>
+    </div>
+{|/if|}

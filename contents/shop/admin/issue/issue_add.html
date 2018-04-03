@@ -1,0 +1,519 @@
+{|if $message == 'ok'|}
+    <div class="shop-message-success">
+        Задача {|if $messageIssueInfo|}<a href="{|$messageIssueInfo.url|}">#{|$messageIssueInfo.id|}</a>{|/if|} успешно создана.
+
+    </div>
+{|/if|}
+
+{|if $message == 'error'|}
+    <div class="shop-message-error">
+        Ошибка создания задачи, имя, бизнес процес задачи обязательно.
+    </div>
+{|/if|}
+
+{|if $documentsArray|}
+    <script>
+        {|foreach from=$documentsArray item="d"|}
+                window.open('/admin/shop/document/'+{|$d|}+'/print/', '_blank');
+        {|/foreach|}
+    </script>
+{|/if|}
+
+{|if $urlredirect|}
+    <script type="text/javascript">
+    document.location = '{|$urlredirect|}';
+    </script>
+{|/if|}
+
+
+<div class="shop-tabs fixed">
+    <a id="js-issue-project-tab" href="javascript:void(0);" onclick="open_tab('project');" class="{|if $tabIssueSelected=='project' || !$tabIssueSelected|}selected{|/if|}" >Проект</a>
+    <a id="js-issue-task-tab" href="javascript:void(0);" onclick="open_tab('issue');" class="{|if $tabIssueSelected=='issue'|}selected{|/if|}" >Задача</a>
+    <a id="js-issue-order-tab" href="javascript:void(0);" onclick="open_tab('order');" class="{|if $tabIssueSelected=='order'|}selected{|/if|} js-order-tab" >Заказ</a>
+    <div class="clear"></div>
+    <input type="hidden" id="tabInitSelected" value="{|$tabIssueSelected|}">
+</div>
+<div class="shop-tabs-place"></div>
+
+<table border="0" width="100%" cellpadding="0" cellspacing="0">
+    <tr valign="top">
+        <td>
+
+            <form action="" method="post" onsubmit="shopWaitShow('Выполняется сохранение задачи.');" >
+                <div class="shop-newtask-block">
+                    <div id="js-iforder" class="js-iforder"></div>
+
+                    <div>
+                        <div class="part">
+                            <div id="js-workflow-parent-div" class="element">
+                                <div id="js-workflow-div">
+                                    <strong>Бизнес-процесс задачи</strong><br/>
+                                    <select name="workflowid" id="js-workflowid" class="js-workflowid chzn-select"
+                                            style="width: 100%;">
+                                        {|foreach from=$categoryArray item="e"|}
+                                        <option value="{|$e.id|}" {|if $e.id== $control_workflowid|} selected {|
+                                        /if|}>{|$e.name|}</option>
+                                        {|/foreach|}
+                                    </select>
+                                    <input type="hidden" id="js-control-workflowid" value="{|$control_workflowid|}">
+                                </div>
+                            </div>
+
+                            <div id="js-what-todo-parent-div" class="element">
+                                <div id="js-what-todo-div">
+                                    <strong>Что нужно сделать?</strong> (Имя задачи, заказа или проекта)<br/>
+                                    <input type="text" name="name" class="js-issuename"
+                                           value="{|if !$clearFields|}{|$control_name|}{|/if|}" style="width: 100%;"/>
+                                </div>
+                            </div>
+
+                            <div id="js-content-parent-div" class="element">
+                                <div id="js-content-div">
+                                    <strong>Описание задачи, заказа или проекта</strong><br/>
+                                    <textarea name="content" style="width: 100%; height: 95px;" class="js-autosize"
+                                              rows="5">{|if !$clearFields|}{|$control_content|}{|/if|}</textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="part">
+                            <div class="element">
+                                <table style="width:100%">
+                                    <tr>
+                                        <td>
+                                            <strong>Телефон</strong>
+                                            <br />
+                                            <input id="js-client-phone" name="contact_phone" type="text" id="js-client-phone" style="width: 90%;"/>
+                                        </td>
+                                        <td>
+                                            <strong>ФИО</strong>
+                                            <br />
+                                            <input type="text" name="clientname" id="id-clientid-name"
+                                                   value="{|$control_clientname|}" placeholder="Выберите клиента"
+                                                   style="width: 90%;"/>
+                                            <input type="hidden" name="clientid" id="id-clientid-value"
+                                                   value="{|$control_clientid|}"/>
+                                        </td>
+                                        <td>
+                                            <strong class="ob-link-dashed" onclick="$j('.js-info-block').slideToggle();">Дополнительные контакты</strong>
+                                            <div class="js-info-block" style="display: none;">
+                                                Email
+                                                <br />
+                                                <input id="js-client-email" type="text" name="contact_email" value="">
+                                                <br />
+                                                Skype
+                                                <br />
+                                                <input id="js-client-skype" type="text" name="contact_skype" value="">
+                                                <br />
+                                                <br />
+                                                WhatsApp
+                                                <br />
+                                                <input id="js-client-whatsapp" type="text" name="contact_whatsapp" value="">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+
+
+
+
+
+                            </div>
+                            <div class="element">
+                                <strong>Кто ответственный?</strong><br/>
+                                <select id="managerid" name="managerid" class="chzn-select js-managerid"
+                                        style="width: 100%;">
+                                    {|foreach from=$managerArray item="e"|}
+                                    <option value="{|$e.id|}" {|if $e.selected |} selected {|
+                                    /if|}>{|$e.name|}</option>
+                                    {|/foreach|}
+                                </select>
+                            </div>
+                            <div>
+                                <div class="element half">
+                                    <strong>Срок исполнения?</strong><br/>
+                                    <input type="text" name="dateto" value="{|$control_dateto|}"
+                                           class="js-datetime js-dateto" style="width: 100%;"/>
+                                </div>
+
+                                <div id="js-start-issue-parent-div" class="element half">
+                                    <div id="js-start-issue-div">
+                                        <strong>Когда старт задачи?</strong><br/>
+                                        <input type="text" name="datefrom" value="{|$control_datefrom|}" class="js-datetime"
+                                               style="width: 100%;"/>
+                                    </div>
+                                </div>
+                                <div class="clear"></div>
+                            </div>
+
+
+                            <div id="js-fade-parent-div" class="element">
+                                <div id="js-fade-div">
+                                    <strong>К какой задаче/проекту относится?</strong><br/>
+                                    <input type="text" id="js-parent-name" name="parentid" value="{|$control_parentid|}"
+                                           style="width: 100%;"/>
+                                </div>
+                            </div>
+
+                            <div>
+                                <div id="js-source-parent-div" class="element half">
+                                    <div id="js-source-div">
+                                        <strong>Источник</strong><br/>
+                                        <select class="chzn-select" name="source" style="width: 100%;">
+                                            <option value="-1">---</option>
+                                            {|foreach from=$sourceArray item="e"|}
+                                            <option value="{|$e.id|}" {|if $e.id== $control_source|}selected{|
+                                            /if|}>{|$e.name|}</option>
+                                            {|/foreach|}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="clear"></div>
+                            </div>
+
+
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+
+                    <div id="js-iforder-callback">
+                        <div id="js-fade-product" class="row js-product-add">
+                            <div class="part">
+                                <div class="element">
+                                    <strong>Категория</strong><br />
+                                    <table style="width: 100%; border-collapse: collapse;">
+                                        <tr>
+                                            <td>
+                                                <select class="chzn-select" id="js-product-category" style="width: 100%;">
+                                                    <option value="0">---</option>
+                                                    {|foreach from=$categoryArray item="e"|}
+                                                        <option value="{|$e.id|}">
+                                                            {|section name=foo start=0 loop=$e.level|}
+                                                            &nbsp;&nbsp;&nbsp;
+                                                            {|/section|}
+                                                            {|$e.name|}
+                                                        </option>
+                                                    {|/foreach|}
+                                                </select>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <br />
+                                    <strong>Список продуктов</strong><br />
+
+                                        <table style="width: 100%; border-collapse: collapse;">
+                                            <tr>
+                                                <td><input id="js-product-name-input" class="productsearch-field" type="text" style="width: 100%;"></td>
+                                                <td style="width: 62px;"> <a class="ob-button product-find" href="#">Найти</a></td>
+                                            </tr>
+                                        </table>
+
+
+
+                                    <div id="js-product-div"></div>
+                                </div>
+                            </div>
+
+                            <div class="part">
+                                {|*|}
+                                <ul id="js-product-tag" data-input="#js-product-input" style="width: 100%; height: 150px; margin-top: 17px;"></ul>
+                                <input id="js-product-input" type="text" name="productlist" value="{|$control_productlist|}" style="display: none;"/>
+                                {|*|}
+                                <strong>Корзина</strong>
+                                <div class="shop-block-issuebasket">
+
+                                    <table id="issue-add-product-table" class="shop-table">
+                                        <tr>
+                                            <td>
+                                                Доставка
+                                                <input type="hidden" id="js-price-delivery-value" name="deliveryPrice" value="0">
+                                            </td>
+                                            <td class="align_right price" id="js-price-delivery" colspan="3">0 uah</td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Итого</td>
+                                            <td class="align_right price" colspan="3" id="js-price-total">0 uah</td>
+                                            <td></td>
+                                        </tr>
+                                    </table>
+                                    <br />
+
+                                    <table style="table-layout: fixed;">
+                                        <tr>
+                                            <td >
+                                                <strong>Способ доставки</strong>
+                                                <br />
+                                                <select id="js-delivery" name="delivery" class="chzn-select" style="width: 90%;">
+                                                    <option data-price="0" value="0">---</option>
+                                                    {|foreach from=$deliveryArray item="d"|}
+                                                        <option data-class="{|$d.class|}" data-price="{|$d.price|}" value="{|$d.id|}">{|$d.name|}</option>
+                                                    {|/foreach|}
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <strong>Страна доставки</strong>
+                                                <br />
+                                                <input type="text" name="delivery_country" value="{|$control_delivery_country|}" style="width: 90%;">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <strong>Город доставки</strong>
+                                                <br />
+                                                <div style="display: none;">
+                                                    <select id="js-delivery-city-select" name="delivery_city_select" class="chzn-select" style="width: 90%;"></select>
+                                                </div>
+                                                <input id="js-delivery-city-input" type="text" name="delivery_city" value="{|$control_delivery_city|}" style="width: 90%;">
+                                            </td>
+                                            <td>
+                                                <strong>Отделение доставки</strong>
+                                                <br />
+                                                <div style="display: none;">
+                                                    <select id="js-delivery-office-select" name="delivery_office_select" class="chzn-select" style="width: 90%;"></select>
+                                                </div>
+                                                <input id="js-delivery-office-input" type="text" name="delivery_office" value="{|$control_delivery_office|}" style="width: 90%;">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <strong>Способ оплаты</strong>
+                                                <br />
+                                                <select name="payment" class="chzn-select" style="width: 90%;">
+                                                    <option value="0">---</option>
+                                                    {|foreach from=$paymentArray item="d"|}
+                                                    <option value="{|$d.id|}">{|$d.name|}</option>
+                                                    {|/foreach|}
+                                                </select>
+                                            </td>
+                                            <td></td>
+                                        </tr>
+                                    </table>
+                                    <br />
+                                    <strong>Скидка</strong>
+                                    <table style="width: auto;">
+                                        <tr>
+                                            <td >
+                                                <select id="discount" name="discount" style="display: none;">
+                                                    <option value="0">---</option>
+                                                    {|foreach from=$discountArray item="d"|}
+                                                    <option value="{|$d.id|}">{|$d.name|} {|$d.amount|}{|$d.type|} {|if $d.started|}(>{|$d.started|}){|/if|}</option>
+                                                    {|/foreach|}
+                                                </select>
+
+                                                {|foreach from=$discountArray item="d"|}
+                                                    <strong onclick="$j('#discount [value=\'{|$d.id|}\']').attr('selected', 'selected');" class="ob-link-dashed discount-link js-discount-link"> {|$d.name|} {|$d.amount|}{|$d.type|} {|if $d.started|}(>{|$d.started|}){|/if|}</strong>
+                                                {|/foreach|}
+                                            </td>
+                                        </tr>
+
+                                        <script>
+                                            $j(function () {
+                                               $j('.js-discount-link').click(function(){
+                                                   $j('.js-discount-link').removeClass('active');
+                                                   $j(this).addClass('active');
+                                               });
+                                            });
+                                        </script>
+                                    </table>
+                                    <br />
+                                </div>
+
+                                {|if $templateArray|}
+                                    <div class="docs-block">
+                                        <strong id="js-dashed-docs-list" class="ob-link-dashed" onclick="$j('.js-docs-list').slideToggle();">Сформировать документы</strong>
+                                        <div class="docs-list js-docs-list" {|if $docsListCookie=='ok'|}style="display: none;"{|/if|}>
+                                            {|foreach from=$templateArray item="e"|}
+                                                <label><input type="checkbox" value="1" name="document_{|$e.id|}">{|$e.name|}</label>
+                                                <br />
+                                            {|/foreach|}
+                                        </div>
+                                    </div>
+                                {|/if|}
+                                <br />
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+                    </div>
+
+
+                    <div id="js-workflow-container-parent-div" class="row js-business-process">
+                        <div id="js-workflow-container-div" class="js-workflow-container"></div>
+                    </div>
+
+
+                    <div class="row">
+                        <strong class="ob-link-dashed" onclick="$j('.js-result-block').slideToggle(); $j('.js-workflowid').change();">Дополнительные настройки</strong><br />
+                        <br />
+                        <div class="js-result-block shop-block" style="display: block;">
+                            <div id="js-result-div"></div>
+
+                            <strong>В каком виде должен быть результат?</strong><br />
+                            <textarea name="result" style="width: 100%; height: 50px;" class="js-autosize" rows="5">{|if !$clearFields|}{|$control_result|}{|/if|}</textarea>
+                            <br />
+                            <br />
+
+                            <span class="nowrap">
+                                <strong>Оценочное время</strong>
+                                    <input type="text" name="estimatetime" value="{|$control_estimatetime|}" style="width: 150px;margin-bottom: 10px;"/> ч.
+                            </span>
+
+                            <span class="nowrap">
+                                <strong>Оценочные деньги</strong>
+                                <input type="text" name="estimatemoney" value="{|$control_estimatemoney|}" style="width: 150px;margin-bottom: 10px;"/> {|$currency|}
+                            </span>
+
+                            <br />
+                            <br />
+
+                            <strong>Прочие ресурсы:</strong><br />
+                            <textarea name="resource" style="width: 100%; height: 50px;" class="js-autosize" rows="5">{|if !$clearFields|}{|$control_resource|}{|/if|}</textarea>
+                            <br />
+                            <br />
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                </div>
+
+                <script type="text/javascript">
+                    $j(function () {
+                        var query = '';
+                        $j('#id-clientid-name').autocomplete({
+                            source: function( request, response ) {
+                                query = request.term;
+                                $j.ajax({
+                                    url: "/admin/shop/users/ajax/autocomplete/select2/",
+                                    dataType: "json",
+                                    data:{
+                                        name: request.term
+                                    },
+                                    success: function( data ) {
+                                        if (data==null) response(null);
+                                        response( $j.map( data, function( item ) {
+                                            name = item.name;
+                                            return {
+                                                id: item.id,
+                                                label: name,
+                                                value: name,
+                                                phone: item.phone,
+                                                email: item.email,
+                                                skype: item.skype,
+                                                whatsapp: item.whatsapp
+                                            }
+                                        }));
+                                    }
+                                });
+                            },
+                            select: function (event, ui) {
+                                $j('#id-clientid-value').val(ui.item.id);
+                                $j('#js-client-phone').val(ui.item.phone);
+                                $j('[name=contact_email]').val(ui.item.email);
+                                $j('[name=contact_skype]').val(ui.item.skype);
+                                $j('[name=contact_whatsapp]').val(ui.item.whatsapp);
+                            },
+                            minLength:3
+                        }).data('ui-autocomplete')._renderItem = function (ul, item) {
+                            ul.addClass('ob-default-autocomplete');
+                            var inner_html = '<span>'+item.label+'</span>';
+                            ul.css('z-index','9999');
+                            if (item.id === 0) {
+                                inner_html = '<span class="ob-link-add ob-link-dashed">'+item.label+'</span>';
+                                return $j( "<li onclick='addUserInSelectWindow(\""+htmlspecialchars(query)+"\")'></li>" )
+                                        .data( "item.autocomplete", item )
+                                        .append(inner_html)
+                                        .appendTo( ul );
+                            } else {
+                                return $j( "<li></li>" )
+                                        .data( "item.autocomplete", item )
+                                        .append(inner_html)
+                                        .appendTo( ul );
+                            }
+                        };
+                    });
+
+                    function addUserInSelectWindow (name) {
+                        selectwindow_init('w2', 'id-clientid-name', 'id-clientid-value', {
+                            usersearch: true,
+                            useradd: true,
+                            selectedTab:1,
+                            userAddDefault:name
+                        });
+                    }
+                </script>
+
+                <div class="ob-button-fixed">
+                    <input type="submit" name="ok" value="{|$translate_save|}" class="ob-button button-green" />
+                    <input type="submit" name="oknext" value="{|$translate_save_plus_add|}" class="ob-button" />
+                </div>
+                <div class="ob-button-fixed-place"></div>
+            </form>
+            <input id="js-user-id" type="hidden" value="{|$userId|}">
+
+            <script type="text/javascript">
+            $j('.js-workflowid').change(function () {
+                var workflowID = $j(this).val();
+                init_products(workflowID);
+
+                $j.ajax({
+                    url: '/admin/issue/workflow-preview/',
+                    datetype: "json",
+                    data: {
+                        workflowid: workflowID
+                    },
+                    success: function (data) {
+                        var obj = $j.parseJSON(data);
+                        if (obj) {
+                            $j('.js-workflow-container').html(obj.html);
+
+                            var defaultIssueName = $j('.js-default-issuename').val();
+                            var defaultManagerID = $j('.js-default-managerid').val();
+                            var defaultDateTo = $j('.js-default-dateto').val();
+
+                            if ($j('.js-issuename').val() == '') {
+                                $j('.js-issuename').val(defaultIssueName);
+                            }
+
+                            if (obj.userid > 0) {
+                                $j('.js-managerid').select2('val', obj.userid);
+                            } else {
+                                $j('.js-managerid').select2('val', $j('#js-user-id').val());
+                            }
+
+                            $j('.js-managerid').change();
+
+                            if (defaultDateTo != '') {
+                                $j('.js-dateto').val(defaultDateTo);
+                            }
+                            $j('#divStatusDefaultIssue').show();
+                        }
+
+                    }
+                });
+
+                $j.ajax({
+                    url: '/admin/issue/workflow-fields/',
+                    data: {
+                        workflowid: workflowID
+                    },
+                    success: function (html) {
+                        $j('.js-fields-container').html(html);
+                    }
+                });
+            });
+
+            // после загрузки страницы сразу вызываем подгрузку workflow
+            $j(function () {
+                //$j('.js-workflowid').change();
+
+                $j('.js-issuename').focus();
+            });
+            </script>
+
+        </td>
+
+        {|if $block_event|}
+            <td  width="30%">
+                {|$block_event|}
+            </td>
+        {|/if|}
+    </tr>
+</table>

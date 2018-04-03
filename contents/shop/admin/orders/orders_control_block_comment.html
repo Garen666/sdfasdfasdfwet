@@ -1,0 +1,105 @@
+{|if $fileArray|}
+    <h2>Файлы</h2>
+    <div class="ob-files-block">
+        {|foreach from=$fileArray item="e"|}
+            <div class="element">
+                <div class="date">{|$e.cdate|}</div>
+                <div class="size">{|$e.size|}</div>
+                <div class="control">
+                    <a class="ob-link-clear" href="{|$e.urlDelete|}" onclick="return confirm('Удалить?');" title="Удалить"></a>
+                    <a class="ob-link-download" href="{|$e.url|}" title="Скачать" download=""></a>
+                </div>
+                <a href="{|$e.url|}">{|$e.name|}</a>
+                ({|$e.username|})
+
+            </div>
+        {|/foreach|}
+    </div>
+    <br />
+{|/if|}
+
+{|$block_comment|}
+
+<div class="ob-comment-add">
+    <div class="comment-wrap">
+        <div class="comment-cell">
+            <div class="comment-caption">Оставить комментарий:</div>
+            <textarea id="js-postcomment" name="postcomment" class="js-autosize js-usertextcomplete" placeholder="Сообщение"></textarea>
+        </div>
+
+        {|if $commentTemplateArray|}
+            <div class="template-cell">
+                <div class="comment-caption">{|$translate_comment_template|}:</div>
+                <div class="list">
+                    {|foreach from=$commentTemplateArray item="comment"|}
+                        <a href="javascript:void(0);" class="ob-link-dashed" data-text="{|$comment.text|}"
+                           onclick="$j('#js-postcomment').val($j('#js-postcomment').val()+$j(this).data('text'));">{|$comment.name|}</a>
+                        <br>
+                    {|/foreach|}
+                </div>
+            </div>
+        {|/if|}
+    </div>
+
+    {|if $box|}
+        {|if $clientEmail|}
+            <div class="client-notify">
+                <label class="js-notify-value-toggle">
+                    <input type="checkbox" name="sendclientemail" value="1" />
+                    Отправить комментарий клиенту на email <strong>{|$clientEmail|}</strong>
+                </label>
+                <span class="js-notify-value" style="display: none;">
+                    с темой
+                    <input type="text" name="sendclientemailsubject" value="{|$control_name|}" style="width: 100%;"/>
+                </span>
+            </div>
+        {|/if|}
+
+        {|if $clientSMSArray|}
+            <div class="client-notify">
+                <label class="js-notify-value-toggle">
+                    <input type="checkbox" name="sendclientsms" value="1" />
+                    Отправить комментарий клиенту по SMS
+                </label>
+                <span class="js-notify-value" style="display: none;">
+                    <select name="sendclientsmsphone">
+                        {|foreach from=$clientSMSArray item="e"|}
+                            <option value="{|$e|}">{|$e|}</option>
+                        {|/foreach|}
+                    </select>
+                </span>
+            </div>
+        {|/if|}
+
+        <div class="attach">
+            Приложить файлы:
+            <input type="file" name="file[]" multiple />
+        </div>
+    {|/if|}
+
+    {|if $watcherArray|}
+        <div class="client-notify">
+            Получат уведомления:
+            {|foreach from=$watcherArray item="e"|}
+                <a href="{|$e.url|}" class="js-contact-preview" data-id="{|$e.id|}">{|$e.name|}</a>
+            {|/foreach|}
+        </div>
+    {|/if|}
+</div>
+
+<div class="shop-popup-block js-edit-message-popup" style="display: none;">
+    <div class="dark"></div>
+    <div class="popupblock">
+        <a href="#" class="close" onclick="popupClose('.js-edit-message-popup');"></a>
+        <div class="shop-tabs">
+            <span class="js-popup-title">Редактировать сообщение</span>
+        </div>
+        <div class="window-content window-form" style="max-height: auto;">
+            <div class="element">
+                <textarea class="js-autosize js-edit-comment-text" style="max-height: 400px;" val=""></textarea>
+            </div>
+            <input type="button" value="" data-id="" data-action="" class="ob-button button-green js-edit-comment" />
+            <input class="ob-button button-cancel" type="button" value="{|$translate_cancel|}" onclick="popupClose('.js-edit-message-popup');"/>
+        </div>
+    </div>
+</div>

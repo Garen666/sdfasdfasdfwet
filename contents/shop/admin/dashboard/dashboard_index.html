@@ -1,0 +1,92 @@
+{|$block_issue|}
+
+{|*|}
+<div class="shop-filter-panel">
+    <div class="filter-toggle {|if $filterpanelCookie|}open{|/if|}"></div>
+    <div class="inner-pannel" {|if !$filterpanelCookie|}style="display: none;"{|/if|}>
+        <form action="." method="get">
+            <div class="element align_right">
+                <input type="text" name="dateFrom" value="{|$control_dateFrom|}" class="js-date" placeholder="{|$translate_filter_date|}" />
+            </div>
+
+            <div class="element align_right">
+                <input type="text" name="dateTo" value="{|$control_dateTo|}" class="js-date" placeholder="{|$translate_to|}" />
+            </div>
+
+            <div class="element">
+                Менеджер:
+                <select name="managerid" class="chzn-select">
+                    <option value="0">---</option>
+                    {|foreach from=$managerArray item="e"|}
+                        <option value="{|$e.id|}" {|if $e.id == $control_managerid|} selected {|/if|}>{|$e.name|}</option>
+                    {|/foreach|}
+                </select>
+            </div>
+
+            <input class="ob-button button-orange" type="submit" value="{|$translate_filter|}" name="ok" />
+        </form>
+    </div>
+</div>
+
+<div class="shop-result-list">
+    <div class="inner-list {|if $notifyArray|}include-preview{|/if|} {|if $filterpanelCookie|}filter-reserve{|/if|}">
+        <div class="ob-block-widgets js-block-widgets">
+            <li class="double disabled">
+                <div class="widget-element">
+                    <div class="widget-caption">Календарь</div>
+                    <div class="widget-content">
+                        {|$block_calendar|}
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="widget-element">
+                    <div class="widget-caption">Название виджета</div>
+                    <div class="widget-content"></div>
+                </div>
+            </li>
+            <li>
+                <div class="widget-element">
+                    <div class="widget-caption">Название виджета</div>
+                    <div class="widget-content"></div>
+                </div>
+            </li>
+            <li>
+                <div class="widget-element">
+                    <div class="widget-caption">Название виджета</div>
+                    <div class="widget-content"></div>
+                </div>
+            </li>
+            <li>
+                <div class="widget-element">
+                    <div class="widget-caption">Название виджета</div>
+                    <div class="widget-content"></div>
+                </div>
+            </li>
+            <li>
+                <div class="widget-element">
+                    <div class="widget-caption">Название виджета</div>
+                    <div class="widget-content"></div>
+                </div>
+            </li>
+            <li class="disabled">
+                <div class="widget-element">
+                    <div class="widget-caption">Добавить новый виджет</div>
+                    <div class="widget-content new"></div>
+                </div>
+            </li>
+        </div>
+
+        <script>
+            $j('.js-block-widgets').sortable({
+                placeholder: "placeholder",
+                revert: true,
+                opacity: 0.5,
+                handle: '.widget-caption',
+                items: "li:not(.disabled)"
+            });
+        </script>
+    </div>
+</div>
+<div class="clear"></div>
+ {|*|}

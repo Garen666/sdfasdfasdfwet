@@ -1,0 +1,58 @@
+<h1>{|if $seoh1|} {|$seoh1|} {|else|} {|$name|} {|/if|}</h1>
+{|$date|}<br />
+<br />
+
+{|if $id|}
+    <form method="post" action="" id="id-order" class="os-news-product">
+        <div class="os-productthumb-element">
+            <div class="image">
+                <a href="{|$url|}"><img src="{|$image|}" alt="{|$name|escape|}" title="{|$name|escape|}" /></a>
+            </div>
+            <div class="name">
+                <a href="{|$url|}">{|$name|}</a>
+            </div>
+            <div class="option">{|if $code|}{|$translate_code_small|}: {|$code|}{|/if|}</div>
+            <div class="option js-shop-compare" data-productid="{|$id|}">
+                <a href="javascript:void(0);" class="js-shop-compare-action">{|$translate_shop_compare_action|}</a>
+                <a href="/compare/" class="js-shop-compared" style="display: none;">{|$translate_compared|}</a>
+            </div>
+            <div class="clear"></div>
+            <div class="price">
+                {|if $price == 0|}
+                    <span class="specify">{|$translate_specify_a_price|}</span>
+                {|else|}
+                    {|if $priceold AND $priceold != 0|}<s>{|$priceold|} {|$currency|}</s><br />{|/if|}
+                    {|$price|} {|$currency|}
+                {|/if|}
+            </div>
+
+            {|if $discount|}<div class="discount">-{|$discount|}%</div>{|/if|}
+            <div class="avail">
+                {|if $avail|}
+                    {|if $availtext|}
+                        {|$availtext|}
+                    {|/if|}
+                {|else|}
+                    {|if $availtext|}
+                        <span class="no">
+                            {|$availtext|}
+                        </span>
+                    {|/if|}
+                {|/if|}
+            </div>
+            {|if $canbuy|}
+                <div class="button js-shop-buy" data-productid="{|$id|}">
+                    <a href="#" class="js-shop-buy-action os-submit">{|$translate_buy|}</a>
+                </div>
+            {|/if|}
+
+            {|if $descriptionshort|}
+                <div class="description">
+                    {|$descriptionshort|}
+                </div>
+            {|/if|}
+        </div>
+    </form>
+{|/if|}
+
+{|$content|}

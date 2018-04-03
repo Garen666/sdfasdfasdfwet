@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<acl>
+    <key>games</key>
+    <key>games_add</key>
+    <key>games_control</key>
+
+    <key>lots</key>
+    <key>messages</key>
+    <key>payments</key>
+
+
+
+
+
+
+
+    <key>users</key>
+<key>users-online</key>
+<key>users-mass-mailing</key>
+<key>users-groups</key>
+<key>users-add</key>
+<key>users-all-view</key>
+<key>users-all-edit</key>
+<key>orders</key>
+<key>orders-all-view</key>
+<key>orders-all-edit</key>
+<key>orders-direction-in</key>
+<key>orders-direction-out</key>
+<key>orders-add</key>
+<key>products</key>
+<key>products-owner-edit</key>
+<key>products-edit</key>
+<key>products-edit-quick</key>
+<key>products-noticeavailability</key>
+<key>products-copy</key>
+<key>products-lists</key>
+<key>products-delete</key>
+<key>products-add</key>
+<key>products-related</key>
+<key>products-views</key>
+<key>products-comments</key>
+<key>products-orders</key>
+<key>products-history</key>
+<key>products-filters</key>
+<key>products-import</key>
+<key>products-keywords-import</key>
+<key>products-import-from-yml</key>
+<key>products-icon</key>
+<key>settings</key>
+<key>comments</key>
+<key>pages</key>
+<key>prices</key>
+<key>activity</key>
+<key>tax</key>
+<key>statistic</key>
+<key>products-list</key>
+<key>feedback</key>
+<key>logo</key>
+<key>faq</key>
+<key>payment</key>
+<key>guestbook</key>
+<key>ticket-support</key>
+<key>block</key>
+<key>redirect</key>
+<key>seo</key>
+<key>marginrule</key>
+<key>report_topproducts</key>
+<key>report_productmatrix</key>
+<key>report_callcenter</key>
+<key>report_notify</key>
+<key>report_eventdate</key>
+<key>report_event</key>
+<key>report_eventtree</key>
+<key>report_contacttree</key>
+<key>report_clientorder</key>
+<key>report_clientbalance</key>
+<key>report_orderdate</key>
+<key>report_orderstatus</key>
+<key>report_orderpayment</key>
+<key>report_orderprobation</key>
+<key>report_sourceorders</key>
+<key>report_sourceclients</key>
+<key>report_summary</key>
+<key>issue</key>
+<key>role</key>
+<key>comment_template</key>
+<key>structure</key>
+</acl>

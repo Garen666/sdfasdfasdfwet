@@ -1,0 +1,18 @@
+<div class="item js-droppable" js-data-id="0">
+    <a href=".">{|$translate_category_list|}</a>
+</div>
+<div class="item js-droppable" js-data-id="0">
+    <a href="./?categoryid=0">{|$translate_no_category|}</a>
+</div>
+{|foreach from=$categoryArray item="e"|}
+{|if $e.level !== 0|}
+<div data-parentid="{|$e.parentid|}"  style="display: none;">
+    {|/if|}
+    <div class="item level_{|$e.level|} js-droppable" js-category-id="{|$e.id|}" js-data-id="{|$e.id|}" >
+        <u data-id="{|$e.id|}">&nbsp;</u>
+        <a href="{|$e.url|}" {|if $e.selected|}class="selected"{|/if|}>{|$e.name|}</a>
+    </div>
+    {|if $e.level !== 0|}
+</div>
+{|/if|}
+{|/foreach|}

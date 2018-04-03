@@ -1,0 +1,42 @@
+<div class="shop-tabs fixed">
+    <a href="/admin/shop/textpages/" class="selected">{|$translate_textpages|}</a>
+    <a href="/admin/shop/textpages/add/">{|$translate_new_textpage_add|}</a>
+    <div class="clear"></div>
+</div>
+<div class="shop-tabs-place"></div>
+
+<div class="shop-filter-panel">
+    <div class="inner-pannel">
+        <h1>{|$translate_textpages|}</h1>
+        <div class="shop-filter-list js-tree-menu">
+            {|if $pagesArray|}
+                {|foreach from=$pagesArray item="e1"|}
+                    <div class="item level_0">
+                        <u data-id="{|$e1.id|}">&nbsp;</u>
+                        <a href="{|$e1.url|}" {|if $e1.selected|}class="selected"{|/if|}>{|$e1.name|}</a>
+                    </div>
+                    {|foreach from=$e1.childsArray item="e2"|}
+                        <div data-parentid="{|$e1.id|}" style="display: none;">
+                            <div class="item level_1">
+                                <a href="{|$e2.url|}" {|if $e2.selected|}class="selected"{|/if|}>{|$e2.name|}</a>
+                            </div>
+                        </div>
+                    {|/foreach|}
+                {|/foreach|}
+            {|/if|}
+        </div>
+    </div>
+</div>
+
+<div class="shop-result-list">
+    <div class="inner-list filter-reserve">
+        {|if $form|}
+            {|$form|}
+        {|elseif $pagesArray|}
+            <div class="shop-message-info">{|$translate_textpages_select|}.</div>
+        {|else|}
+            <a href="/admin/shop/textpages/add/">{|$translate_new_textpage_add|}</a>
+        {|/if|}
+    </div>
+</div>
+<div class="clear"></div>

@@ -1,0 +1,11 @@
+<h1>{|$gameName|}</h1>
+<h3>{|$description|}</h3>
+
+<div>
+    <ul id="tabs">
+        {|foreach from=$lotTypeAllArray key="key" item="lt"|}
+            <li {|if $lt.selected|} data-class="current" {|/if|}><a href="{|if $lt.selected|}javascript:void(0){|else|}{|$lt.url|}{|/if|}" title="tab{|$key|}">{|$lt.name|}</a></li>
+        {|/foreach|}
+    </ul>
+
+</div>

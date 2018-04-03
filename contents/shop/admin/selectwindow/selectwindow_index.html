@@ -1,0 +1,299 @@
+<input type="hidden" class="js-round-select-window" value="{|$roundSetting|}"/>
+<div class="shop-popup-block" id="{|$windowID|}" style="display: none;">
+    <div class="dark"></div>
+    <div class="popupblock">
+        <a href="#" id="{|$windowID|}-close" class="close"></a>
+
+        <div id="{|$windowID|}-loading" class="loading" style="display: none;"></div>
+
+        <div id="{|$windowID|}-tabs" class="shop-tabs">
+            {|if $option_productsearch|}
+                <a href="#" data-rel=".{|$windowID|}-tab-product-search">{|$translate_find_product|}</a>
+            {|/if|}
+
+            {|if $option_productadd|}
+                <a href="#" data-rel=".{|$windowID|}-tab-product-add">{|$translate_new_product_create|}</a>
+            {|/if|}
+
+            {|if $option_boxsearch|}
+                <a href="#" data-rel=".{|$windowID|}-tab-box-search">{|$translate_find_tab_box|}</a>
+            {|/if|}
+
+            {|if $option_boxadd|}
+                <a href="#" data-rel=".{|$windowID|}-tab-box-add">{|$translate_create_tab_box|}</a>
+            {|/if|}
+
+            {|if $option_usersearch|}
+                <a href="#" data-rel=".{|$windowID|}-tab-user-search">{|$translate_find_client|}</a>
+            {|/if|}
+
+            {|if $option_useradd|}
+                <a href="#" data-rel=".{|$windowID|}-tab-user-add">{|$translate_create_client|}</a>
+            {|/if|}
+            <div class="clear"></div>
+        </div>
+
+        <div class="window-content">
+            <div class="{|$windowID|}-tab-product-search window-form" style="display: none;">
+                <div class="element">
+                    <div class="el-caption">{|$translate_find_product|}</div>
+                    <div class="el-value">
+                        <input class="ob-button button-orange fl-r" type="button" id="{|$windowID|}-product-search-button" value="{|$translate_search|}" />
+                        <input type="text" id="{|$windowID|}-product-search" value="" autocomplete="off" class="selectwindow-input-search" style="width: 500px;" />
+                    </div>
+                </div>
+                <div class="element">
+                    <div class="el-caption">{|$translate_select_a_category|}</div>
+                    <div class="el-value">
+                        <select id="{|$windowID|}-product-search-categoryid" class="chzn-select">
+                            <option value="0">---</option>
+                            {|foreach from=$categoryArray item="e"|}
+                                <option value="{|$e.id|}">
+                                    {|section name=foo start=0 loop=$e.level|}
+                                        &nbsp;&nbsp;&nbsp;
+                                    {|/section|}{|$e.name|}
+                                </option>
+                            {|/foreach|}
+                        </select>
+                    </div>
+                </div>
+                <br />
+
+                <div id="{|$windowID|}-product-search-result" class="selectwindow-autocomplete-result"></div>
+            </div>
+
+            <div class="{|$windowID|}-tab-box-search" style="display: none;">
+                <h1>{|$translate_find_tab_box|}</h1>
+                <input type="text" id="{|$windowID|}-box-search" value="" autocomplete="off" class="selectwindow-input-search" />
+                <input class="ob-button button-orange" type="button" id="{|$windowID|}-box-search-button" value="{|$translate_search|}" />
+                <br />
+                <br />
+
+                <div id="{|$windowID|}-box-search-result" class="selectwindow-autocomplete-result"></div>
+            </div>
+
+            <div class="{|$windowID|}-tab-user-search" style="display: none;">
+                <h1>{|$translate_find_client|} ({|$translate_by_user|})</h1>
+                <input type="text" id="{|$windowID|}-user-search" value="" autocomplete="off" class="selectwindow-input-search" />
+                <input class="ob-button button-orange" type="button" id="{|$windowID|}-user-search-button" value="{|$translate_search|}" />
+                <br />
+                <br />
+
+                <div id="{|$windowID|}-user-search-result" class="selectwindow-autocomplete-result">
+                    <br />
+                    <div class="shop-tabs">
+                        <a href="#" class="selectwindow-users-link selected" data-rel=".selectwindow-users-tab-all" >{|$translate_all|}</a>
+                        <a href="#" class="selectwindow-users-link" data-rel=".selectwindow-users-tab-clients" >{|$translate_clients|}</a>
+                        <a href="#" class="selectwindow-users-link" data-rel=".selectwindow-users-tab-users" >{|$translate_users_only|}</a>
+                        <div class="clear"></div>
+                    </div>
+
+                    <br />
+                    <div class="selectwindow-users-tab-all" ></div>
+                    <div class="selectwindow-users-tab-clients" style="display: none;"></div>
+                    <div class="selectwindow-users-tab-users" style="display: none;"></div>
+                </div>
+            </div>
+
+            <div class="{|$windowID|}-tab-product-add window-form" style="display: none;">
+                <h1>{|$translate_create_new_product|}</h1>
+
+                <div class="element fl-l" style="width: 49%;">
+                    {|$translate_select_a_category|}
+                    <select class="chzn-select"  id="{|$windowID|}-product-add-categoryid">
+                        <option value="0">---</option>
+                        {|foreach from=$categoryArray item="e"|}
+                            <option value="{|$e.id|}">
+                                {|section name=foo start=0 loop=$e.level|}
+                                    &nbsp;&nbsp;&nbsp;
+                                {|/section|}{|$e.name|}{|$e.name|}
+                            </option>
+                        {|/foreach|}
+                    </select>
+                </div>
+                <div class="element fl-r" style="width: 49%;">
+                    Выберите бренд
+                    <select name="brand" class="chzn-select" id="{|$windowID|}-product-add-brandid">
+                        <option value="0">---</option>
+                        {|foreach from=$brandsArray item="e"|}
+                        <option value="{|$e.id|}" >{|$e.name|}</option>
+                        {|/foreach|}
+                    </select>
+                </div>
+                <div class="clear"></div>
+
+                <div class="element">
+                    Название продукта
+                    <div class="js-formula">
+                        <input type="text" class="{|$windowID|}-product-add-name" value="{|$option_productAddDefault|}"/>
+                    </div>
+                </div>
+
+                <div class="element fl-l" style="width: 49%;">
+                    Цена продажи <br />
+                    <input type="text" id="{|$windowID|}-product-add-price" style="width: 125px;" />
+                    <select class="chzn-select inline" id="{|$windowID|}-product-add-currencyid" style="width: 90px;">
+                        {|foreach from=$currencyArray item="e"|}
+                            <option value="{|$e.id|}">{|$e.name|}</option>
+                        {|/foreach|}
+                    </select>
+                    <label>
+                        <input id="{|$windowID|}-product-add-hidden" type="checkbox"  value="1"  checked  />
+                        {|$translate_product_hidden|}
+                    </label>
+                    <div class="clear"></div> <br />
+                    {|$translate_unit|} <br />
+                    <input type="text" id="{|$windowID|}-product-add-unit" style="width: 100px;" />
+                </div>
+                <div class="element fl-r" style="width: 49%;">
+                    Себестоимость товара <br />
+                    <input type="text" id="{|$windowID|}-product-add-pricebase" value="" style="width: 200px;"  />
+                </div>
+                <div class="clear"></div>
+
+                <div class="element fl-l" style="width: 49%;">
+                    Источник (тип товара)
+                    <select name="source" class="chzn-select" id="{|$windowID|}-product-add-source">
+                        <option value="">Склад или поставщик</option>
+                        <option value="service" >Услуга (безлимитно тиражируемая)</option>
+                        <option value="servicebusy" >Услуга с сеткой занятости</option>
+                    </select>
+                </div>
+                <div class="element fl-r" style="width: 49%;">
+                    {|$translate_term_product|}
+                    <select class="chzn-select" id="{|$windowID|}-product-add-term">
+                        <option value="unlimited"{|if $control_term == 'unlimited'|} selected {|/if|}>{|$translate_unlimited|}</option>
+                        <option value="day" {|if $control_term == 'day'|} selected {|/if|}>{|$translate_day|}</option>
+                        <option value="month" {|if $control_term == 'month'|} selected {|/if|}>{|$translate_month|}</option>
+                        <option value="year" {|if $control_term == 'year'|} selected {|/if|}>{|$translate_year|}</option>
+                    </select>
+                </div>
+                <div class="clear"></div>
+
+                <input type="button" id="{|$windowID|}-product-add-button" value="{|$translate_create|}" class="ob-button button-green" />
+            </div>
+
+            <div class="{|$windowID|}-tab-box-add" style="display: none;">
+                <h1>{|$translate_create_new_tab_box|}</h1>
+
+                <table>
+                    <tr>
+                        <td>
+                            <select id="{|$windowID|}-box-add-categoryid">
+                                <option value="0">---</option>
+                                {|foreach from=$categoryArray item="e"|}
+                                    <option value="{|$e.id|}">{|$e.name|}</option>
+                                {|/foreach|}
+                            </select>
+                        </td>
+                        <td>
+                            <div class="formula">
+                                <input type="text" class="{|$windowID|}-box-add-name" />
+                            </div>
+                        </td>
+                        <td><input type="button" id="{|$windowID|}-box-add-button" value="{|$translate_create|}" class="ob-button button-green" /></td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="{|$windowID|}-tab-user-add user-add-form" style="display: none;">
+                <h1>{|$translate_create_new_client|}</h1>
+                <strong>{|$translate_user_typesex|}</strong><br />
+                <select name="typesex" class="chzn-select js-type-change" id="{|$windowID|}-user-add-typesex" style="width: 300px;">
+                    <option value="man" {|if "man" == $control_typesex|} selected {|/if|}>{|$translate_user_man|}</option>
+                    <option value="woman" {|if "woman" == $control_typesex|} selected {|/if|}>{|$translate_user_woman|}</option>
+                    <option value="company" {|if "company" == $control_typesex|} selected {|/if|}>{|$translate_company_little|}</option>
+                </select>
+                <br />
+                <br />
+
+                <div class="js-type-user-fields">
+                    <table>
+                        <tr>
+                            <td>
+                                <strong>{|$translate_name_last|} </strong><br />
+                                <input type="text" id="{|$windowID|}-user-add-name-last" value="{|$option_userAddDefault|}" style="width: 200px;" />
+                            </td>
+                            <td>
+                                <strong>{|$translate_name_small|} </strong><br />
+                                <input type="text" id="{|$windowID|}-user-add-name" style="width: 200px;" />
+                            </td>
+                            <td>
+                                <strong>{|$translate_name_middle|} </strong><br />
+                                <input type="text" id="{|$windowID|}-user-add-name-middle" style="width: 200px;" />
+                            </td>
+                        </tr>
+                    </table>
+                    <br />
+                </div>
+
+                <table>
+                    <tr>
+                        <td>
+                            <strong>{|$translate_company|}</strong><br />
+                            <input type="text" id="{|$windowID|}-user-add-company" style="width: 200px;" />
+                        </td>
+                        <td>
+                            <div class="js-type-user-fields">
+                                <strong>{|$translate_post|}</strong><br />
+                            </div>
+                            <div class="js-type-company-fields" style="display: none;">
+                                <strong>{|$translate_spacialization|}</strong><br />
+                            </div>
+                            <input type="text" id="{|$windowID|}-user-add-post" style="width: 200px;" />
+                        </td>
+                    </tr>
+                </table>
+                <br />
+
+                <strong>{|$translate_phone|}</strong><br />
+                <textarea id="{|$windowID|}-user-add-phone" class="js-phone-formatter" ></textarea>
+                <br />
+                <br />
+
+                <strong>E-mail</strong><br />
+                <textarea id="{|$windowID|}-user-add-email"></textarea>
+                <br />
+                <br />
+
+                {|if $box|}
+                    <strong>Skype</strong><br />
+                    <input type="text" id="{|$windowID|}-user-add-skype" class="js-phone-formatter" />
+                    <br />
+                    <br />
+
+                    <div class="js-type-user-fields">
+                        <strong>Whatsapp</strong><br />
+                        <input type="text" id="{|$windowID|}-user-add-whatsapp" class="js-phone-formatter" />
+                        <br />
+                        <br />
+                    </div>
+                {|/if|}
+
+                <strong>{|$translate_address_small|}</strong><br />
+                <input type="text" id="{|$windowID|}-user-add-address" />
+                <br />
+                <br />
+
+                <input type="button" id="{|$windowID|}-user-add-button" value="{|$translate_create|}" class="ob-button button-green" />
+                <br />
+                <br />
+                <script type="text/javascript">
+                    $j('.js-type-change').change(function(){
+                        if($j(this).val() != 'company'){
+                            $j('.js-type-user-fields').show();
+                            $j('.js-type-company-fields').hide();
+                        }else{
+                            $j('.js-type-user-fields').hide();
+                            $j('.js-type-company-fields').show();
+                        }
+                    });
+                </script>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    popupOpen('#{|$windowID|}');
+</script>

@@ -1,0 +1,447 @@
+<div class="shop-filter-panel">
+    <div class="filter-toggle {|if $filterpanelCookie|}open{|/if|}"></div>
+    <div class="inner-pannel" {|if !$filterpanelCookie|}style="display: none;"{|/if|}>
+        <form action="" method="get">
+            <div class="element">
+                <input type="text" name="datefrom" value="{|$control_datefrom|}" class="js-date" placeholder="Дата от" />
+            </div>
+
+            <div class="element">
+                <input type="text" name="dateto" value="{|$control_dateto|}" class="js-date" placeholder="Дата до" />
+            </div>
+
+            <div class="element ulist">
+                <label>
+                    <input type="checkbox" name="groupcompany" value="1" {|if $control_groupcompany|} checked {|/if|} />
+                    Группировать по компаниям
+                </label>
+            </div>
+
+            <div class="element">
+                <input type="text" name="from" value="{|$control_from|}" placeholder="От кого" />
+            </div>
+
+            <div class="element">
+                <input type="text" name="to" value="{|$control_to|}" placeholder="Кому" />
+            </div>
+
+            Группировать:
+            <select name="groupby" class="chzn-select">
+                <option value="day" {|if $control_groupby == 'day'|} selected {|/if|}>День</option>
+                <option value="week" {|if $control_groupby == 'week'|} selected {|/if|}>Неделя</option>
+                <option value="month" {|if $control_groupby == 'month'|} selected {|/if|}>Месяц</option>
+            </select>
+            <br />
+
+            Показывать:
+            <select name="showby" class="chzn-select">
+                <option value="summary" {|if $control_showby == 'summary'|} selected {|/if|}>Сводку</option>
+                <option value="client" {|if $control_showby == 'client'|} selected {|/if|}>По клиентам</option>
+                <option value="manager" {|if $control_showby == 'manager'|} selected {|/if|}>По менеджерам</option>
+            </select>
+            <br />
+
+            <div class="element">
+                <input type="text" name="callduration" value="{|$control_callduration|}" placeholder="Длительность звонка" />
+            </div>
+
+            <input class="ob-button button-orange" type="submit" name="ok" value="{|$translate_filter|}" />
+
+            <div class="clear"></div>
+            <br />
+        </form>
+    </div>
+</div>
+
+<form action="" method="post">
+    <div class="shop-result-list">
+        <div class="inner-list {|if $filterpanelCookie|}filter-reserve{|/if|}">
+
+            <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+
+            {|if $showBy == 'summary'|}
+            <h1>События по датам</h1>
+
+                <div style="width: 100%; overflow: scroll;">
+                    <table class="shop-table css-grid js-table-fixed">
+                        <thead>
+                            <tr>
+                                <td width="300">Событие / Дата</td>
+                                {|foreach from=$dateArray item="date"|}
+                                    <td>
+                                        {|if $monthNameArray[$date]|}
+                                            {|$monthNameArray[$date]|}
+                                        {|else|}
+                                            {|$date|}
+                                        {|/if|}
+                                    </td>
+                                {|/foreach|}
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr>
+                                <td>Звонки входящие</td>
+                                {|foreach from=$dateArray item="date"|}
+                                    <td align="right">{|$reportArray[$date].call_In|}</td>
+                                {|/foreach|}
+                            </tr>
+                            <tr>
+                                <td>Звонки исходящие</td>
+                                {|foreach from=$dateArray item="date"|}
+                                    <td align="right">{|$reportArray[$date].call_Out|}</td>
+                                {|/foreach|}
+                            </tr>
+                            <tr>
+                                <td>Звонки внутренние</td>
+                                {|foreach from=$dateArray item="date"|}
+                                    <td align="right">{|$reportArray[$date].call_Our|}</td>
+                                {|/foreach|}
+                            </tr>
+                            <tr>
+                                <td>Звонки (все)</td>
+                                {|foreach from=$dateArray item="date"|}
+                                    <td align="right">{|$reportArray[$date].call_All|}</td>
+                                {|/foreach|}
+                            </tr>
+                            <tr>
+                                <td>Email входящие</td>
+                                {|foreach from=$dateArray item="date"|}
+                                    <td align="right">{|$reportArray[$date].email_In|}</td>
+                                {|/foreach|}
+                            </tr>
+                            <tr>
+                                <td>Email исходящие</td>
+                                {|foreach from=$dateArray item="date"|}
+                                    <td align="right">{|$reportArray[$date].email_Out|}</td>
+                                {|/foreach|}
+                            </tr>
+                            <tr>
+                                <td>Email внутренние</td>
+                                {|foreach from=$dateArray item="date"|}
+                                    <td align="right">{|$reportArray[$date].email_Our|}</td>
+                                {|/foreach|}
+                            </tr>
+                            <tr>
+                                <td>Email (все)</td>
+                                {|foreach from=$dateArray item="date"|}
+                                    <td align="right">{|$reportArray[$date].email_All|}</td>
+                                {|/foreach|}
+                            </tr>
+                            <tr>
+                                <td>Встречи (все)</td>
+                                {|foreach from=$dateArray item="date"|}
+                                    <td align="right">{|$reportArray[$date].meeting_All|}</td>
+                                {|/foreach|}
+                            </tr>
+                            <tr>
+                                <td>SMS (все)</td>
+                                {|foreach from=$dateArray item="date"|}
+                                    <td align="right">{|$reportArray[$date].sms_All|}</td>
+                                {|/foreach|}
+                            </tr>
+                            <tr>
+                                <td>Skype (все)</td>
+                                {|foreach from=$dateArray item="date"|}
+                                    <td align="right">{|$reportArray[$date].skype_All|}</td>
+                                {|/foreach|}
+                            </tr>
+                            <tr>
+                                <td>Jabber (все)</td>
+                                {|foreach from=$dateArray item="date"|}
+                                    <td align="right">{|$reportArray[$date].jabber_All|}</td>
+                                {|/foreach|}
+                            </tr>
+                            <tr>
+                                <td>WhatsApp (все)</td>
+                                {|foreach from=$dateArray item="date"|}
+                                    <td align="right">{|$reportArray[$date].whatsapp_All|}</td>
+                                {|/foreach|}
+                            </tr>
+                            <tr>
+                                <td>Viber (все)</td>
+                                {|foreach from=$dateArray item="date"|}
+                                    <td align="right">{|$reportArray[$date].viber_All|}</td>
+                                {|/foreach|}
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <script type="text/javascript">
+                google.load("visualization", "1", {packages:["corechart"]});
+                google.setOnLoadCallback(drawChart);
+                function drawChart() {
+                    var data = google.visualization.arrayToDataTable([
+                    ['Дата', 'Звонки входящие', 'Звонки исходящие', 'Звонки внутренние'],
+                    {|foreach from=$dateArray item="date"|}
+                        ['{|$date|}', {|$reportArray[$date].call_In+0|}, {|$reportArray[$date].call_Out+0|}, {|$reportArray[$date].call_Our+0|}],
+                    {|/foreach|}
+                    ]);
+
+                    var options = {};
+
+                    var chart = new google.visualization.LineChart(document.getElementById('chart_div_11'));
+                    chart.draw(data, options);
+
+                    var data = google.visualization.arrayToDataTable([
+                    ['Дата', 'Email входящие', 'Email исходящие', 'Email внутренние'],
+                    {|foreach from=$dateArray item="date"|}
+                        ['{|$date|}', {|$reportArray[$date].email_In+0|}, {|$reportArray[$date].email_Out+0|}, {|$reportArray[$date].email_Our+0|}],
+                    {|/foreach|}
+                    ]);
+
+                    var options = {};
+
+                    var chart = new google.visualization.LineChart(document.getElementById('chart_div_12'));
+                    chart.draw(data, options);
+
+                    var data = google.visualization.arrayToDataTable([
+                    ['Дата', 'Звонки все', 'Email все'],
+                    {|foreach from=$dateArray item="date"|}
+                        ['{|$date|}', {|$reportArray[$date].call_All+0|}, {|$reportArray[$date].email_All+0|}],
+                    {|/foreach|}
+                    ]);
+
+                    var options = {};
+
+                    var chart = new google.visualization.LineChart(document.getElementById('chart_div_13'));
+                    chart.draw(data, options);
+                }
+                </script>
+
+                <div id="chart_div_11" style="width: 100%; height: 500px;"></div>
+                <div id="chart_div_12" style="width: 100%; height: 500px;"></div>
+                <div id="chart_div_13" style="width: 100%; height: 500px;"></div>
+
+                <br />
+            {|/if|}
+
+            {|if $clientArray|}
+                <h1>События клиентов по датам</h1>
+
+                <div style="width: 100%; overflow: scroll;">
+                    <table class="shop-table css-grid js-table-fixed">
+                        <thead>
+                            <tr>
+                                <td width="300">Клиент</td>
+                                <td width="300">Событие / Дата</td>
+                                {|foreach from=$dateArray item="date"|}
+                                    <td>
+                                        {|if $monthNameArray[$date]|}
+                                            {|$monthNameArray[$date]|}
+                                        {|else|}
+                                            {|$date|}
+                                        {|/if|}
+                                    </td>
+                                {|/foreach|}
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {|foreach from=$clientArray item="clientName" key="clientID"|}
+                                <tr>
+                                    <td>{|$clientName|}</td>
+                                    <td>Звонки входящие</td>
+                                    {|foreach from=$dateArray item="date"|}
+                                        <td align="right">{|$reportClientArray[$clientID][$date].callIn|}</td>
+                                    {|/foreach|}
+                                </tr>
+                                <tr>
+                                    <td>{|$clientName|}</td>
+                                    <td>Звонки исходящие</td>
+                                    {|foreach from=$dateArray item="date"|}
+                                        <td align="right">{|$reportClientArray[$clientID][$date].callOut|}</td>
+                                    {|/foreach|}
+                                </tr>
+                                <tr>
+                                    <td>{|$clientName|}</td>
+                                    <td>Звонки внутренние</td>
+                                    {|foreach from=$dateArray item="date"|}
+                                        <td align="right">{|$reportClientArray[$clientID][$date].callOur|}</td>
+                                    {|/foreach|}
+                                </tr>
+                                <tr>
+                                    <td>{|$clientName|}</td>
+                                    <td>Звонки (все)</td>
+                                    {|foreach from=$dateArray item="date"|}
+                                        <td align="right">{|$reportClientArray[$clientID][$date].callAll|}</td>
+                                    {|/foreach|}
+                                </tr>
+
+                                <tr>
+                                    <td>{|$clientName|}</td>
+                                    <td>Email входящие</td>
+                                    {|foreach from=$dateArray item="date"|}
+                                        <td align="right">{|$reportClientArray[$clientID][$date].emailIn|}</td>
+                                    {|/foreach|}
+                                </tr>
+                                <tr>
+                                    <td>{|$clientName|}</td>
+                                    <td>Email исходящие</td>
+                                    {|foreach from=$dateArray item="date"|}
+                                        <td align="right">{|$reportClientArray[$clientID][$date].emailOut|}</td>
+                                    {|/foreach|}
+                                </tr>
+                                <tr>
+                                    <td>{|$clientName|}</td>
+                                    <td>Email внутренние</td>
+                                    {|foreach from=$dateArray item="date"|}
+                                        <td align="right">{|$reportClientArray[$clientID][$date].emailOur|}</td>
+                                    {|/foreach|}
+                                </tr>
+                                <tr>
+                                    <td>{|$clientName|}</td>
+                                    <td>Email (все)</td>
+                                    {|foreach from=$dateArray item="date"|}
+                                        <td align="right">{|$reportClientArray[$clientID][$date].emailAll|}</td>
+                                    {|/foreach|}
+                                </tr>
+                            {|/foreach|}
+                        </tbody>
+                    </table>
+                </div>
+                <br />
+            {|/if|}
+
+            {|if $managerArray|}
+                <h1>События менеджеров по датам</h1>
+
+                <div style="width: 100%; overflow: scroll;">
+                    <table class="shop-table css-grid js-table-fixed">
+                        <thead>
+                            <tr>
+                                <td width="300">Менеджер</td>
+                                <td width="300">Событие / Дата</td>
+                                {|foreach from=$dateArray item="date"|}
+                                    <td>
+                                        {|if $monthNameArray[$date]|}
+                                            {|$monthNameArray[$date]|}
+                                        {|else|}
+                                            {|$date|}
+                                        {|/if|}
+                                    </td>
+                                {|/foreach|}
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {|foreach from=$managerArray item="managerName" key="managerID"|}
+                                <tr>
+                                    <td>{|$managerName|}</td>
+                                    <td>Звонки входящие</td>
+                                    {|foreach from=$dateArray item="date"|}
+                                        <td align="right">{|$reportManagerArray[$managerID][$date].callIn|}</td>
+                                    {|/foreach|}
+                                </tr>
+                                <tr>
+                                    <td>{|$managerName|}</td>
+                                    <td>Звонки исходящие</td>
+                                    {|foreach from=$dateArray item="date"|}
+                                        <td align="right">{|$reportManagerArray[$managerID][$date].callOut|}</td>
+                                    {|/foreach|}
+                                </tr>
+                                <tr>
+                                    <td>{|$managerName|}</td>
+                                    <td>Звонки внутренние</td>
+                                    {|foreach from=$dateArray item="date"|}
+                                        <td align="right">{|$reportManagerArray[$managerID][$date].callOur|}</td>
+                                    {|/foreach|}
+                                </tr>
+                                <tr>
+                                    <td>{|$managerName|}</td>
+                                    <td>Звонки (все)</td>
+                                    {|foreach from=$dateArray item="date"|}
+                                        <td align="right">{|$reportManagerArray[$managerID][$date].callAll|}</td>
+                                    {|/foreach|}
+                                </tr>
+
+                                <tr>
+                                    <td>{|$managerName|}</td>
+                                    <td>Email входящие</td>
+                                    {|foreach from=$dateArray item="date"|}
+                                        <td align="right">{|$reportManagerArray[$managerID][$date].emailIn|}</td>
+                                    {|/foreach|}
+                                </tr>
+                                <tr>
+                                    <td>{|$managerName|}</td>
+                                    <td>Email исходящие</td>
+                                    {|foreach from=$dateArray item="date"|}
+                                        <td align="right">{|$reportManagerArray[$managerID][$date].emailOut|}</td>
+                                    {|/foreach|}
+                                </tr>
+                                <tr>
+                                    <td>{|$managerName|}</td>
+                                    <td>Email внутренние</td>
+                                    {|foreach from=$dateArray item="date"|}
+                                        <td align="right">{|$reportManagerArray[$managerID][$date].emailOur|}</td>
+                                    {|/foreach|}
+                                </tr>
+                                <tr>
+                                    <td>{|$managerName|}</td>
+                                    <td>Email (все)</td>
+                                    {|foreach from=$dateArray item="date"|}
+                                        <td align="right">{|$reportManagerArray[$managerID][$date].emailAll|}</td>
+                                    {|/foreach|}
+                                </tr>
+                            {|/foreach|}
+                        </tbody>
+                    </table>
+                </div>
+            {|/if|}
+
+            {|if $managerArray|}
+                {|foreach from=$managerArray item="managerName" key="managerID"|}
+                    <br />
+                    <br />
+                    <h1>{|$managerName|}</h1>
+                    <div id="chart-manager-{|$managerID|}-call" style="width: 100%; height: 500px;"></div>
+                    <div id="chart-manager-{|$managerID|}-email" style="width: 100%; height: 500px;"></div>
+
+                    <script type="text/javascript">
+                    google.load("visualization", "1", {packages:["corechart"]});
+                    google.setOnLoadCallback(drawChart);
+                    function drawChart() {
+                        var data = google.visualization.arrayToDataTable([
+                        ['Дата', 'Звонки входящие', 'Звонки исходящие', 'Звонки внутренние'],
+                        {|foreach from=$dateArray item="date"|}
+                            ['{|$date|}', {|$reportManagerArray[$managerID][$date].callIn+0|}, {|$reportManagerArray[$managerID][$date].callOut+0|}, {|$reportManagerArray[$managerID][$date].callOur+0|}],
+                        {|/foreach|}
+                        ]);
+
+                        var options = {};
+
+                        var chart = new google.visualization.LineChart(document.getElementById('chart-manager-{|$managerID|}-call'));
+                        chart.draw(data, options);
+
+                        // --
+
+                        var data = google.visualization.arrayToDataTable([
+                        ['Дата', 'Email входящие', 'Email исходящие', 'Email внутренние'],
+                        {|foreach from=$dateArray item="date"|}
+                            ['{|$date|}', {|$reportManagerArray[$managerID][$date].emailIn+0|}, {|$reportManagerArray[$managerID][$date].emailOut+0|}, {|$reportManagerArray[$managerID][$date].emailOur+0|}],
+                        {|/foreach|}
+                        ]);
+
+                        var options = {};
+
+                        var chart = new google.visualization.LineChart(document.getElementById('chart-manager-{|$managerID|}-email'));
+                        chart.draw(data, options);
+                    }
+                    </script>
+                {|/foreach|}
+            {|/if|}
+
+            <br />
+
+        </div>
+    </div>
+    <div class="clear"></div>
+
+</form>
+
+<style type="text/css">
+.css-grid tbody td {
+    border: 1px solid #dadada;
+}
+</style>

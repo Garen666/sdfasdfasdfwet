@@ -1,0 +1,177 @@
+<div class="shop-tabs fixed">
+    <a href="/admin/shop/games/">&lsaquo; Игры</a>
+    <a href="/admin/shop/games/manage/">Менеджер Игр</a>
+    <a href="/admin/shop/games/add/" class="selected">Добавить Игру</a>
+    <div class="clear"></div>
+</div>
+<div class="shop-tabs-place"></div>
+
+{|if $message == 'ok'|}
+    <div class="shop-message-success">
+        Игра успешно создана.<br />
+    </div>
+{|/if|}
+
+{|if $message == 'error'|}
+    <div class="shop-message-error">
+        Ошибка создания новой игры.
+    </div>
+{|/if|}
+
+<form action="" method="post" enctype="multipart/form-data">
+    <div class="shop-productright-layer">
+        <div class="inner">
+            <div class="shop-toggle-block">
+                <div class="shop-toggle-block-inner">
+                    <div class="cell">
+                        <a href="#" class="toggle">Общая информация</a>
+                    </div>
+
+                    <div class="cell">
+                        <div class="block">
+                            <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                                <tr>
+                                    <td>
+                                        <div class="caption">Наименование</div>
+                                        <div class="js-formula">
+                                            <span class="important-field"><input type="text" name="name[]" value="{|$control_name|}" style="width: 97%;" class="help-hint-product-name" /></span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                            <br />
+
+                            <div class="caption">Краткое описание</div>
+                            <textarea name="descriptionshort" style="width: 99%; height: 60px;" id="id-descriptionshort">{|$control_descriptionshort|}</textarea>
+                            <br />
+                            <br />
+
+
+                            <div class="caption">Описание</div>
+                            <textarea name="description" style="width: 99%; height: 100px;" id="id">{|$control_description|}</textarea>
+                            <br />
+                            <br />
+                            <div class="clear"></div>
+                            <br />
+
+
+                            <div class="caption">Теги</div>
+                            <ul class="js-tags" data-input=".js-tags-input"></ul>
+                            <input type="hidden" name="tags" value="{|$control_tags|}" class="js-tags-input" />
+                            <br />
+                            <br />
+
+                            <label>
+                                <input type="checkbox" name="hidden" value="1" class="help-hint-product-hide" {|if $control_hidden|} checked {|/if|} />
+                                Скрытый
+                            </label>
+
+                            <label>
+                                <input class="help-hint-deleted" type="checkbox" name="deleted" value="1" {|if $control_deleted|} checked {|/if|} />
+                                Удаленный
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="shop-toggle-block">
+                <div class="shop-toggle-block-inner">
+                    <div class="cell">
+                        <a href="#" class="toggle">SEO</a>
+                    </div>
+                    <div class="cell">
+                        <div class="block">
+                            SEO заголовок (title)
+                            <input type="text" name="seotitle" value="{|$control_seotitle|}" style="width: 100%;" />
+                            <br />
+                            <br />
+
+                            <div class="caption">SEO описание (description)</div>
+                            <textarea name="seodescription" style="width: 100%; height: 80px;">{|$control_seodescription|}</textarea>
+                            <br />
+                            <br />
+
+                            <div class="caption">SEO текст (content)</div>
+                            <textarea name="seocontent" style="width: 100%; height: 80px;">{|$control_seocontent|}</textarea>
+                            <br />
+                            <br />
+
+                            <div class="caption">SEO ключевые слова (kaewords)</div>
+                            <textarea name="seokeywords" style="width: 100%; height: 80px;">{|$control_seokeywords|}</textarea>
+                            <br />
+                            <br />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="shop-productleft-layer">
+        <div class="shop-toggle-block">
+            <a href="#" class="toggle">Основное изображение:</a>
+            <div class="block">
+                <strong>Загрузить основное изображение</strong>
+                <div class="shop-photos-block">
+                    <div class="main">
+                        <div class="item">
+                            {|$cropper|}
+                        </div>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="clear"></div>
+
+    <div class="ob-button-fixed">
+        <input type="submit" name="ok" value="Создать игру" class="ob-button button-green" />
+    </div>
+</form>
+
+<style>
+    .js-add-filter-popup {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        z-index: 1000;
+        top: 0;
+        left: 0;
+    }
+
+    .js-add-filter-popup .popup-block {
+        position: fixed;
+        top: 118px;
+        left: 50%;
+        margin: 0 0 0 -222px;
+        z-index: 1002;
+        background-color: #ffffff;
+        width: 444px;
+        border-radius: 5px;
+    }
+
+    .js-add-filter-popup .dark {
+        width:100%;
+        height:100%;
+        position:fixed;
+        top: 0;
+        left: 0;
+        z-index:1001;
+        background-color: #000000;
+        opacity:0.5;
+    }
+
+    .js-add-filter-popup .popup-block a.close {
+        float: right;
+        width: 10px;
+        height: 10px;
+        background: url('/_images/close.png') no-repeat;
+        text-decoration: none;
+        margin: 6px 8px 0 0;
+    }
+</style>
+<br />
+<br />

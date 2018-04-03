@@ -1,0 +1,145 @@
+<div class="shop-tabs fixed">
+    <a href="/admin/shop/users/mailing/" class="selected">{|$translate_users_mailing|} Email</a>
+    <a href="/admin/shop/users/smsmailing/">{|$translate_users_mailing|} SMS</a>
+    <div class="clear"></div>
+</div>
+<div class="shop-tabs-place"></div>
+
+{|if $message == 'error'|}
+    <div class="shop-message-error">
+        {|$translate_mailing_error|}.<br />
+        ({|$translate_mailing_error_why|})
+    </div>
+{|/if|}
+
+{|if $message == 'ok'|}
+    <div class="shop-message-success">
+        {|$translate_mailing_success|} ({|$cnt|}).
+    </div>
+    {|if $sendsArray|}
+        <table class="shop-table">
+            <thead>
+            <tr>
+                <td>#</td>
+                <td>Email</td>
+                <td>Отправлено</td>
+            </tr>
+            </thead>
+            {|foreach from=$sendsArray item="user"|}
+            <tr>
+                <td><a href="{|$user.url|}">{|$user.id|}</a></td>
+                <td>{|$user.email|}</td>
+                <td>
+                    {|if $user.send|}
+                        Да
+                    {|else|}
+                        Нет
+                    {|/if|}
+                </td>
+            </tr>
+            {|/foreach|}
+        </table>
+    {|/if|}
+{|/if|}
+
+<form name="form" id="myform" method="post" enctype="multipart/form-data" >
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+        <tr valign="top">
+
+            {|if $arrUserId|}
+                <input type="hidden" name="arrUserId" value="{|$arrUserId|}">
+            {|/if|}
+            <td>
+                {|if $emailCount|}
+                    Пользователей с Email: {|$emailCount|}<br />
+                    Пользователей подписанных на рассылку: {|$disCount|}
+                {|/if|}
+                <br />
+                <br />
+
+                <strong>{|$translate_subject|}:</strong><br/>
+                <input name="subject" type="text" value="{|$control_subject|}" style="width: 80%;" />
+                <br />
+                <br />
+
+                <strong>{|$translate_return_address|}:</strong><br/>
+                <input name="mail" type="mail" value="{|$control_mail|}" style="width: 80%;" />
+                <br />
+                <br />
+
+                <strong>Шаблон письма:</strong><br/>
+                <select name="design" class="chzn-select" style="width: 80%;" >
+                    <option value="0">---</option>
+                    {|foreach from=$designArray item="e"|}
+                    <option value="{|$e.name|}">{|$e.name|}</option>
+                    {|/foreach|}
+                </select>
+                <br />
+
+                <strong>{|$translate_text_of_letter|}:</strong><br/>
+                <textarea name="text" style="width: 99%; height: 220px;" class="rte-zone">{|$control_text
+                    |}</textarea>
+                <br />
+
+                {|$translate_can_use|}:<br />
+                [name_smart] - имя или название компании (для рассылки)<br />
+                [name] - полное ФИО <br />
+                [name_first] - Имя <br />
+                [name_last] - Фамилия <br />
+                [name_middle] - Отчество <br />
+                [name_first_last] - склеенные Имя и Фамилия <br />
+                [company] - Название компании <br />
+                [email] <br />
+                [phone] <br />
+                [url_unsubscribe] - ссылка "отписаться" <br />
+                [perfix] - если мужчина - то "Уважаемый", если женщина - "Уважаемая".<br />
+                [news] - Новость.<br />
+
+                <br />
+                <br />
+
+                Последнее новости:<br />
+                {|foreach from=$newsArray item="news"|}
+                    <input type="checkbox" name="news{|$news.id|}" value="1">
+                    {|$news.name|}
+                    ({|$news.date|})
+                <br />
+                {|/foreach|}
+                <br />
+                <br />
+
+                <strong>{|$translate_file|} 1</strong><br />
+                <input type="file" name="file1" />
+                <br />
+
+                <div class="js-files-block" style="display: none">
+                    <strong>{|$translate_file|} 2</strong><br />
+                    <input type="file" name="file2" />
+                    <br />
+                    <strong>{|$translate_file|} 3</strong><br />
+                    <input type="file" name="file3" />
+                    <br />
+                    <strong>{|$translate_file|} 4</strong><br />
+                    <input type="file" name="file4" />
+                    <br />
+                    <strong>{|$translate_file|} 5</strong><br />
+                    <input type="file" name="file5" />
+                </div>
+                <a href="#" id="js-toggle-files" >{|$translate_attach_more_files|}</a>
+                <br />
+                <br />
+                <br />
+                <input type="submit" name="ok" value="{|$translate_send|}" onclick="return confirm('{|$translate_send_confirm|}? ({|$translate_send_confirm_warning|})');" class="ob-button button-green" />
+                <input type="submit" name="test" value="Тестовая отправка"  class="ob-button button-green" />
+            </td>
+        </tr>
+    </table>
+</form>
+
+<script type="text/javascript">
+    $j(function() {
+        $j(".rte-zone").htmlarea({
+            css: '/_css/jquery.htmlarea.editor.css'
+        });
+    });
+</script>

@@ -1,0 +1,41 @@
+<br />
+
+<form action="" method="post" class="shop-block">
+    <h2>Быстрое создание задачи</h2>
+
+    {|*|}
+        <input type="text" name="parentid" value="{|$control_parentid|}" class="js-parentid" placeholder="Подзадача" style="width: 100px;" />
+    {|*|}
+
+    <div class="ob-issuequickadd-block">
+        <div class="elements">
+            <div class="element" style="width: 70%;">
+                <input type="text" name="newname" value="{|$control_newname|}" placeholder="Имя задачи" style="width: 100%;" />
+            </div>
+            <div class="element">
+                <select class="chzn-select" name="newmanagerid" style="width: 250px;">
+                    <option value="0">---</option>
+                    {|foreach from=$managerArray item="e"|}
+                        <option value="{|$e.id|}" {|if $e.id == $control_newmanagerid|} selected {|/if|}>{|$e.name|}</option>
+                    {|/foreach|}
+                </select>
+            </div>
+            <div class="element">
+                <input type="text" class="js-date" value="{|$control_newdateto|}" name="newdateto" style="width:120px;" placeholder="Выполнить до" />
+            </div>
+            <div class="element">
+                <select class="chzn-select" name="newworkflowid" style="width: 200px;">
+                    <option value="0">---</option>
+                    {|foreach from=$workflowArray item="e"|}
+                        <option value="{|$e.id|}" {|if $e.id == $control_newworkflowid|} selected {|/if|}>{|$e.name|}</option>
+                    {|/foreach|}
+                </select>
+            </div>
+        </div>
+        <br />
+
+        <textarea name="newcontent" class="js-autosize" style="width: 100%;" placeholder="Что нужно сделать?">{|$control_newcontent|}</textarea><br />
+        <br />
+        <input class="ob-button" type="submit" name="addissueok" value="Создать задачу" />
+    </div>
+</form>

@@ -1,0 +1,404 @@
+<div class="shop-tabs fixed">
+    <a href="/admin/shop/users/">&lsaquo; {|$translate_users|}</a>
+    <a href="." class="js-type-user-fields selected">{|$translate_users_add|}</a>
+    <a href="." class="js-type-company-fields selected">{|$translate_company_add|}</a>
+    <div class="clear"></div>
+</div>
+<div class="shop-tabs-place"></div>
+
+{|if $message == 'ok'|}
+    <div class="shop-message-success">
+        {|$translate_save_success|}. {|$translate_redirection|}...
+    </div>
+
+    <script type="text/javascript">
+    document.location = '{|$urlredirect|}';
+    </script>
+{|/if|}
+
+{|if $message == 'error'|}
+    <div class="shop-message-error">
+        {|$translate_error|}.
+        <br />
+        {|foreach from=$errorsArray item="e"|}
+            {|if $e == 'login'|}
+                {|$translate_order_error_login|}. {|$translate_order_error_login_must_be|}.<br />
+            {|/if|}
+            {|if $e == 'login-exists'|}
+                {|$translate_login_already_exists|}.<br />
+            {|/if|}
+            {|if $e == 'password'|}
+                {|$translate_profile_error_password|}.<br />
+            {|/if|}
+            {|if $e == 'email'|}
+                {|$translate_profile_error_mail|}.<br />
+            {|/if|}
+            {|if $e == 'email-exists'|}
+                {|$translate_profile_error_mail_exists|}.<br />
+            {|/if|}
+            {|if $e == 'phone'|}
+                {|$translate_order_error_phone|}.<br />
+            {|/if|}
+            {|if $e == 'noname'|}
+                {|$translate_no_name_error|}.<br />
+            {|/if|}
+            {|if $e == 'nocontact'|}
+                {|$translate_no_contact_error|}.<br />
+            {|/if|}
+            {|if $e == 'notUnicCompany'|}
+                Компания с таким именем уже существует.<br />
+            {|/if|}
+
+
+        {|/foreach|}
+    </div>
+{|/if|}
+{|*|} Блок для вывода совпадений{|*|}
+<div class="shop-usercontrol-content">
+    <form action="" method="post" enctype="multipart/form-data">
+        <div class="userleft-layer">
+            <label class="employee">
+                <input type="checkbox" name="employer" {|if $control_employer|}checked{|/if|}/>
+                <span class="js-type-company-fields" {|if "company" != $control_typesex|}style="display: none;"{|/if|}>Моя компания</span>
+                <span class="js-type-user-fields" {|if "company" == $control_typesex|}style="display: none;"{|/if|}>{|$translate_employee|}</span>
+            </label>
+            <h1 class="js-type-company-fields" {|if "company" != $control_typesex|}style="display: none;"{|/if|}>Добавить компанию</h1>
+            <h1 class="js-type-user-fields" {|if "company" == $control_typesex|}style="display: none;"{|/if|}>Добавить персону</h1>
+            <div class="clear"></div>
+            <br />
+
+            <div class="ob-data-element">
+                <div class="data-add">
+                    <div class="el-caption">{|$translate_user_typesex|}:</div>
+                    <div class="el-value">
+                        <select id="js-typesex" name="typesex" class="chzn-select js-type-change">
+                            <option value="man" {|if "man" == $control_typesex|} selected {|/if|}>{|$translate_user_man|}</option>
+                            <option value="woman" {|if "woman" == $control_typesex|} selected {|/if|}>{|$translate_user_woman|}</option>
+                            <option value="company" {|if "company" == $control_typesex|} selected {|/if|}>{|$translate_company_little|}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="shop-usermaininfo-block {|if !$control_typesex|}user{|/if|}" style="position: relative;">
+                <div class="avatar-layer">
+                    <div class="avatar">
+                        <a href="#" id="js-add-avatar" class="js-add-avatar"><img id="js-avatar-image" src="{|if $avatarimage|}{|$avatarimage|}{|else|}{|if "company" == $control_typesex|}/media/shop/stub-company.jpg{|else|}/media/shop/stub-man.jpg{|/if|}{|/if|}" alt="" /></a>
+                        <input id="js-image-add" type="file" name="avatarimage" />
+                    </div>
+                </div>
+                <div class="info">
+                    <div class="js-type-user-fields" {|if "company" == $control_typesex|} style="display:none;" {|/if|}>
+                        <table class="layer-table">
+                            <tr valign="top">
+                                <td>
+                                    <input type="text" name="namelast" class="js-search-dublicates" value="{|$control_namelast|}" placeholder="{|$translate_name_last|}" autofocus/>
+                                </td>
+                                <td class="separator"></td>
+                                <td>
+                                    <input type="text" name="name" class="js-search-dublicates" value="{|$control_name|}" placeholder="{|$translate_name_small|}" />
+                                </td>
+                                <td class="separator"></td>
+                                <td>
+                                    <input type="text" name="namemiddle" class="js-search-dublicates" value="{|$control_namemiddle|}" placeholder="{|$translate_name_middle|}" />
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="ob-duplicate-block">
+                        <div class="js-name-duplicate"></div>
+                        <div class="js-phones-duplicate"></div>
+                        <div class="js-email-duplicate"></div>
+                    </div>
+
+                    <ul id="js-company-tag" data-input="#js-company-input" ></ul>
+                    <input id="js-company-input" type="text" name="company" value="{|$control_company|}" style="display: none" placeholder="{|$translate_company|}"/><br />
+
+                    <input type="text" id="js-field-post" name="post" value="{|$control_post|}"  placeholder="{|if "company" == $control_typesex|}{|$translate_spacialization|}{|else|}{|$translate_post|}{|/if|}"  />
+                </div>
+                <div class="clear"></div>
+            </div>
+
+            <div class="ob-data-element">
+                <div class="data-add">
+                    <div class="el-caption">{|$translate_manager|}:</div>
+                    <div class="el-value">
+                        <select name="managerid" class="chzn-select">
+                            <option value="0">---</option>
+                            {|foreach from=$managerArray item="e"|}
+                                <option value="{|$e.id|}" {|if $e.id == $control_managerid|} selected {|/if|}>{|$e.name|}</option>
+                            {|/foreach|}
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            {|if !$box|}
+                <div class="ob-data-element">
+                    <div class="data-add">
+                        <div class="el-caption">{|$translate_convenient_time|}:</div>
+                        <div class="el-value">
+                            <input type="text" name="time" value="{|$control_time|}" />
+                        </div>
+                    </div>
+                </div>
+            {|/if|}
+
+            <div class="ob-data-element">
+                <div class="data-add">
+                    <div class="el-caption">{|$translate_phones|}:</div>
+                    <div class="el-value">
+                        <textarea name="phones" rows="1" class="js-autosize js-search-dublicates-phones" >{|$control_phones|}</textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ob-data-element">
+                <div class="data-add">
+                    <div class="el-caption">E-mail:</div>
+                    <div class="el-value">
+                        <textarea name="emails" rows="1" class="js-autosize js-search-dublicates-email">{|$control_emails|}</textarea>
+                    </div>
+                </div>
+            </div>
+
+            {|if $box |}
+                <div class="ob-data-element">
+                    <div class="data-add">
+                        <div class="el-caption">Skype:</div>
+                        <div class="el-value">
+                            <textarea name="skype" rows="1" class="js-autosize">{|$control_skype|}</textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ob-data-element">
+                    <div class="data-add">
+                        <div class="el-caption">Jabber:</div>
+                        <div class="el-value">
+                            <input type="text" name="jabber" value="{|$control_jabber|}" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ob-data-element">
+                    <div class="data-add">
+                        <div class="el-caption">WhatsApp:</div>
+                        <div class="el-value">
+                            <input type="text" name="whatsapp" value="{|$control_whatsapp|}" />
+                        </div>
+                    </div>
+                </div>
+            {|/if|}
+
+            <div class="ob-data-element">
+                <div class="data-add">
+                    <div class="el-caption">{|$translate_address_small|}:</div>
+                    <div class="el-value">
+                        <textarea name="address" rows="1" class="js-autosize">{|$control_address|}</textarea>
+                    </div>
+                </div>
+            </div>
+
+
+            {|if $box|}
+                <div class="ob-data-element">
+                    <div class="data-add">
+                        <div class="el-caption">Источник:</div>
+                        <div class="el-value">
+                            <select name="sourceid" class="chzn-select">
+                                <option value="">---</option>
+                                {|foreach from=$sourceArray item="e"|}
+                                    <option value="{|$e.id|}" {|if $e.id == $control_sourceid|} selected {|/if|}>{|$e.name|}</option>
+                                {|/foreach|}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ob-data-element">
+                    <div class="data-add">
+                        <div class="el-caption">{|$translate_contractor|}:</div>
+                        <div class="el-value">
+                            <select name="contractorid" class="chzn-select">
+                                {|foreach from=$contractorArray item="e"|}
+                                    <option value="{|$e.id|}" {|if $e.id == $control_contractorid|} selected {|/if|}>{|$e.name|}</option>
+                                {|/foreach|}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            {|/if|}
+
+            <div class="ob-data-element">
+                <div class="data-add">
+                    <div class="el-caption">{|$translate_bdate|}:</div>
+                    <div class="el-value">
+                        <input type="text" name="bdate" class="js-date" value="{|$control_bdate|}" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="ob-data-element">
+                <div class="data-add">
+                    <div class="el-caption">{|$translate_website_urls|}:</div>
+                    <div class="el-value">
+                        <textarea name="urls" rows="1" class="js-autosize">{|$control_urls|}</textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ob-data-element">
+                <div class="data-add">
+                    <div class="el-caption">{|$translate_contact_recomendation|}:</div>
+                    <div class="el-value">
+                        <input type="text" name="parentname" id="id-recomended-name" value="{|$control_parentname|}" />
+                        <input type="hidden" name="parentid" id="id-recomended-value" value="{|$control_parentid|}" />
+                        {|*|}<a href="#" id="id-recomended" class="ob-button">{|$translate_change_contact|}</a>{|*|}
+                    </div>
+                </div>
+            </div>
+
+            {|if $box|}
+                <div class="ob-data-element">
+                    <div class="data-view">
+                        <div class="el-value">
+                            <label>
+                                <input type="checkbox" name="allowreferal" />
+                                Выплачиваются реферальные / партнерские
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            {|/if|}
+
+            <div class="ob-data-element">
+                <div class="data-add">
+                    <div class="el-caption">{|$translate_tags|}:</div>
+                    <div class="el-value">
+                        <ul class="js-tags" data-input=".js-tags-input"></ul>
+                        <input type="hidden" name="tags" value="{|$control_tags|}" class="js-tags-input" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="ob-data-element">
+                <div class="data-add">
+                    <div class="el-caption">{|$translate_price_level|}:</div>
+                    <div class="el-value">
+                        <select class="chzn-select" name="pricelevel">
+                            <option value="0" {|if $control_pricelevel === '0'|} selected {|/if|}>{|$translate_usual_prices|}</option>
+                            <option value="1" {|if $control_pricelevel == 1|} selected {|/if|}>1</option>
+                            <option value="2" {|if $control_pricelevel == 2|} selected {|/if|}>2</option>
+                            <option value="3" {|if $control_pricelevel == 3|} selected {|/if|}>3</option>
+                            <option value="4" {|if $control_pricelevel == 4|} selected {|/if|}>4</option>
+                            <option value="5" {|if $control_pricelevel == 5|} selected {|/if|}>5</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ob-data-element">
+                <div class="data-add">
+                    <div class="el-caption">{|$translate_user_group|}:</div>
+                    <div class="el-value">
+                        <select name="groupid" class="chzn-select">
+                            <option value="0">---</option>
+                            {|foreach from=$groupsArray item="e"|}
+                                <option value="{|$e.id|}" {|if $e.id == $control_groupid|} selected {|/if|}>{|$e.name|}</option>
+                            {|/foreach|}
+                        </select>
+                        {|if $groupsArray|}
+                            <span class="light">В некоторые группы контакты попадают автоматически.</span>
+                        {|/if|}
+                    </div>
+                </div>
+            </div>
+
+            <div class="ob-data-element">
+                <div class="data-view">
+                    <div class="el-caption">Комментарий:</div>
+                    <div class="el-value">
+                        <textarea name="commentadmin" rows="1" class="js-autosize"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ob-data-element">
+                <div class="data-add">
+                    <div class="el-value">
+                        <label>
+                            <input type="checkbox" name="distribution" checked  />
+                            {|$translate_subscribe_to_our_newsletter|}
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            {|* внимание! не удаляйте эти скрытые поля! *|}
+            <input type="hidden" name="callcomment" value="{|$control_callcomment|}" />
+            <input type="hidden" name="callfrom" value="{|$control_callfrom|}" />
+            <input type="hidden" name="callto" value="{|$control_callto|}" />
+            <input type="hidden" name="calldate" value="{|$control_calldate|}" />
+
+            <div class="ob-button-fixed">
+                <input type="submit" name="ok" value="{|$translate_save|}" class="ob-button button-green" onclick="shopWaitShow('Выполняется добавление контакта.');" />
+                <input type="submit" name="okClear" value="{|$translate_save_plus_add|}" class="ob-button" onclick="shopWaitShow('Выполняется добавление контакта.');" />
+            </div>
+            <div class="ob-button-fixed-place"></div>
+        </div>
+        <div class="clear"></div>
+    </form>
+</div>
+
+
+<script type="text/javascript">
+    {|if "company" == $control_typesex|}
+        $j('.shop-tabs .js-type-user-fields').hide();
+        $j('.shop-tabs .js-type-company-fields').show();
+    {|else|}
+        $j('.shop-tabs .js-type-company-fields').hide();
+        $j('.shop-tabs .js-type-user-fields').show();
+    {|/if|}
+
+    $j(function(){
+        $j('.js-type-change').change(function(){
+            tagCompany();
+            if($j(this).val() != 'company'){
+                $j('.js-type-user-fields').show();
+                $j('.js-type-company-fields').hide();
+                $j('#js-field-post').attr('placeholder','{|$translate_post|}');
+            }else{
+                $j('.js-type-user-fields').hide();
+                $j('.js-type-company-fields').show();
+                $j('#js-field-post').attr('placeholder','{|$translate_spacialization|}');
+            }
+
+            var cardAvatar = $j('.shop-usermaininfo-block .avatar img').attr('src');
+            var avatarMan = '/media/shop/stub-man.jpg';
+            var avatarWoman = '/media/shop/stub-woman.jpg';
+            var avatarCompany = '/media/shop/stub-company.jpg';
+
+            if($j(this).val() === 'man'){
+                $j('.shop-usermaininfo-block').addClass('user');
+                $j('.shop-usermaininfo-block').removeClass('user-w');
+                if (cardAvatar == avatarWoman || cardAvatar == avatarCompany) {
+                    $j('.shop-usermaininfo-block .avatar img').attr('src', avatarMan);
+                }
+            }else if($j(this).val() === 'woman'){
+                $j('.shop-usermaininfo-block').removeClass('user');
+                $j('.shop-usermaininfo-block').addClass('user-w');
+                if (cardAvatar == avatarMan || cardAvatar == avatarCompany) {
+                    $j('.shop-usermaininfo-block .avatar img').attr('src', avatarWoman);
+                }
+            }else{
+                $j('.shop-usermaininfo-block').removeClass('user');
+                $j('.shop-usermaininfo-block').removeClass('user-w');
+                if (cardAvatar == avatarMan || cardAvatar == avatarWoman) {
+                    $j('.shop-usermaininfo-block .avatar img').attr('src', avatarCompany);
+                }
+            }
+        });
+    });
+</script>

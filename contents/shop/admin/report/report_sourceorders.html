@@ -1,0 +1,183 @@
+<div class="shop-filter-panel">
+    <div class="filter-toggle {|if $filterpanelCookie|}open{|/if|}"></div>
+    <div class="inner-pannel" {|if !$filterpanelCookie|}style="display: none;"{|/if|}>
+        <form action="" method="get">
+            <div class="element ulist">
+                <label><input type="radio" name="direction" value="" {|if !$control_direction|}checked{|/if|}>Все заказы</label>
+                <label><input type="radio" name="direction" value="in" {|if $control_direction == 'in'|}checked{|/if|}>От клиентов (входящие)</label>
+                <label><input type="radio" name="direction" value="out" {|if $control_direction == 'out'|}checked{|/if|}>Поставщикам (исходящие)</label>
+            </div>
+            <div class="element">
+                <input type="text" name="datefrom" value="{|$control_datefrom|}" class="js-date" placeholder="Дата заказа от" />
+            </div>
+
+            <div class="element">
+                <input type="text" name="dateto" value="{|$control_dateto|}" class="js-date" placeholder="Дата заказа до" />
+            </div>
+
+            {|if $statusArray|}
+                <div class="element ulist">
+                    <div class="ulist-caption">Статус заказа</div>
+                    <label>
+                        <input type="radio" name="statusid" value="" {|if !$control_statusid|}checked{|/if|}>
+                        {|$translate_all|}
+                    </label>
+                </div>
+                {|foreach from=$statusArray item="e" key="categoryName"|}
+                    <div class="element ulist">
+                        <div class="ulist-caption">{|$categoryName|}</div>
+                        {|foreach from=$e item="s"|}
+                            <label {|if $s.color|} style="background-color: {|$s.color|};" {|/if|}>
+                                <input type="radio" name="statusid" value="{|$s.id|}" {|if $s.id == $control_statusid|}checked{|/if|}>
+                                {|$s.name|}
+                            </label>
+                        {|/foreach|}
+                    </div>
+                {|/foreach|}
+                <br />
+            {|/if|}
+
+            {|if $sourceArray|}
+                <div class="element">
+                    Источник заказа
+                    <select name="sourceid" class="chzn-select">
+                        <option value="">{|$translate_all|}</option>
+                        {|foreach from=$sourceArray item="e"|}
+                            <option value="{|$e.id|}" {|if $control_sourceid == $e.id|} selected {|/if|}>{|$e.name|}</option>
+                        {|/foreach|}
+                    </select>
+                </div>
+            {|/if|}
+
+            {|if $orderCategoryArray|}
+                <div class="element">
+                    Категория заказа
+                    <select name="ordercategoryid" class="chzn-select">
+                        <option value="">{|$translate_all|}</option>
+                        {|foreach from=$orderCategoryArray item="e"|}
+                            <option value="{|$e.id|}" {|if $control_ordercategoryid == $e.id|} selected {|/if|}>{|$e.name|}</option>
+                        {|/foreach|}
+                    </select>
+                </div>
+            {|/if|}
+
+            {|if $managerArray|}
+                <div class="element">
+                    Менеджер заказа
+                    <select name="managerid" class="chzn-select">
+                        <option value="">{|$translate_all_managers|}</option>
+                        {|foreach from=$managerArray item="e"|}
+                            <option value="{|$e.id|}" {|if $e.id == $control_managerid|} selected {|/if|}>{|$e.name|}</option>
+                        {|/foreach|}
+                    </select>
+                </div>
+            {|/if|}
+
+            {|if $managerArray|}
+                <div class="element">
+                    Автор заказа
+                    <select name="authorid" class="chzn-select">
+                        <option value="">{|$translate_all_managers|}</option>
+                        {|foreach from=$managerArray item="e"|}
+                            <option value="{|$e.id|}" {|if $e.id == $control_authorid|} selected {|/if|}>{|$e.name|}</option>
+                        {|/foreach|}
+                    </select>
+                </div>
+            {|/if|}
+
+            {|if $contractorArray|}
+                <div class="element">
+                    {|$translate_contractor|}
+                    <select name="contractorid" class="chzn-select">
+                        <option value="">{|$translate_all|}</option>
+                        {|foreach from=$contractorArray item="e"|}
+                            <option value="{|$e.id|}" {|if $control_contractorid == $e.id|} selected {|/if|}>{|$e.name|}</option>
+                        {|/foreach|}
+                    </select>
+                </div>
+            {|/if|}
+
+            <input class="ob-button button-orange" type="submit" name="ok" value="{|$translate_filter|}" />
+            <div class="clear"></div>
+            <br />
+
+        </form>
+    </div>
+</div>
+
+<div class="shop-result-list">
+    <div class="inner-list {|if $filterpanelCookie|}filter-reserve{|/if|}">
+        <h1>Источники заказов</h1>
+
+        <table border="0" class="shop-table js-table-fixed">
+            <thead>
+                <tr>
+                    <td>Источник заказа</td>
+                    <td align="right">Количество заказов</td>
+                    <td align="right">Сумма заказов ({|$currency|})</td>
+                    <td align="right">Средний чек ({|$currency|})</td>
+                </tr>
+            </thead>
+            {|foreach from=$reportArray item="e" key="clientID"|}
+                <tr>
+                    <td>{|$e.name|}</td>
+                    <td align="right">{|$e.count|}</td>
+                    <td align="right">{|$e.sum|round:2|}</td>
+                    <td align="right">{|$e.avg|round:2|}</td>
+                </tr>
+            {|/foreach|}
+        </table>
+
+        {|if $reportArray|}
+            <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+            <script type="text/javascript">
+            google.load("visualization", "1", {packages:["corechart"]});
+            google.setOnLoadCallback(drawChart);
+            function drawChart() {
+                var data = google.visualization.arrayToDataTable([
+                ['Источник заказа', 'Количество заказов'],
+                {|foreach from=$reportArray item="e"|}
+                    ['{|$e.name|}', {|$e.count|}],
+                {|/foreach|}
+                ]);
+
+                var options = {};
+
+                var chart = new google.visualization.ColumnChart(document.getElementById('chart_div_1'));
+                chart.draw(data, options);
+
+                var data = google.visualization.arrayToDataTable([
+                ['Источник заказа', 'Сумма заказов'],
+                {|foreach from=$reportArray item="e"|}
+                    ['{|$e.name|}', {|$e.sum|}],
+                {|/foreach|}
+                ]);
+
+                var options = {};
+
+                var chart = new google.visualization.ColumnChart(document.getElementById('chart_div_2'));
+                chart.draw(data, options);
+
+                // ---
+
+                var data = google.visualization.arrayToDataTable([
+                ['Источник заказа', 'Средний чек'],
+                {|foreach from=$reportArray item="e"|}
+                    ['{|$e.name|}', {|$e.avg|}],
+                {|/foreach|}
+                ]);
+
+                var options = {};
+
+                var chart = new google.visualization.ColumnChart(document.getElementById('chart_div_3'));
+                chart.draw(data, options);
+            }
+            </script>
+
+            <div id="chart_div_1" style="width: 100%; height: 500px;"></div>
+            <div id="chart_div_2" style="width: 100%; height: 500px;"></div>
+            <div id="chart_div_3" style="width: 100%; height: 500px;"></div>
+        {|/if|}
+    </div>
+</div>
+<div class="clear"></div>

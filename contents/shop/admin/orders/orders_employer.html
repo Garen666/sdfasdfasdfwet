@@ -1,0 +1,72 @@
+{|$block_menu|}
+
+{|if $message == 'ok'|}
+    <div class="shop-message-success">
+        Данные успешно сохранены.
+    </div>
+{|/if|}
+
+{|if $message == 'error'|}
+    <div class="shop-message-error">
+        Во время сохранения произошла ошибка.
+    </div>
+{|/if|}
+
+<h1>Заказ {|$orderName|}</h1>
+<h1>Сумма заказа: {|$sum|} {|$currency|}</h1>
+{|if $sum != $sumWithoutTax|}
+    <h1>Сумма заказа без НДС: {|$sumWithoutTax|} {|$currency|}</h1>
+{|/if|}
+<h1>Распределено между исполнителями: {|$employerSum|} {|$currency|}</h1>
+<br />
+
+<form action="" method="post">
+    <table class="shop-table">
+        <thead>
+            <tr>
+                <td>Исполнитель</td>
+                <td>Этап</td>
+                <td>Крайник срок этапа</td>
+                <td>Роль</td>
+                <td>Сумма ({|$currency|})</td>
+                <td>Процент</td>
+                <td></td>
+            </tr>
+        </thead>
+        {|foreach from=$employerArray item="e" key="index"|}
+            <tr>
+                <td>
+                    <select name="manager{|$index|}" class="chzn-select" style="width: 300px;" {|if not $canEdit|} disabled {|/if|}>
+                        <option value="0">---</option>
+                        {|foreach from=$managerArray item="m"|}
+                            <option value="{|$m.id|}" {|if $m.id == $e.managerid|} selected {|/if|}>{|$m.name|}</option>
+                        {|/foreach|}
+                    </select>
+                </td>
+                <td>
+                    <select name="status{|$index|}" class="chzn-select" style="width: 300px;" {|if not $canEdit|} disabled {|/if|}>
+                        <option value="0">---</option>
+                        {|foreach from=$statusArray item="m"|}
+                            <option value="{|$m.id|}" {|if $m.id == $e.statusid|} selected {|/if|}>{|$m.name|}</option>
+                        {|/foreach|}
+                    </select>
+                </td>
+                <td><input type="text" name="term{|$index|}" value="{|$e.term|}" class="js-datetime" {|if not $canEdit|} disabled {|/if|} /></td>
+                <td><input type="text" name="role{|$index|}" value="{|$e.role|}" {|if not $canEdit|} disabled {|/if|} /></td>
+                <td><input type="text" name="sum{|$index|}" value="{|$e.sum|}" {|if not $canEdit|} disabled {|/if|} /></td>
+                <td><input type="text" name="percent{|$index|}" value="{|$e.percent|}" {|if not $canEdit|} disabled {|/if|} /></td>
+                {|if $e.total|}
+                    <td>= {|$e.total|} {|$currency|}</td>
+                {|else|}
+                    <td></td>
+                {|/if|}
+            </tr>
+        {|/foreach|}
+    </table>
+
+    {|if $canEdit|}
+        <div class="ob-button-fixed">
+            <input type="submit" name="ok" value="Сохранить" class="ob-button button-green" />
+        </div>
+    {|/if|}
+</form>

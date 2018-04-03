@@ -1,0 +1,35 @@
+{|if $message != 'ok'|}
+<div class="shop-tabs fixed">
+    <a href="/admin/shop/workflow/">&lsaquo; Бизнес-процессы</a>
+    <a href="/admin/shop/workflow/{|$orderCategoryId|}/">Бизнес-процесс #{|$orderCategoryId|}</a>
+    <a href="../delete/" class="selected">{|$translate_delete|}</a>
+    <div class="clear"></div>
+</div>
+<div class="shop-tabs-place"></div>
+{|/if|}
+
+{|if $message == 'ok'|}
+<div class="shop-message-success">
+    Запись успешно удалена.<br />
+    <a href="/admin/shop/workflow/">Бизнес-процессы</a>
+</div>
+{|/if|}
+
+{|if $message == 'error'|}
+<div class="shop-message-error">
+    Ошибка удаления.
+</div>
+{|/if|}
+
+{|if $message != 'ok'|}
+<div class="shop-block">
+    <form action="" method="post">
+        Вы действительно хотите удалить бизнес-процесс
+        <strong>#{|$orderCategoryId|}</strong>?
+        <br />
+        <br />
+        <input type="submit" name="ok" value="{|$translate_yes|}" class="ob-button button-red" />
+        <input class="ob-button" type="button" value="{|$translate_no|}" onclick="document.location='../';" />
+    </form>
+</div>
+{|/if|}

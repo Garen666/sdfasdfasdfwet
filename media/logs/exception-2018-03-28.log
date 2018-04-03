@@ -1,0 +1,12 @@
+2018-03-28 14:28:52: #0 C:\OpenServer\domains\shop\api\services\Shop_ShopService.class.php(605): ServiceUtils_AbstractService->getObjectByID('1', 'ShopCategory')
+#1 C:\OpenServer\domains\shop\contents\shop\shop_category.php(8): Shop_ShopService->getCategoryByID('1')
+#2 C:\OpenServer\domains\shop\packages\Engine\Engine_ContentDriver.class.php(203): shop_category->process()
+#3 C:\OpenServer\domains\shop\packages\Engine\Engine_ContentDriver.class.php(81): Engine_ContentDriver->displayOne('shop-category')
+#4 C:\OpenServer\domains\shop\packages\Engine\Engine_ContentDriver.class.php(58): Engine_ContentDriver->display('shop-category')
+#5 C:\OpenServer\domains\shop\packages\Engine\Engine.class.php(142): Engine_ContentDriver->getString('shop-category')
+#6 C:\OpenServer\domains\shop\shop.starter.php(60): Engine->execute()
+#7 {main}Array
+(
+    [0] => ShopCategory-object by id not found
+)
+

@@ -1,0 +1,20 @@
+<div>
+    <table style="width:100%;">
+        <tr>
+            <th>Последние</th>
+            <th>Чат</th>
+        </tr>
+        <tr>
+            <td>
+                <div>
+                    {|foreach from=$chatListArray item="cl"|}
+                        <p><a href="?to={|$cl.id|}">{|$cl.name|}</a></p>
+                    {|/foreach|}
+                </div>
+            </td>
+            <td>
+
+            </td>
+        </tr>
+    </table>
+</div>

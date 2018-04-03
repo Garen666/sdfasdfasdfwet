@@ -1,0 +1,11 @@
+{|if $faqArray|}
+    <div class="os-caption-block">Обсуждаемое</div>
+    <div class="os-faq-block">
+        {|foreach from=$faqArray item="e"|}
+            <div class="element">
+                <a href="/faq/{|$e.id|}/" rel="nofollow">{|$e.name|}</a>
+                <div class="date">{|$e.date|}</div>
+            </div>
+        {|/foreach|}
+    </div>
+{|/if|}

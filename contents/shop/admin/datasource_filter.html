@@ -1,0 +1,53 @@
+<div style="display: none;" class="shop-popup-block js-tableview-popup">
+    <div class="dark"></div>
+    <div class="popupblock">
+        <a class="close" onclick="popupClose('.js-tableview-popup');" href="#"></a>
+        <div class="shop-tabs">
+            <span>{|$translate_caption_tool_table|}</span>
+        </div>
+        <div class="window-content">
+            <div class="shop-table-view">
+                <form action="" method="post">
+                    {|foreach from=$fieldsArray item="e"|}
+                        <label class="element">
+                            <input type="checkbox" name="columns[]" value="{|$e.key|}" {|if $e.visible|} checked {|/if|} {|if $e.primary|} disabled {|/if|} />
+                            <span>{|$e.name|}</span>
+                        </label>
+                    {|/foreach|}
+                    <br />
+
+                    <div class="view">
+                        <table>
+                            <tr>
+                                <td><strong>{|$translate_show_records_per_page|}</strong>:</td>
+                                <td><input type="text" name="rowscount" value="{|$rowscount|}" style="width: 70px;"/> (max:100)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>{|$translate_sort_by_default|}:</strong></td>
+                                <td>
+                                    <select name="rowssort">
+                                        <option value="">Auto</option>
+                                        {|foreach from=$fieldsArray item="e"|}
+                                            {|if $e.sortable|}
+                                                <option value="{|$e.key|}" {|if $rowssort == $e.key|} selected {|/if|}>{|$e.name|}</option>
+                                            {|/if|}
+                                        {|/foreach|}
+                                    </select>
+
+                                    <select name="rowssorttype">
+                                        <option value="">Auto</option>
+                                        <option value="asc" {|if $rowssorttype == 'asc'|} selected {|/if|}>A-Z</option>
+                                        <option value="desc" {|if $rowssorttype == 'desc'|} selected {|/if|}>Z-A</option>
+                                    </select>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <input type="submit" value="{|$translate_save|}" name="columnsave" class="ob-button button-green" />
+                    <input type="button" value="{|$translate_cancel|}" class="ob-button" onclick="popupClose('.js-tableview-popup');" />
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

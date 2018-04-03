@@ -1,0 +1,218 @@
+{|if
+$authorName OR
+$totalOrder > 0 OR
+$paymentInCount > 0 OR
+$paymentOutCount > 0 OR
+0 AND $totalProduct > 0 OR
+$totalCallback > 0 OR
+$totalFeedback > 0 OR
+$totalComment OR
+$login OR
+$rating
+|}
+    <div class="ob-details-block">
+        {|if $authorName|}
+            <div class="ob-data-element">
+                <div class="data-view">
+                    <div class="el-caption">Создал:</div>
+                    <div class="el-value">
+                        <a href="{|$authorURL|}" class="js-contact-preview" data-id="{|$authorId|}">{|$authorName|}</a>
+                    </div>
+                </div>
+            </div>
+        {|/if|}
+
+        {|if $totalOrdersIn > 0|}
+        <div class="ob-data-element">
+            <div class="data-view">
+                <div class="el-caption">
+                    <a href="/admin/shop/orders/?filterauthorid={|$userID|}&direction=in&filtershowclosed=1">Создал заказов</a>:
+                </div>
+                <div class="el-value">
+                    {|$createOrderCount|}
+                    {|$translate_to_the_tune_of|}
+                    {|$createOrderSum|number_format:2|} {|$totalCurrency|}
+                </div>
+            </div>
+        </div>
+        {|/if|}
+
+        {|if $totalOrdersIn > 0|}
+            <div class="ob-data-element">
+                <div class="data-view">
+                    <div class="el-caption">
+                        <a href="/admin/shop/orders/?filterclientid={|$userID|}&direction=in&filtershowclosed=1">Заказы</a>:
+                    </div>
+                    <div class="el-value">
+                        {|$totalOrdersIn|}
+                        {|$translate_to_the_tune_of|}
+                        {|$totalSumIn|number_format:2|} {|$totalCurrency|}
+                    </div>
+                </div>
+            </div>
+        {|/if|}
+
+        {|if $totalOrdersOut > 0|}
+            <div class="ob-data-element">
+                <div class="data-view">
+                    <div class="el-caption">
+                        <a href="/admin/shop/orders/?filterclientid={|$userID|}&direction=out">Исходящих заказов</a>:
+                    </div>
+                    <div class="el-value">
+                        {|$totalOrdersOut|}
+                        {|$translate_to_the_tune_of|}
+                        {|$totalSumOut|number_format:2|} {|$totalCurrency|}
+                    </div>
+                </div>
+            </div>
+        {|/if|}
+
+        {|if $box|}
+            {|if $paymentInCount > 0|}
+                <div class="ob-data-element">
+                    <div class="data-view">
+                        <div class="el-caption">
+                            <a href="/admin/shop/finance/?clientid={|$userID|}&ok=1">Входящих платежей</a>:
+                        </div>
+                        <div class="el-value">
+                            {|$paymentInCount|}
+                            на сумму
+                            {|$paymentInSum|number_format:2|} {|$currency|}
+                        </div>
+                    </div>
+                </div>
+            {|/if|}
+
+            {|if $paymentOutCount > 0|}
+                <div class="ob-data-element">
+                    <div class="data-view">
+                        <div class="el-caption">
+                            <a href="/admin/shop/finance/?clientid={|$userID|}&ok=1">Исходящих платежей</a>:
+                        </div>
+                        <div class="el-value">
+                            {|$paymentOutCount|}
+                            на сумму
+                            {|$paymentOutSum|number_format:2|} {|$currency|}
+                        </div>
+                    </div>
+                </div>
+            {|/if|}
+
+            {|if $paymentInCount > 0 OR $paymentOutCount > 0 OR $balance != 0|}
+                <div class="ob-data-element">
+                    <div class="data-view">
+                        <div class="el-caption">Баланс:</div>
+                        <div class="el-value">
+                            <strong style="color: {|$balanceColor|}">{|$balance|number_format:2|}&nbsp;{|$currency|}</strong>
+                        </div>
+                    </div>
+                </div>
+            {|/if|}
+
+        {|/if|}
+
+        {|if 0 AND $totalProduct > 0|}
+            <div class="ob-data-element">
+                <div class="data-view">
+                    <div class="el-caption">{|$translate_ordered_goods|}:</div>
+                    <div class="el-value">
+                        {|$totalProduct|}
+                    </div>
+                </div>
+            </div>
+        {|/if|}
+
+        {|if $totalCallback > 0|}
+            <div class="ob-data-element">
+                <div class="data-view">
+                    <div class="el-caption">
+                        <a href="/admin/shop/callback/?filter10_key=userid&filter10_value={|$userID|}">{|$translate_made_a_custom_calls|}</a>:
+                    </div>
+                    <div class="el-value">
+                        {|$totalCallback|}
+                    </div>
+                </div>
+            </div>
+        {|/if|}
+
+        {|if $totalFeedback > 0|}
+            <div class="ob-data-element">
+                <div class="data-view">
+                    <div class="el-caption">
+                        <a href="/admin/shop/feedback/?filter10_key=userid&filter10_value={|$userID|}">{|$translate_wrote_letters|}</a>:
+                    </div>
+                    <div class="el-value">
+                        {|$totalFeedback|}
+                    </div>
+                </div>
+            </div>
+        {|/if|}
+
+        {|if $totalComment > 0|}
+            <div class="ob-data-element">
+                <div class="data-view">
+                    <div class="el-caption">
+                        <a href="/admin/shop/comments/?filter10_key=userid&filter10_value={|$userID|}">{|$translate_posted_a_comment_yet|}</a>:
+                    </div>
+                    <div class="el-value">
+                        {|$totalComment|}
+                    </div>
+                </div>
+            </div>
+        {|/if|}
+
+        {|if $login|}
+            <div class="ob-data-element">
+                <div class="data-view">
+                    <div class="el-caption">{|$translate_put_in_the_basket_of_goods|}:</div>
+                    <div class="el-value">
+                        {|$totalBasket|}
+                    </div>
+                </div>
+            </div>
+
+            {|if $lastAdate > '01.01.1971, 02:00'|}
+                <div class="ob-data-element">
+                    <div class="data-view">
+                        <div class="el-caption">{|$translate_last_time_here|}:</div>
+                        <div class="el-value">
+                            {|$lastAdate|}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ob-data-element">
+                    <div class="data-view">
+                        <div class="el-caption">{|$translate_with|} IP:</div>
+                        <div class="el-value">
+                            {|$lastIP|}
+                        </div>
+                    </div>
+                </div>
+            {|else|}
+                <div class="ob-data-element">
+                    <div class="data-view">
+                        <div class="el-value" style="font-weight: bold;">
+                            {|$translate_this_user_has_not_went_to_the_site|}
+                        </div>
+                    </div>
+                </div>
+            {|/if|}
+        {|/if|}
+
+        {|if $rating|}
+            <div class="ob-data-element">
+                <div class="data-view">
+                    <div class="el-caption">Рейтинг:</div>
+                    <div class="el-value">
+                        <div class="ob-block-rating">
+                            <div class="inner" style="width: {|$rating*20|}%;"></div>
+                            <div class="text">({|$ratingValue|})</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {|/if|}
+    </div>
+    <br />
+{|/if|}

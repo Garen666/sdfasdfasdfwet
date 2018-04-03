@@ -1,0 +1,393 @@
+<style>
+    #tabs {
+        overflow: auto;
+        width: 100%;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    #tabs li {
+        margin: 0;
+        padding: 0;
+        float: left;
+    }
+
+    #tabs a {
+        box-shadow: -4px 0 0 rgba(0, 0, 0, .2);
+        background: #ad1c1c;
+        background: linear-gradient(220deg, transparent 10px, #ad1c1c 10px);
+        text-shadow: 0 1px 0 rgba(0,0,0,.5);
+        color: #fff;
+        float: left;
+        font: bold 12px/35px 'Lucida sans', Arial, Helvetica;
+        height: 35px;
+        padding: 0 30px;
+        text-decoration: none;
+    }
+
+    #tabs a:hover {
+        background: #c93434;
+        background: linear-gradient(220deg, transparent 10px, #c93434 10px);
+    }
+
+    #tabs a:focus {
+        outline: 0;
+    }
+
+    #tabs #current a {
+        background: #fff;
+        background: linear-gradient(220deg, transparent 10px, #fff 10px);
+        text-shadow: none;
+        color: #333;
+    }
+
+    #content {
+        background-color: #fff;
+        background-image:         linear-gradient(top, #fff, #ddd);
+        border-radius: 0 2px 2px 2px;
+        box-shadow: 0 2px 2px #000, 0 -1px 0 #fff inset;
+        padding: 30px;
+    }
+
+    /* Remove the rule below if you want the content to be "organic" */
+    #content div {
+        height: 220px;
+    }
+</style>
+
+<style>
+    .header {
+        width: 100%;
+        padding: 20px;
+    }
+
+    .button a {
+        float: right;
+        padding: 10px;
+        display: block;
+        text-decoration: none;
+        color: #999;
+        border: 2px solid #999;
+        border-radius: 3px;
+    }
+
+    .button a:hover {
+        color: #000;
+        border: 2px solid #000;
+        transition: 2s;
+    }
+
+    img {
+        max-width: 100%;
+    }
+
+    .related {
+        text-align: center;
+        padding: 5em 0;
+    }
+
+    .related > a {
+        width: calc(100% - 20px);
+        max-width: 340px;
+        border: 3px solid #f0f0f0;
+        border-color: initial;
+        display: inline-block;
+        text-align: center;
+        margin: 20px 10px;
+        padding: 25px;
+        border-radius: 3px;
+    }
+
+    .related a img {
+        max-width: 100%;
+        opacity: 0.8;
+    }
+
+    .related a h3 {
+        margin: 0;
+        padding: 0.5em 0 0.3em;
+        max-width: 300px;
+        text-align: left;
+    }
+
+    .related p{
+        font-size: 1.4em;
+        color: #ccc;
+    }
+
+    *,
+    *:after,
+    *:before {
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+
+    .clearfix:before,
+    .clearfix:after {
+        content: " ";
+        display: table;
+    }
+
+    .clearfix:after {
+        clear: both;
+    }
+
+    body {
+        font-family: sans-serif;
+        background: #f6f9fa;
+    }
+
+    h1 {
+        color: #ccc;
+        text-align: center;
+    }
+
+    a {
+        color: #ccc;
+        text-decoration: none;
+        outline: none;
+    }
+
+    /*Fun begins*/
+    .tab_container {
+        width: 90%;
+        margin: 0 auto;
+        padding-top: 70px;
+        position: relative;
+    }
+
+    input, section {
+        clear: both;
+        padding-top: 10px;
+        display: none;
+    }
+
+    label {
+        font-weight: 700;
+        font-size: 18px;
+        display: block;
+        float: left;
+        width: 20%;
+        padding: 1.5em;
+        color: #757575;
+        cursor: pointer;
+        text-decoration: none;
+        text-align: center;
+        background: #f0f0f0;
+    }
+
+    #tab1:checked ~ #content1,
+    #tab2:checked ~ #content2,
+    #tab3:checked ~ #content3,
+    #tab4:checked ~ #content4,
+    #tab5:checked ~ #content5 {
+        display: block;
+        padding: 20px;
+        background: #fff;
+        color: #999;
+        border-bottom: 2px solid #f0f0f0;
+    }
+
+    .tab_container .tab-content p,
+    .tab_container .tab-content h3 {
+        -webkit-animation: fadeInScale 0.7s ease-in-out;
+        -moz-animation: fadeInScale 0.7s ease-in-out;
+        animation: fadeInScale 0.7s ease-in-out;
+    }
+    .tab_container .tab-content h3  {
+        text-align: center;
+    }
+
+    .tab_container [id^="tab"]:checked + label {
+        background: #fff;
+        box-shadow: inset 0 3px #0CE;
+    }
+
+    .tab_container [id^="tab"]:checked + label .fa {
+        color: #0CE;
+    }
+
+    label .fa {
+        font-size: 1.3em;
+        margin: 0 0.4em 0 0;
+    }
+
+    /*Media query*/
+    @media only screen and (max-width: 930px) {
+        label span {
+            font-size: 14px;
+        }
+        label .fa {
+            font-size: 14px;
+        }
+    }
+
+    @media only screen and (max-width: 768px) {
+        label span {
+            display: none;
+        }
+
+        label .fa {
+            font-size: 16px;
+        }
+
+        .tab_container {
+            width: 98%;
+        }
+    }
+
+    /*Content Animation*/
+    @keyframes fadeInScale {
+        0% {
+            transform: scale(0.9);
+            opacity: 0;
+        }
+
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+</style>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+<script type="text/javascript">
+    $j(function () {
+        $j("#content div").hide(); // Initially hide all content
+        $j("#tabs li:first").attr("id","current"); // Activate first tab
+        $j("#content div:first").fadeIn(); // Show first tab content
+
+        $j('#tabs a').click(function(e) {
+            e.preventDefault();
+            $j("#content div").hide(); //Hide all content
+            $j("#tabs li").attr("id",""); //Reset id's
+            $j(this).parent().attr("id","current"); // Activate this
+            $j('#' + $j(this).attr('title')).fadeIn(); // Show content for current tab
+        });
+    });
+</script>
+
+<h1>
+    Профиль
+</h1>
+<br>
+<br>
+<br>
+
+
+<table style="width: 100%">
+    <tr>
+        <td style="width: 50%">
+            <div>
+                <ul id="tabs">
+                    <li><a href="#" title="tab1">One</a></li>
+                    <li><a href="#" title="tab2">Two</a></li>
+                    <li><a href="#" title="tab3">Three</a></li>
+                    <li><a href="#" title="tab4">Four</a></li>
+                </ul>
+
+                <div id="content">
+                    <div id="tab1">One - content</div>
+                    <div id="tab2">Two - content</div>
+                    <div id="tab3">Three - content</div>
+                    <div id="tab4">Four - content</div>
+                </div>
+            </div>
+        </td>
+        <td style="width: 50%">
+            <div class="tab_container">
+            <input id="tab11" type="radio" name="tabs" checked>
+            <label for="tab11"><i class="fa fa-code"></i><span>Code</span></label>
+
+            <input id="tab12" type="radio" name="tabs">
+            <label for="tab12"><i class="fa fa-pencil-square-o"></i><span>About</span></label>
+
+            <input id="tab13" type="radio" name="tabs">
+            <label for="tab13"><i class="fa fa-bar-chart-o"></i><span>Services</span></label>
+
+            <input id="tab14" type="radio" name="tabs">
+            <label for="tab14"><i class="fa fa-folder-open-o"></i><span>Portfolio</span></label>
+
+            <input id="tab15" type="radio" name="tabs">
+            <label for="tab15"><i class="fa fa-envelope-o"></i><span>Contact</span></label>
+
+            <section id="content1" class="tab-content">
+                <h3>Headline 1</h3>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                    consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+                    cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+                    proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                    consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+                    cillum dolore eu fugiat nulla pariatur.</p>
+            </section>
+
+            <section id="content2" class="tab-content">
+                <h3>Headline 2</h3>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.</p>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                    consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+                    cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+                    proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            </section>
+
+            <section id="content3" class="tab-content">
+                <h3>Headline 3</h3>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                    consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+                    cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+                    proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                    consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+                    cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+                    proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            </section>
+
+            <section id="content4" class="tab-content">
+                <h3>Headline 4</h3>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                    tempor incididunt ut labore et dolore magna aliqua.</p>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                    consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+                    cillum dolore eu fugiat nulla pariatur.</p>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                    consequat.</p>
+            </section>
+
+            <section id="content5" class="tab-content">
+                <h3>Headline 5</h3>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.</p>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                    consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+                    cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+                    proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            </section>
+            </div>
+        </td>
+    </tr>
+</table>
+
+
+
+

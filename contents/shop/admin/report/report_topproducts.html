@@ -1,0 +1,169 @@
+<div class="shop-filter-panel">
+    <div class="filter-toggle {|if $filterpanelCookie|}open{|/if|}"></div>
+    <div class="inner-pannel" {|if !$filterpanelCookie|}style="display: none;"{|/if|}>
+        <form action="" method="get">
+            <div class="element">
+                <input type="text" name="datefrom" value="{|$control_datefrom|}" class="js-date" placeholder="Дата заказа от" />
+            </div>
+
+            <div class="element">
+                <input type="text" name="dateto" value="{|$control_dateto|}" class="js-date" placeholder="Дата заказа до" />
+            </div>
+
+            {|if $statusArray|}
+                <div class="element ulist">
+                    <div class="ulist-caption">Статус заказа</div>
+                    <label>
+                        <input type="radio" name="statusid" value="" {|if !$control_statusid|}checked{|/if|}>
+                        {|$translate_all|}
+                    </label>
+                </div>
+
+                {|foreach from=$statusArray item="e" key="categoryName"|}
+                    <div class="element ulist">
+                    <div class="ulist-caption">{|$categoryName|}</div>
+                        {|foreach from=$e item="s"|}
+                            <label {|if $s.color|} style="background-color: {|$s.color|};" {|/if|}>
+                                <input type="radio" name="statusid" value="{|$s.id|}" {|if $s.id == $control_statusid|}checked{|/if|}>
+                                {|$s.name|}
+                            </label>
+                        {|/foreach|}
+                    </div>
+                {|/foreach|}
+                <br />
+            {|/if|}
+
+            {|if $sourceArray|}
+                <div class="element">
+                    Источник заказа
+                    <select name="sourceid" class="chzn-select">
+                        <option value="">{|$translate_all|}</option>
+                        {|foreach from=$sourceArray item="e"|}
+                            <option value="{|$e.id|}" {|if $control_sourceid == $e.id|} selected {|/if|}>{|$e.name|}</option>
+                        {|/foreach|}
+                    </select>
+                </div>
+            {|/if|}
+
+            {|if $orderCategoryArray|}
+                <div class="element">
+                    Категория заказа
+                    <select name="ordercategoryid" class="chzn-select">
+                        <option value="">{|$translate_all|}</option>
+                        {|foreach from=$orderCategoryArray item="e"|}
+                            <option value="{|$e.id|}" {|if $control_ordercategoryid == $e.id|} selected {|/if|}>{|$e.name|}</option>
+                        {|/foreach|}
+                    </select>
+                </div>
+            {|/if|}
+
+            {|if $managerArray|}
+                <div class="element">
+                    Менеджер заказа
+                    <select name="managerid" class="chzn-select">
+                        <option value="">{|$translate_all_managers|}</option>
+                        {|foreach from=$managerArray item="e"|}
+                            <option value="{|$e.id|}" {|if $e.id == $control_managerid|} selected {|/if|}>{|$e.name|}</option>
+                        {|/foreach|}
+                    </select>
+                </div>
+            {|/if|}
+
+            {|if $managerArray|}
+                <div class="element">
+                    Автор заказа
+                    <select name="authorid" class="chzn-select">
+                        <option value="">{|$translate_all_managers|}</option>
+                        {|foreach from=$managerArray item="e"|}
+                            <option value="{|$e.id|}" {|if $e.id == $control_authorid|} selected {|/if|}>{|$e.name|}</option>
+                        {|/foreach|}
+                    </select>
+                </div>
+            {|/if|}
+
+            {|if $contractorArray|}
+                <div class="element">
+                    {|$translate_contractor|}
+                    <select name="contractorid" class="chzn-select">
+                        <option value="">{|$translate_all|}</option>
+                        {|foreach from=$contractorArray item="e"|}
+                            <option value="{|$e.id|}" {|if $control_contractorid == $e.id|} selected {|/if|}>{|$e.name|}</option>
+                        {|/foreach|}
+                    </select>
+                </div>
+            {|/if|}
+
+            {|if $brandArray|}
+                <div class="element">
+                    Бренд товара
+                    <select name="brandid" class="chzn-select">
+                        <option value="">{|$translate_all|}</option>
+                        {|foreach from=$brandArray item="e"|}
+                            <option value="{|$e.id|}" {|if $control_brandid == $e.id|} selected {|/if|}>{|$e.name|}</option>
+                        {|/foreach|}
+                    </select>
+                </div>
+            {|/if|}
+
+            {|if $categoryArray|}
+                <div class="element">
+                    Категория товара
+                    <select name="categoryid" class="chzn-select">
+                        <option value="">{|$translate_all|}</option>
+                        {|foreach from=$categoryArray item="e"|}
+                            <option value="{|$e.id|}" {|if $control_categoryid == $e.id|} selected {|/if|}>{|$e.name|}</option>
+                        {|/foreach|}
+                    </select>
+                </div>
+            {|/if|}
+
+            <input class="ob-button button-orange" type="submit" name="ok" value="{|$translate_filter|}" />
+            <div class="clear"></div>
+            <br />
+
+        </form>
+    </div>
+</div>
+
+<div class="shop-result-list">
+    <div class="inner-list {|if $filterpanelCookie|}filter-reserve{|/if|}">
+        <h1>Самые заказываемые товары</h1>
+
+        <table border="0" class="shop-table js-table-fixed">
+            <thead>
+                <tr>
+                    <td>Продукт</td>
+                    <td align="right">Количество заказов</td>
+                </tr>
+            </thead>
+            {|foreach from=$productArray item="productName" key="productID"|}
+                <tr>
+                    <td>{|$productID|} {|$productName|}</td>
+                    <td align="right">{|$reportArray[$productID]|}</td>
+                </tr>
+            {|/foreach|}
+        </table>
+
+        {|if $reportArray|}
+            <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+            <script type="text/javascript">
+            google.load("visualization", "1", {packages:["corechart"]});
+            google.setOnLoadCallback(drawChart);
+            function drawChart() {
+                var data = google.visualization.arrayToDataTable([
+                ['Product', 'Sales'],
+                {|foreach from=$productArray item="productName" key="productID"|}
+                    ['{|$productName|}',  {|$reportArray[$productID]|}],
+                {|/foreach|}
+                ]);
+
+                var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+                chart.draw(data, options);
+            }
+            </script>
+
+            <div id="chart_div" style="width: 100%; height: 500px;"></div>
+        {|/if|}
+    </div>
+</div>
+<div class="clear"></div>

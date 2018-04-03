@@ -1,0 +1,661 @@
+<div class="js-calendar-block">
+    <div class="shop-calendar-block">
+        <div class="by-week js-by-week" {|if $weekMonth != 'week'|}style="display: none;"{|/if|} >
+            <div class="caption">
+                <div class="tabs">
+                    <a class="js-week-next-prev prev" href="#">&lsaquo;</a>
+                    <a class="js-week-next-prev next" href="#">&rsaquo;</a>
+                    <span class="js-calendar-tabs">
+                        <a href="#" class="{|if $weekMonth == 'week'|}selected{|/if|}"  data-nav="js-by-week">Неделя</a>
+                        <a href="#" class="{|if $weekMonth == 'month'|}selected{|/if|}" data-nav="js-by-month">Месяц</a>
+                    </span>
+                    <div class="clear"></div>
+                </div>
+                <div class="js-data-week" style="display: none" data-currentweek="{|$calendarCurrentWeek|number_format:0|}"></div>
+                <span class="toggle-name">{|$calendarMonth.month|} {|$calendarMonth.year|}</span>
+                <div class="clear"></div>
+            </div>
+            <div class="list">
+                <div class="list-row">
+                    <div class="day-name">Пн</div>
+                    <div class="day-name">Вт</div>
+                    <div class="day-name">Ср</div>
+                    <div class="day-name">Чт</div>
+                    <div class="day-name">Пт</div>
+                    <div class="day-name">Сб</div>
+                    <div class="day-name">Вс</div>
+                </div>
+                {|foreach from=$calendarWeekDateArray name=foo key="k" item="week"|}
+                    {|assign var=innerInLine value=0|}
+                    <div class="list-row {|$k|} js-week" style="display: {|if $k == $calendarCurrentWeek|}table-row{|else|}none{|/if|};">
+                        {|if $smarty.foreach.foo.first|}
+                            {|section name=foo start=0 loop=$skipDay|}
+                                {|assign var=innerInLine value=$innerInLine+1|}
+                                <div class="day othermonth">
+                                    <div class="inner">
+                                        <div class="issues">
+                                            <div class="d-title">&nbsp;</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {|/section|}
+                        {|/if|}
+
+                        {|foreach from=$week item="date"|}
+                            {|assign var=innerInLine value=$innerInLine+1|}
+                            <div class="day {|if $date.date == $dateCurrent|}current{|/if|} {|*|}{|if $calendarAlertArray[$date.date] > 0|}incomplete{|/if|}{|*|}">
+                                <div class="inner">
+                                    <div class="issues" data-date="{|$date.date|}">
+                                        <div class="d-title">
+                                            {|$date.date|}
+                                        </div>
+                                        <div class="add-element">
+                                            <a href="#" class="ob-link-add js-create-issues" data-date="{|$date.date|}" data-type="week">Добавить задачу</a>
+                                        </div>
+                                        {|foreach from=$calendarWeekArray[$k][$date.date] item="e"|}
+                                            {|if $e.type=='user'|}
+                                                <a class="day-element js-contact-preview" data-type="user" data-id="{|$e.id|}" href="{|$e.url|}">{|$e.name|}</a>
+                                            {|elseif $e.smart && $e.smartContent|}
+                                                <a class="day-element {|if $e.statusName|}stage-workflow-element{|else|}js-issue-preview{|/if|}" data-type="{|if $e.project|}project{|elseif $e.statusName OR $e.colour|}workflow{|else|}issue{|/if|}" data-id="{|$e.id|}" data-statusid="{|$e.statusId|}" {|if $e.colour|}style="background-color: {|$e.colour|};"{|/if|} href="javascript:void(0);" onclick="smart_popup_open('{|$e.id|}', '{|$e.smartContent|}');">{|$e.name|}</a>
+                                            {|else|}
+                                                <a class="day-element {|if $e.statusName|}stage-workflow-element{|else|}js-issue-preview{|/if|}" data-type="{|if $e.project|}project{|elseif $e.statusName OR $e.colour|}workflow{|else|}issue{|/if|}" data-id="{|$e.id|}" data-statusid="{|$e.statusId|}" {|if $e.colour|}style="background-color: {|$e.colour|};"{|/if|} href="{|$e.url|}">
+                                                    {|if $e.time|}<span class="time">{|$e.time|}</span>{|/if|}
+                                                    {|$e.name|}
+                                                    <span class="clear"></span>
+
+                                                    <span class="icons">
+                                                        {|if $e.fireIssue|}
+                                                            <span class="status overdue"></span>
+                                                        {|/if|}
+                                                        {|if $e.allClosed OR $e.closed|}
+                                                            <span class="status ok"></span>
+                                                        {|/if|}
+                                                    </span>
+                                                    {|if $e.statusName|}
+                                                        <span class="status-name">{|$e.statusName|}</span>
+                                                    {|/if|}
+                                                    <span class="clear"></span>
+                                                </a>
+                                            {|/if|}
+                                        {|/foreach|}
+                                    </div>
+                                </div>
+                            </div>
+                        {|/foreach|}
+                        {|if $innerInLine > 0|}
+                            {|section name=foo start=$innerInLine loop=7|}
+                                <div class="day othermonth">
+                                    <div class="inner">
+                                        <div class="issues">
+                                            <div class="d-title">&nbsp;</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {|/section|}
+                        {|/if|}
+                    </div>
+                {|/foreach|}
+            </div>
+        </div>
+
+        <div class="by-month js-by-month" {|if $weekMonth != 'month'|}style="display: none;"{|/if|}>
+            <div class="caption">
+                <div class="tabs">
+                    <a class="js-month-next-prev prev" href="#">&lsaquo;</a>
+                    <a class="js-month-next-prev next" href="#">&rsaquo;</a>
+                    <span class="js-calendar-tabs">
+                        <a href="#" class="{|if $weekMonth == 'week'|}selected{|/if|}"  data-nav="js-by-week">Неделя</a>
+                        <a href="#" class="{|if $weekMonth == 'month'|}selected{|/if|}" data-nav="js-by-month">Месяц</a>
+                    </span>
+                    <div class="clear"></div>
+                </div>
+                <div class="js-data-month" style="display: none" data-month="{|$dataMonth|}" data-year="{|$dataYear|}" data-show="month" data-currentweeklast=""></div>
+                <span class="toggle-name">{|$calendarMonth.month|} {|$calendarMonth.year|}</span>
+                <div class="clear"></div>
+            </div>
+
+            <div class="list">
+                <div class="list-row">
+                    <div class="day-name">Пн</div>
+                    <div class="day-name">Вт</div>
+                    <div class="day-name">Ср</div>
+                    <div class="day-name">Чт</div>
+                    <div class="day-name">Пт</div>
+                    <div class="day-name">Сб</div>
+                    <div class="day-name">Вс</div>
+                </div>
+                <div class="list-row">
+                    {|assign var=innerInLine value=0|}
+                    {|section name=foo start=0 loop=$skipDay|}
+                        {|assign var=innerInLine value=$innerInLine+1|}
+                        <div class="day othermonth">
+                            <div class="issues">
+                                <div class="d-title"></div>
+                            </div>
+                        </div>
+                    {|/section|}
+
+                    {|assign var=monthLine value=0|}
+                    {|foreach from=$calendarMonthDateArray item="date" key="key"|}
+                        {|assign var=innerInLine value=$innerInLine+1|}
+                        <div class="day {|if $date.date == $dateCurrent|}current{|/if|}">
+                            <div class="inner">
+                                <div class="issues" data-date="{|$date.date|}">
+                                    <div class="d-title">
+                                        {|$date.date|}
+                                    </div>
+                                    <div class="add-element">
+                                        {|if $date.date >= $dateCurrent|}
+                                            <a href="#" class="ob-link-add js-create-issues" data-date="{|$date.date|}" data-type="month">Добавить задачу</a>
+                                        {|/if|}
+                                    </div>
+                                    {|foreach from=$calendarMonthArray[$date.date] item="e"|}
+                                        {|if $e.type=='user'|}
+                                            <a class="day-element js-contact-preview" data-type="user" data-id="{|$e.id|}" href="{|$e.url|}">{|$e.name|}</a>
+                                        {|elseif $e.smart && $e.smartContent|}
+                                            <a class="day-element {|if $e.statusName|}stage-workflow-element{|else|}js-issue-preview{|/if|}" data-type="{|if $e.project|}project{|elseif $e.statusName OR $e.colour|}workflow{|else|}issue{|/if|}" data-id="{|$e.id|}" data-statusid="{|$e.statusId|}" {|if $e.colour|}style="background-color: {|$e.colour|};"{|/if|} href="javascript:void(0);" onclick="smart_popup_open('{|$e.id|}', '{|$e.smartContent|}');">{|$e.name|}</a>
+                                        {|else|}
+                                            <a class="day-element {|if $e.statusName|}stage-workflow-element{|else|}js-issue-preview{|/if|}" data-type="{|if $e.project|}project{|elseif $e.statusName OR $e.colour|}workflow{|else|}issue{|/if|}" data-id="{|$e.id|}" data-statusid="{|$e.statusId|}" {|if $e.colour|}style="background-color: {|$e.colour|};"{|/if|} href="{|$e.url|}">
+                                                {|if $e.time|}<span class="time">{|$e.time|}</span>{|/if|}
+                                                {|$e.name|}
+                                                <span class="clear"></span>
+
+                                                <span class="icons">
+                                                    {|if $e.fireIssue|}
+                                                        <span class="status overdue"></span>
+                                                    {|/if|}
+                                                    {|if $e.allClosed OR $e.closed|}
+                                                        <span class="status ok"></span>
+                                                    {|/if|}
+                                                </span>
+                                                {|if $e.statusName|}
+                                                    <span class="status-name">{|$e.statusName|}</span>
+                                                {|/if|}
+                                                <span class="clear"></span>
+                                            </a>
+                                        {|/if|}
+                                    {|/foreach|}
+                                </div>
+                            </div>
+                        </div>
+                        {|if ($key + 1 + $skipDay) == (($monthLine + 1) * 7)|}
+                            {|assign var=monthLine value=$monthLine+1|}
+                            {|assign var=innerInLine value=0|}
+                            </div>
+                            <div class="list-row">
+                        {|/if|}
+                    {|/foreach|}
+                    {|if $innerInLine > 0|}
+                        {|section name=foo start=$innerInLine loop=7|}
+                            <div class="day othermonth">
+                                <div class="issues">
+                                    <div class="d-title"></div>
+                                </div>
+                            </div>
+                        {|/section|}
+                    {|/if|}
+                </div>
+            </div>
+        </div>
+
+        <div class="shop-popup-block js-settings-stage-popup" style="display: none;">
+            <div class="dark"></div>
+            <div class="popupblock">
+                <a href="#" class="close" onclick="popupClose('.js-settings-stage-popup');"></a>
+                <div class="shop-tabs">
+                    <span>Настройки этапа</span>
+                </div>
+                <div class="window-content window-form">
+                    <div id="js-settings-stage-popup-content"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="shop-popup-block js-modal-create-issue" style="display: none;">
+            <div class="dark"></div>
+            <div class="popupblock">
+                <a href="#" class="close" onclick="popupClose('.js-modal-create-issue');"></a>
+                <div class="shop-tabs">
+                    <span>Создать задачу</span>
+                </div>
+                <div class="window-content window-form">
+                    <form action="">
+                        <div class="element">
+                            <div class="el-caption">Имя задачи</div>
+                            <div class="el-value">
+                                <input type="hidden" name="type" value=""/>
+                                <input type="hidden" name="date" value=""/>
+                                <input type="text" name="issue_name" />
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+
+                        <div class="element">
+                            <div class="el-caption">Бизнес-процесс</div>
+                            <div class="el-value">
+                                <select name="workflowId" class="chzn-select">
+                                    <option value="0">---</option>
+                                    {|foreach from=$workflowArray item="w"|}
+                                        <option value="{|$w.id|}">{|$w.name|}</option>
+                                    {|/foreach|}
+                                </select>
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+
+                        <div class="element">
+                            <div class="el-caption">Проект/задача</div>
+                            <div class="el-value">
+                                <input type="hidden" id="js-parent-name-id" value=""/>
+                                <input type="text" id="js-parent-name" name="parentid" value="" />
+                                <script type="text/javascript">
+                                    $j('.js-by-month .issues').each(function(){
+
+                                    });
+
+                                    $j('.js-week, .js-by-month').each(function(){
+                                        if ($j(this).is(':visible')) {
+                                            $j(this).addClass('current');
+                                        }
+                                    });
+                                    animation('.current .day', 'blind');
+
+                                    $j( "#js-parent-name" ).catcomplete({
+                                        delay: 0,
+                                        source: function( request, response ) {
+                                            $j.ajax({
+                                                url: "/admin/issue/searchajax/select2/",
+                                                dataType: "json",
+                                                data: {
+                                                    name: request.term
+                                                },
+                                                success: function (data) {
+                                                    if (data == 'badLen') return false;
+                                                    if (data == null) response(null);
+                                                    response($j.map(data, function (item) {
+                                                        var id = group = name = '';
+                                                        id = item.id;
+                                                        name = item.name;
+                                                        category = item.category;
+
+                                                        return {
+                                                            id: id,
+                                                            label: name,
+                                                            category: category
+                                                        }
+                                                    }));
+                                                }
+                                            });
+                                        },
+                                        select: function( event, ui ) {
+                                            $j('.js-modal-create-issue').find('form #js-parent-name-id').val(ui.item.id);
+                                        }
+                                    });
+                                </script>
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+
+                        <div class="element">
+                            <div class="el-caption">Ответственный</div>
+                            <div class="el-value">
+                                <select name="managerid" class="chzn-select">
+                                    <option value="0">---</option>
+                                    {|foreach from=$managerArray item="e"|}
+                                        <option value="{|$e.id|}" {|if $e.id == $control_managerid|} selected {|/if|}>{|$e.name|}</option>
+                                    {|/foreach|}
+                                </select>
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+
+                        <div class="element">
+                            <div class="el-caption">Срок исполнения</div>
+                            <div class="el-value">
+                                <input type="text" name="dateto" value="{|$control_dateto|}" class="js-datetime js-dateto"/>
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+
+                        <div class="element">
+                            <textarea name="issue_description" placeholder="Описание" style="height: 300px;"></textarea>
+                        </div>
+
+                        <input type="button" class="ob-button button-green js-ajax-create-issue" value="Создать задачу"/>
+                        <input type="button" class="ob-button button-cancel" value="Отмена" onclick="$j('.js-modal-create-issue').fadeOut();" />
+
+                        <script type="text/javascript">
+                            var form = '';
+                            $j('.js-ajax-create-issue').on('click', function () {
+                                form = $j(this).closest('form');
+
+                                var date = form.find('input[name="date"]').val();
+                                var dateto = form.find('input[name="dateto"]').val();
+                                var name = form.find('input[name="issue_name"]').val();
+                                var description = form.find('textarea[name="issue_description"]').val();
+                                var parentID = form.find('#js-parent-name-id').val();
+                                var managerID = form.find('select[name="managerid"]').val();
+                                var workflowID = form.find('select[name="workflowId"]').val();
+
+                                $j.ajax({
+                                    url: '/admin/issue/ajax/add/',
+                                    dataType: "json",
+                                    data:{
+                                        date: date,
+                                        dateto: dateto,
+                                        name: name,
+                                        description: description,
+                                        parentid: parentID,
+                                        managerid: managerID,
+                                        workflowid: workflowID
+                                    },
+                                    success: function(data) {
+                                        if (data.error) {
+                                            alert(data.name);
+                                            $j('.js-modal-create-issue').fadeOut();
+                                            return false;
+                                        }
+                                        $j('.js-by-'+form.find('input[name="type"]').val()+' .list .day').each(function () {
+                                            if ($j(this).find('.issues').data('date') == date) {
+                                                if (data.smart) {
+                                                    $j(this).find('.issues').append('<div class="issue js-issue-preview" data-id="'+data.id+'"><a href="javascript:void(0);" onclick="smart_popup_open('+data.id+', \''+data.smart+'\');">'+data.name+'</a></div>');
+                                                } else {
+                                                    $j(this).find('.issues').append('<div class="issue" data-id="'+data.id+'"><a href="'+data.url+'">'+data.name+'</a></div>');
+                                                }
+                                                $j('.js-modal-create-issue').fadeOut();
+
+                                                // Очищаем поля.
+                                                form.find('input[name="date"]').val('');
+                                                form.find('input[name="dateto"]').val('');
+                                                form.find('input[name="issue_name"]').val('');
+                                                form.find('textarea[name="issue_description"]').val('');
+                                                form.find('#js-parent-name-id').val('');
+                                                form.find('#js-parent-name').val('');
+                                                form.find('select[name="managerid"]').select2('val', 0);
+                                            }
+                                        });
+                                    }
+                                });
+                            })
+                        </script>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <form class="js-argument-form">
+        {|foreach from=$valueArray item="e" key="k"|}
+            <input type="hidden" name="{|$k|}" value="{|$e|}" />
+        {|/foreach|}
+    </form>
+    
+    <form class="js-where-form">
+        {|foreach from=$whereArray item="e" key="k"|}
+            <input type="hidden" name="{|$k|}" value="{|$e|}" />
+        {|/foreach|}
+    </form>
+
+    <script type="text/javascript">
+
+        // всплывающие подсказки
+        $j('.stage-workflow-element').each(function (i, e) {
+            var $element = $j(e);
+            var statusID = $element.data('statusid');
+            var orderID = $element.data('id');
+
+            $element.tooltipster({
+                theme: 'ob-block-preview',
+                interactive: true,
+                contentAsHTML: true,
+                minWidth: 350,
+                maxWidth: 600,
+                offsetY: 10,
+                onlyOne: true,
+                content: '<div class="loading">Загрузка...</div>',
+                updateAnimation: false,
+                functionBefore: function (origin, continueTooltip) {
+                    continueTooltip();
+
+                    $j.get('/admin/order/workflow-info/', {
+                        statusid: statusID,
+                        orderid: orderID
+                    }, function(data) {
+                        if (!data) {
+                            $element.tooltipster('hide');
+                        }
+                        origin.tooltipster('content', data);
+                    });
+                }
+            });
+        });
+
+        $j('.js-calendar-tabs a').click(function(){
+            var currentType = $j(this).data('nav');
+            $j('.js-calendar-tabs a').removeClass('selected');
+            $j('.js-calendar-tabs a[data-nav="' + currentType + '"]').addClass('selected');
+            $j('.js-by-week, .js-by-month').hide();
+            $j('.' + currentType).show();
+            weekDaySize();
+            return false;
+        });
+
+        // изменяем состояние задачи
+        $j('.js-calendar-issue').change(function (event) {
+            var id = $j(event.target).data('id');
+            var status = $j(event.target).prop('checked');
+            var employerId = $j(event.target).data('employerid');
+
+            $j.ajax({
+                url: '/calendar/issue/update/',
+                data: {
+                    id: id,
+                    status: status,
+                    employerId: employerId
+                }
+            });
+        });
+
+        $j(window).bind('ready resize', function() {
+            weekDaySize();
+        });
+
+        function weekDaySize() {
+            var maxHeight = 0;
+            $j('.js-by-week .issues').css({
+                'height' : 'auto'
+            });
+
+            $j('.js-by-week .issues').each(function(){
+                var dayHeight = $j(this).height();
+                if (maxHeight < dayHeight) {
+                    maxHeight = dayHeight;
+                }
+            });
+            $j('.js-by-week .issues').height(maxHeight);
+        }
+
+        $j('.js-by-week .issues').sortable({
+            connectWith: ".js-by-week .issues",
+            revert: "invalid",
+            items: ".issue",
+            update: function() {
+                weekDaySize();
+            },
+            stop: function (event, ui) {
+                var id = $j(ui.item).find('.js-calendar-issue').data('id');
+                var date = $j(ui.item).closest('.issues').data('date');
+                var employerId = $j(ui.item).find('.js-calendar-issue').data('employerid');
+
+                $j.ajax({
+                    url: '/calendar/issue/update/',
+                    data: {
+                        id: id,
+                        date: date,
+                        employerId: employerId
+                    }
+                });
+            }
+        });
+
+        $j('.js-by-month .issues').sortable({
+            connectWith: ".js-by-month .issues",
+            revert: "invalid",
+            items: ".issue",
+            stop: function (event, ui) {
+                var id = $j(ui.item).find('.js-calendar-issue').data('id');
+                var date = $j(ui.item).closest('.issues').data('date');
+                var employerId = $j(ui.item).find('.js-calendar-issue').data('employerid');
+
+                $j.ajax({
+                    url: '/calendar/issue/update/',
+                    data: {
+                        id: id,
+                        date: date,
+                        employerId: employerId
+                    }
+                });
+            }
+        });
+
+        $j('.js-by-day .issues').sortable({
+            connectWith: ".js-by-day .issues",
+            revert: "invalid",
+            items: ".issue"
+        });
+
+        // Create issue
+        $j('.js-create-issues').on('click', function () {
+            $j('.js-modal-create-issue').find('form').find('input[name="type"]').val($j(this).data('type'));
+            $j('.js-modal-create-issue').find('form').find('input[name="date"]').val($j(this).data('date'));
+            $j('.js-modal-create-issue').find('form').find('input[name="dateto"]').val($j(this).data('date'));
+            popupOpen('.js-modal-create-issue');
+            $j('.js-modal-create-issue').find('form').find('input[name="issue_name"]').focus();
+        });
+
+        // Переключатель месяцев и недель (Вперед, назад)
+        $j(function () {
+            $j('.js-month-next-prev').on('click', function () {
+                var element = $j(this);
+                var currentMonth = $j('.js-data-month').data('month');
+                var currentYear = $j('.js-data-month').data('year');
+                var lastWeek = $j('.js-data-month').data('currentweeklast');
+                var show = $j('.js-data-month').data('show');
+
+                if (element.hasClass('next')) {
+                    if (currentMonth == 12) {
+                        currentYear = currentYear + 1;
+                        currentMonth = '1';
+                    } else {
+                        currentMonth = currentMonth + 1;
+                    }
+                }
+
+                if (element.hasClass('prev')) {
+                    if (currentMonth == 1) {
+                        currentYear = currentYear - 1;
+                        currentMonth = '12';
+                    } else {
+                        currentMonth = currentMonth - 1;
+                    }
+                }
+                
+                var arguments = $j('.js-argument-form').serializeArray();
+                var where = $j('.js-where-form').serializeArray();
+
+                $j.ajax({
+                    url: '/admin/shop/calendal/load/month/ajax/',
+                    data: {
+                        'month': currentMonth,
+                        'year': currentYear,
+                        'lastWeek': lastWeek,
+                        'managerid': '{|$managerid|}',
+                        'show': show,
+                        'arguments': arguments,
+                        'where': where
+                    },
+                    success: function (html) {
+                        $j('.js-calendar-block').html(html);
+                        weekDaySize();
+                    }
+                });
+            });
+
+            var currentweek = $j('.js-data-week').data('currentweek');
+            $j('.js-week-next-prev').on('click', function () {
+                var element = $j(this);
+
+                if (element.hasClass('next')) {
+                    currentweek = currentweek + 1;
+
+                    if (!$j('.js-week.'+currentweek).length && !$j('.js-week.0'+currentweek).length) {
+                        $j('.js-data-month').data('show', 'week');
+                        $j('.js-by-month').find('.js-month-next-prev.next').click();
+
+                        return;
+                    }
+                }
+
+                if (element.hasClass('prev')) {
+                    currentweek = currentweek - 1;
+
+                    if (!$j('.js-week.'+currentweek).length && !$j('.js-week.0'+currentweek).length) {
+                        $j('.js-data-month').data('currentweeklast', '1');
+                        $j('.js-data-month').data('show', 'week');
+
+                        $j('.js-by-month').find('.js-month-next-prev.prev').click();
+                        return;
+
+                    }
+                }
+
+                $j('.js-week').each(function () {
+                    if ($j(this).hasClass(currentweek) || $j(this).hasClass('0'+currentweek)) {
+                        $j(this).show();
+                    } else {
+                        $j(this).hide();
+                    }
+                });
+                weekDaySize();
+            });
+        });
+
+        // Месяц / неделя
+        function cookieFromCalendarType(){
+            var type = [];
+            $j(".js-calendar-tabs a").each(function(){
+                if($j(this).hasClass("selected")){
+                    type.push($j(this).data("nav"));
+                }
+            });
+            $j.cookie("calendarTypeCookie", type.join(','));
+        }
+
+
+        $j(function() {
+            $j(".js-calendar-tabs a").click(function(){
+                setTimeout("cookieFromCalendarType();", 100);
+            });
+        });
+
+        function settings_stage_popup (orderId, statusId) {
+            if (!statusId || !orderId) {
+                return false;
+            }
+
+            $j.get('/admin/order/workflow-setting-info/', {
+                statusid: statusId,
+                orderid: orderId
+            }, function(data) {
+                if (data) {
+                    $j('#js-settings-stage-popup-content').empty();
+                    $j('#js-settings-stage-popup-content').append(data);
+                    popupOpen('.js-settings-stage-popup');
+                }
+            });
+
+            return false;
+
+        }
+    </script>
+</div>

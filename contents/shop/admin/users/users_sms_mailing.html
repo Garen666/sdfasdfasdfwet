@@ -1,0 +1,97 @@
+<div class="shop-tabs fixed">
+    <a href="/admin/shop/users/mailing/">{|$translate_users_mailing|} Email</a>
+    <a href="/admin/shop/users/smsmailing/" class="selected">{|$translate_users_mailing|} SMS</a>
+    <div class="clear"></div>
+</div>
+<div class="shop-tabs-place"></div>
+
+{|if $message == 'error'|}
+    <div class="shop-message-error">
+        {|$translate_mailing_error|}.<br />
+        ({|$translate_mailing_error_why|})
+    </div>
+{|/if|}
+
+{|if $message == 'ok'|}
+    <div class="shop-message-success">
+        {|$translate_mailing_success|} ({|$cnt|}).
+    </div>
+    {|if $sendsArray|}
+        <table class="shop-table">
+            <thead>
+            <tr>
+                <td>#</td>
+                <td>Телефон</td>
+                <td>Отправлено</td>
+            </tr>
+            </thead>
+            {|foreach from=$sendsArray item="user"|}
+            <tr>
+                <td><a href="{|$user.url|}">{|$user.id|}</a></td>
+                <td>{|$user.phone|}</td>
+                <td>
+                    {|if $user.send|}
+                    Да
+                    {|else|}
+                    Нет
+                    {|/if|}
+                </td>
+            </tr>
+            {|/foreach|}
+        </table>
+    {|/if|}
+{|/if|}
+
+{|if $false|}
+    Интеграция с TurboSms не настроена.<br />
+    Настройка аккаунта в магазине - <a href="/admin/shop/settings/Интеграции/">Перейти</a><br />
+    Сайт сервиса TurboSms - <a href="http://turbosms.ua/">Перейти</a><br />
+{|else|}
+    {|if $errorAuth|}
+        Ошибка авторизации. Проверьте данные для интеграции.<br /><br />
+    {|elseif $balance|}
+        Осталось кредитов: {|$balance|}
+        <a href="http://turbosms.ua/"> Пополнить счет</a>
+        <br /><br />
+
+        <form name="form" id="myform" method="post" action="" >
+            <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                <tr valign="top">
+                    <td>
+                        {|if $userCount|}
+                            Пользователей с телефоном: {|$userCount|}<br />
+                            Пользователей подписанных на рассылку: {|$disCount|}
+                        {|/if|}
+                        <br />
+                        <br />
+                        <strong>{|$translate_text_of_letter|}:</strong><br/>
+                        <textarea name="text" style="width: 99%; height: 100px;" id="id-text">{|$control_text|}</textarea>
+                        <br />
+                        <br />
+                        <input type="hidden" name="arrUserId" value="{|$arrUserId|}">
+                        <input type="submit" name="ok" value="{|$translate_send|}" onclick="return confirm('{|$translate_send_confirm|}? ({|$translate_send_confirm_warning|})');" class="ob-button button-green" />
+                    </td>
+                </tr>
+            </table>
+        </form>
+
+        <div class="shop-right-sidebar" style="display: block;">
+            <div class="toggle"></div>
+            <div class="element double">
+                <a href="#" name='checkall' onclick='checkedAll();'>{|$translate_check_all_small|}</a> /
+                <a href="#" name='checkall' onclick='uncheckedAll();'>{|$translate_uncheck_small|}</a>
+            </div>
+
+            <div class="element">
+                {|$translate_find_user|}
+                <input type="text" name="" placeholder="" id="id_search_user" />
+            </div>
+
+            <div class="element">
+                {|$translate_find_by_tag|}
+                <input type="text" name="" placeholder="" id="id_search_tags">
+            </div>
+            <div class="element"></div>
+        </div>
+    {|/if|}
+{|/if|}

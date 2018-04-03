@@ -1,0 +1,19 @@
+<img style="width: inherit;" src="https://mfst.igromania.ru/wp-content/uploads/2016/05/warcraft-12.jpg">
+<br>
+<br>
+<input id="js-input-game-search" type="text" placeholder="Поиск" style="width: 100%;">
+
+
+<div class="main-column-game">
+    {|foreach from=$gamesArray item="g"|}
+        <div class="js-game-item" data-name="{|$g.name|}" style="display: inline-block;">
+            <a href="{|$g.url|}"><b>{|$g.name|}</b> {|$g.descriptionshort|}</a>
+            <div>
+                {|foreach from=$gamesTypeArray[$g.id] item="gt"|}
+                    <a href="{|$gt.url|}">{|$gt.name|}</a>
+                {|/foreach|}
+            </div>
+        </div>
+    <br><br>
+    {|/foreach|}
+</div>

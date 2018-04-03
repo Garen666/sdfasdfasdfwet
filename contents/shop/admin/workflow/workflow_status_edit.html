@@ -1,0 +1,311 @@
+<div class="shop-tabs fixed">
+    <a href="/admin/shop/workflow/">&lsaquo; Бизнес-процессы</a>
+    <a href="/admin/shop/workflow/{|$categoryid|}/">Бизнес-процесс {|$categoryName|}</a>
+    <a href="/admin/shop/workflowstatus/{|$statusid|}/" class="selected">Этап {|$name|}</a>
+    {|*|}<a href="./delete/" >{|$translate_delete|}</a>{|*|}
+    <div class="clear"></div>
+</div>
+<div class="shop-tabs-place"></div>
+{|if $edit_ok|}
+    <div class="shop-message-success">
+        Данные этапа успешно сохранены.
+    </div>
+{|/if|}
+
+<form action="" method="post">
+    <div class="caption">Название этапа</div>
+    <input type="text" name="name" value="{|$control_name|}" style="width: 300px;" />
+    <br />
+    <br />
+
+    {|if $box|}
+        <div class="caption">Описание этапа</div>
+        <textarea name="description" style="width: 80%;" class="js-autosize" rows="3">{|$control_description|}</textarea>
+        <br />
+        <br />
+
+        <div class="caption">Срок</div>
+        <table>
+            <tr>
+                <td>
+                    <input type="text" name="term" value="{|$control_term|}" style="width: 50px;" />
+                </td>
+                <td>
+                    <select name="period" class="chzn-select" style="width: 80px;">
+                        <option value="hour" {|if $control_period == 'hour'|} selected {|/if|}>Час</option>
+                        <option value="day" {|if $control_period == 'day'|} selected {|/if|}>День</option>
+                        <option value="week" {|if $control_period == 'week'|} selected {|/if|}>Неделя</option>
+                        <option value="month" {|if $control_period == 'month'|} selected {|/if|}>Месяц</option>
+                    </select>
+                </td>
+            </tr>
+        </table>
+        <br />
+
+        <div class="caption">Ответственная роль</div>
+        <select name="roleid" class="chzn-select" style="width: 300px;">
+            <option value="0">---</option>
+            {|foreach from=$roleArray item="e"|}
+                <option value="{|$e.id|}" {|if $e.id == $control_roleid|} selected {|/if|}>
+                    {|section name=foo start=0 loop=$e.level|}
+                        &nbsp;&nbsp;&nbsp;
+                    {|/section|}
+                    {|$e.name|}
+                </option>
+            {|/foreach|}
+        </select>
+        <br />
+
+        <div class="caption">Конкретный ответственный сотрудник</div>
+        <select name="managerid" class="chzn-select" style="width: 300px;">
+            <option value="0">---</option>
+            {|foreach from=$managerArray item="e"|}
+                <option value="{|$e.id|}" {|if $e.id == $control_managerid|} selected {|/if|}>
+                    {|$e.name|}
+                </option>
+            {|/foreach|}
+        </select>
+        <br />
+
+        <label>
+            <input type="checkbox" name="jumpmanager" value="1" {|if $control_jumpmanager|} checked {|/if|} />
+            При переходе в этот этап менять ответственного. По умолчанию берется ответственный из задачи, иначе конкретный выбранный сотрудник.
+        </label>
+        <br />
+        <br />
+    {|/if|}
+
+    <div class="caption">Цвет</div>
+    <input type="text" class="js-color" name="colour" value="{|$control_colour|}" style="width: 80px;" />
+    <br />
+    <br />
+
+    <div class="caption">Smart-обработчик</div>
+    <input type="text" name="smart" value="{|$control_smart|}" style="width: 300px;" />
+    <br />
+    <br />
+
+    {|if $box|}
+        <label>
+            <input type="checkbox" name="onlyauto" value="1" {|if $control_onlyauto|} checked {|/if|} />
+            Этап нельзя выбирать вручную
+        </label>
+        <br />
+
+        <label>
+            <input type="checkbox" name="onlyissue" value="1" {|if $control_onlyissue|} checked {|/if|} />
+            С этапа нельзя уходить пока не решены все подзадачи данного этапа
+        </label>
+        <br />
+        <br />
+    {|/if|}
+
+    <label>
+        <input type="checkbox" name="notify_sms_client" onclick="$j('.js-notify_sms_client').fadeToggle();" value="1" {|if $control_notify_sms_client|} checked {|/if|} />
+        Отправлять уведомление по смс клиенту
+    </label>
+    <div class="clear"></div>
+    <textarea style="{|if !$control_notify_sms_client|}display: none;{|/if|}" cols="40" rows="5" class="js-notify_sms_client" name="text_notify_sms_client">{|$control_text_notify_sms_client|}</textarea>
+    <div class="clear"></div>
+
+    <label>
+        <input type="checkbox" name="notify_sms_admin" onclick="$j('.js-notify_sms_admin').fadeToggle();" value="1" {|if $control_notify_sms_admin|} checked {|/if|} />
+        Отправлять уведомление по смс менеджеру
+    </label>
+    <div class="clear"></div>
+    <textarea style="{|if !$control_notify_sms_admin|}display: none;{|/if|}" cols="40" rows="5" class="js-notify_sms_admin" name="text_notify_sms_admin">{|$control_text_notify_sms_admin|}</textarea>
+    <div class="clear"></div>
+
+    <label>
+        <input type="checkbox" name="notify_email_client" onclick="$j('.js-notify_email_client').fadeToggle();" value="1" {|if $control_notify_email_client|} checked {|/if|} />
+        Отправлять уведомление по email клиенту
+    </label>
+    <div class="clear"></div>
+    <textarea style="width: 80%; height: 200px; {|if !$control_notify_email_client|}display: none;{|/if|}" cols="40" rows="5" class="js-notify_email_client" name="text_notify_email_client">{|$control_text_notify_email_client|}</textarea>
+    <div class="clear"></div>
+
+    <label>
+        <input type="checkbox" name="notify_email_admin" onclick="$j('.js-notify_email_admin').fadeToggle();" value="1" {|if $control_notify_email_admin|} checked {|/if|} />
+        Отправлять уведомление по email менеджеру
+    </label>
+    <div class="clear"></div>
+    <textarea style="width: 80%; height: 200px; {|if !$control_notify_email_admin|}display: none;{|/if|}" cols="40" rows="5" class="js-notify_email_admin" name="text_notify_email_admin">{|$control_text_notify_email_admin|}</textarea>
+    <div class="clear"></div>
+    <br />
+
+    {|if not $issue && $box|}
+        <label>
+            <input type="checkbox" name="need_payment" value="1" {|if $control_need_payment|} checked {|/if|} />
+            Должна быть оплата
+        </label>
+        <br />
+
+        <label>
+            <input type="checkbox" name="need_prepayment" value="1" {|if $control_need_prepayment|} checked {|/if|} />
+            Должна быть предоплата
+        </label>
+        <br />
+        <br />
+
+        <label>
+            <input type="checkbox" name="need_content" value="1" {|if $control_need_content|} checked {|/if|} />
+            Необходимо содержание
+        </label>
+        <br />
+
+        <label>
+            <input type="checkbox" name="need_document" value="1" {|if $control_need_document|} checked {|/if|} />
+            Необходимы документы
+        </label>
+        <br />
+        <br />
+    {|/if|}
+
+    <label>
+        <input type="checkbox" name="closed" value="1" {|if $control_closed|} checked {|/if|} />
+        {|if $issue|}
+            Считать задачу закрытой
+        {|else|}
+            Считать заказ закрытым
+        {|/if|}
+    </label>
+    <br />
+
+    {|if NOT $issue|}
+        <label>
+            <input type="checkbox" name="saled" value="1" {|if $control_saled|} checked {|/if|} />
+            Считать заказ проданным
+        </label>
+        <br />
+
+        <label>
+            <input type="checkbox" name="shipped" value="1" {|if $control_shipped|} checked {|/if|} />
+            Считать заказ отгруженным
+        </label>
+        <br />
+        <br />
+
+        <label>
+            <input type="radio" name="orderSupplier" value="" {|if !$control_orderSupplier|} checked {|/if|} />
+            Не создавать заказ постащику автоматически
+        </label>
+        <br />
+
+        <label>
+            <input type="radio" name="orderSupplier" value="create" {|if $control_orderSupplier == 'create'|} checked {|/if|} />
+            Автоматически создать заказ поставщику
+        </label>
+        <br />
+
+        <label>
+            <input type="radio" name="orderSupplier" value="cancel" {|if $control_orderSupplier == 'cancel'|} checked {|/if|} />
+            Отменить заказ поставщику (если заказ еще в первом состоянии)
+        </label>
+        <br />
+        <br />
+
+        {|if $storage|}
+            <label>
+                <input type="checkbox" name="storage_incoming" value="1" {|if $control_storage_incoming|} checked {|/if|} />
+                Автоматически приходовать заказ на склад
+            </label>
+            <select name="storagenameid_incoming">
+                {|foreach from=$storageNameIncomingArray item="e"|}
+                    <option value="{|$e.id|}" {|if $e.id == $control_storagenameid_incoming|} selected {|/if|}>{|$e.name|}</option>
+                {|/foreach|}
+            </select>
+            <br />
+
+            <label>
+                <input type="checkbox" name="storage_sale" value="1" {|if $control_storage_sale|} checked {|/if|} />
+                Автоматически продавать заказ со склада {|$storageName|}
+            </label>
+            <br />
+
+            <label>
+                <input type="checkbox" name="storage_reserve" value="1" {|if $control_storage_reserve|} checked {|/if|} />
+                Автоматически резервировать товар на складе {|$storageName|}
+            </label>
+            <br />
+
+            <label>
+                <input type="checkbox" name="storage_unreserve" value="1" {|if $control_storage_unreserve|} checked {|/if|} />
+                Автоматически снимать резерв товара на складе
+            </label>
+            <br />
+
+            <label>
+                <input type="checkbox" name="storage_return" value="1" {|if $control_storage_return|} checked {|/if|} />
+                Автоматически возвращать товар на склад
+            </label>
+            <br />
+
+            <br />
+        {|/if|}
+    {|else|}
+        <br />
+    {|/if|}
+
+    {|if $box|}
+        <div class="caption">
+            В этом этапе автоматически стартовартовать новые бизес-процессы:<br />
+            Подзадачи с указанным бизнес-процессом будут созданы в этом же проекте и назначены на исполнителя этапа.
+        </div>
+
+        <table class="shop-table" cellpadding="0" cellspacing="0" width="100%">
+            <thead>
+                <tr>
+                    <td width="20">#</td>
+                    <td width="320">Бизнес-процесс</td>
+                    <td>Имя задачи</td>
+                </tr>
+            </thead>
+        {|foreach from=$subworkflowArray item="x" key="index"|}
+            <tr>
+                <td>{|$index|}</td>
+                <td>
+                    <select name="subworkflow{|$index|}" class="chzn-select" style="width: 300px;">
+                        <option value="0">---</option>
+                        {|foreach from=$workflowArray item="name" key="id"|}
+                            <option value="{|$id|}" {|if $id == $x|} selected {|/if|}>{|$name|}</option>
+                        {|/foreach|}
+                    </select>
+                </td>
+                <td>
+                    <input type="text" name="subworkflow{|$index|}name" value="{|$subworkflowNameArray[$index]|}" style="width: 90%;">
+                </td>
+            </tr>
+        {|/foreach|}
+        </table>
+        <br />
+
+        <div class="caption">Автоматически повторять</div>
+        <table>
+            <tr>
+                <td>
+                    <select id="js-autorepeat" name="autorepeat_period" style="width: 200px;"  class="chzn-select" >
+                        <option value="no" {|if not $control_autorepeat_period OR not $control_autorepeat_term|} selected {|/if|}>не повторять</option>
+                        <option value="month" {|if $control_autorepeat_period == 'month' AND $control_autorepeat_term|} selected {|/if|}>каждый месяц</option>
+                        <option value="week" {|if $control_autorepeat_period == 'week' AND $control_autorepeat_term|} selected {|/if|}>каждую неделю</option>
+                        <option value="day" {|if $control_autorepeat_period == 'day' AND $control_autorepeat_term|} selected {|/if|}>каждый день</option>
+                    </select>
+                </td>
+                <td>
+                    <div id="js-autorepeat-term" {|if not $control_autorepeat_term OR not $control_autorepeat_period|}style="display:none; "{|/if|}>
+                        в <input type="text" name="autorepeat_term" value="{|$control_autorepeat_term|}" style="width: 50px;" />
+                        <span id="js-autorepeat-term-text">{|if $control_autorepeat_period == 'month'|}день месяца{|elseif $control_autorepeat_period == 'week'|}день недели{|elseif $control_autorepeat_period == 'day'|}час{|/if|}</span>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <br />
+    {|/if|}
+
+    <br />
+    <br />
+    <br />
+
+    <div class="ob-button-fixed">
+        <input type="submit" name="send_edit" value="Сохранить" class="ob-button button-green" />
+    </div>
+</form>

@@ -1,0 +1,89 @@
+<div class="shop-tabs fixed">
+    {|if $urlBack|}
+        <a href="{|$urlBack|}">&lsaquo; Назад</a>
+    {|elseif $box|}
+        <a href="/admin/projects/">&lsaquo; Проекты</a>
+    {|else|}
+        <a href="/admin/shop/orders/">&lsaquo; Заказы</a>
+    {|/if|}
+
+    {|if $projectName|}
+        <a href="{|$projectURL|}">&lsaquo; {|$projectName|}</a>
+    {|/if|}
+
+    <a href="/admin/shop/orders/{|$orderid|}/" {|if $selected == 'view'|} class="selected" {|/if|}><em>{|$orderName|}</em></a>
+
+    <div class="clear"></div>
+</div>
+<div class="shop-tabs-place"></div>
+
+<div class="shop-filter-displace">
+    <div class="ob-block-head">
+        <div class="head-wrap">
+            {|if $image|}
+                <div class="image"><a class="js-colorbox" {|if $bigImage|}href="{|$bigImage|}"{|else|}href="{|$image|}"{|/if|}><img src="{|$image|}" alt=""/></a></div>
+            {|/if|}
+
+            <div class="info">
+                <div class="caption">
+                    {|if $number|}
+                        <div class="tag">#{|$number|}</div>
+                    {|/if|}
+
+                    <h1>{|$orderName|}</h1>
+
+                    {|if !$isWatcher|}
+                        <a class="ob-link-follow js-tooltip" href="{|$urlWatch|}" title="Следить"></a>
+                    {|else|}
+                        <a class="ob-link-follow no js-tooltip" href="{|$urlWatch|}" title="Не следить"></a>
+                    {|/if|}
+
+                    <div class="clear"></div>
+                </div>
+
+                {|if $description|}
+                    <div class="description">
+                        {|$description|}
+                    </div>
+                {|/if|}
+            </div>
+        </div>
+
+        <div class="navigation js-ui-navigation">
+            <a href="/admin/shop/orders/{|$orderid|}/" {|if $selected == 'view'|} class="selected" {|/if|}>Информация</a>
+
+            {|if $box|}
+                <a href="/admin/shop/orders/{|$orderid|}/issue/" {|if $selected == 'issue'|} class="selected" {|/if|}>
+                    Задачи
+                    {|if $issueCount > 0|}
+                        <span class="ob-count-element">{|$issueCount|}</span>
+                    {|/if|}
+                </a>
+                <a href="/admin/shop/orders/{|$orderid|}/event/" {|if $selected == 'event'|} class="selected" {|/if|}>События</a>
+                <a href="/admin/shop/orders/{|$orderid|}/employer/" {|if $selected == 'employer'|} class="selected" {|/if|}>Исполнители</a>
+                <a href="/admin/shop/orders/{|$orderid|}/contact/" {|if $selected == 'contacts'|} class="selected" {|/if|}>Контакты</a>
+                <a href="/admin/shop/orders/{|$orderid|}/log/" {|if $selected == 'log'|} class="selected" {|/if|}>История</a>
+            {|/if|}
+
+            {|foreach from=$moduleTabArray item="e"|}
+                {|if $e.moduleName != 'storage' OR !$isIssue|}
+                    <a href="{|$e.url|}" {|if $selected == $e.moduleName|} class="selected" {|/if|} >{|$e.name|}</a>
+                {|/if|}
+            {|/foreach|}
+
+            {|if $canEdit|}
+                <a href="/admin/shop/orders/{|$orderid|}/delete/" {|if $selected == 'delete'|} class="selected" {|/if|}>Удалить</a>
+            {|/if|}
+        </div>
+    </div>
+</div>
+
+<script>
+    // инициализация просмотра картинок
+    $j('.js-colorbox').colorbox({
+        maxWidth: '95%',
+        maxHeight: '95%',
+        current: false,
+        returnFocus: false
+    });
+</script>

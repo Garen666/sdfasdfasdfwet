@@ -1,0 +1,96 @@
+{|if $message == "ok"|}
+    <div class="os-message-success">
+        {|$translate_message_success|}.<br />
+        {|$translate_be_published|}.
+    </div>
+{|/if|}
+
+{|if not $guestBookArray|}
+    <div class="os-message-notice">
+        {|$translate_message_notice|}
+    </div>
+{|/if|}
+
+{|if $message == "error"|}
+    <div class="os-message-error">
+        {|$translate_message_error|}.<br />
+        {|$translate_your_feedback|}<br />
+    </div>
+{|/if|}
+
+<div class="os-faq-block">
+    {|foreach from=$guestBookArray item="g"|}
+        <div class="element">
+            {|$g.response|}
+            <div class="date">
+                {|$g.cdate|}
+                {|if $g.name|}
+                    от {|$g.name|}
+                {|elseif $g.login|}
+                    от {|$g.login|}
+                {|/if|}
+            </div>
+        </div>
+    {|/foreach|}
+</div>
+{|if $isUserAuthorized|}
+    <a href="javascript: void(0);" class="os-submit" onclick="popupOpen('.js-popup-review')">{|$translate_leave_reply|}</a>
+    <div id="form-order-id" class="os-popup-block js-popup-review" style="display: none;">
+        <div class="dark" onclick="popupClose('.js-popup-review');"></div>
+        <div class="popup-block">
+            <div class="head">
+                <a href="javascript: void(0);" class="close" onclick="popupClose('.js-popup-review');">&nbsp;</a>
+                {|$translate_leave_reply|}
+            </div>
+            <form method="post">
+                <div class="body">
+                    <table>
+                        <tr>
+                            <td>Отзыв<span class="important">*</span>:</td>
+                            <td><textarea class="js-required" type="text" name="response"></textarea></td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="foot">
+                    <input type="hidden" name="ajs" class="ajs" value="1" />
+                    <input class="js-form-validation os-submit" type="submit" name="guestbook" value="{|$translate_send_message|}" />
+                </div>
+            </form>
+        </div>
+    </div>
+{|else|}
+    {|if $isUnregisteredUsers|}
+        <a href="javascript: void(0);" class="os-submit" onclick="popupOpen('.js-popup-review')">{|$translate_leave_reply|}</a>
+        <div id="form-order-id" class="os-popup-block js-popup-review" style="display: none;">
+            <div class="dark" onclick="popupClose('.js-popup-review');"></div>
+            <div class="popup-block">
+                <div class="head">
+                    <a href="javascript: void(0);" class="close" onclick="popupClose('.js-popup-review');">&nbsp;</a>
+                    {|$translate_leave_reply|}
+                </div>
+                <form method="post">
+                    <div class="body">
+                        <table>
+                            <tr>
+                                <td>Имя:</td>
+                                <td><input type="text" name="name" /></td>
+                            </tr>
+                            <tr>
+                                <td>Отзыв:</td>
+                                <td><textarea type="text" name="response"></textarea></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="foot">
+                        <input type="hidden" name="ajs" class="ajs" value="1" />
+                        <input type="submit" name="guestbook" value="{|$translate_send_message|}" class="os-submit" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    {|else|}
+        <div class="os-message-info">
+            {|$translate_message_info|}.
+        </div>
+    {|/if|}
+{|/if|}

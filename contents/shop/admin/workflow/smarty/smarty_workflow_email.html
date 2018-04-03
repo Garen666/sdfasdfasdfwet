@@ -1,0 +1,118 @@
+<div class="shop-popup-block js-smart-email-popup">
+    <div class="dark"></div>
+    <div class="popupblock">
+        <a href="javascript:void(0);" class="close" onclick="return popupClose('.js-smart-email-popup');"></a>
+        <div class="shop-tabs">
+            <span>Написать</span>
+        </div>
+        <div class="window-content window-form">
+            {|if $number OR $orderName|}
+                <div class="head">
+                    {|if $number|}
+                        <div class="tag">
+                            {|if $orderUrl|}
+                                <a href="{|$orderUrl|}">#{|$number|}</a>
+                            {|else|}
+                                #{|$number|}
+                            {|/if|}
+                        </div>
+                    {|/if|}
+
+                    {|$orderName|}
+                    <div class="clear"></div>
+                </div>
+            {|/if|}
+            {|if $comments|}
+                <div class="element">
+                    <div class="el-caption">Описание</div>
+                    <div class="el-value darken">{|$comments|}</div>
+                </div>
+            {|/if|}
+            {|if $clientId|}
+                <div class="element">
+                    <div class="el-caption">Клиент</div>
+                    <div class="el-value"><a class="js-contact-preview" data-id="{|$clientId|}" href="{|$clientUrl|}">{|$clientName|}</a></div>
+                </div>
+            {|/if|}
+            {|if $managerId|}
+                <div class="element">
+                    <div class="el-caption">Ответственный</div>
+                    <div class="el-value"><a class="js-contact-preview" data-id="{|$managerId|}" href="{|$managerUrl|}">{|$managerName|}</a></div>
+                </div>
+            {|/if|}
+
+            <div class="element">
+                <div class="el-caption">Кому</div>
+                <div class="el-value"><input type="text" id="js-mail-to-{|$orderId|}" name="" value="" placeholder="Введите E-mail" /></div>
+            </div>
+            <div class="element">
+                <div class="el-caption">Тема письма</div>
+                <div class="el-value"><input type="text" id="js-mail-subject-{|$orderId|}" name="" value="" placeholder="Укажите тему" /></div>
+            </div>
+            <div class="element">
+                <div class="el-caption">Дата отправки</div>
+                <div class="el-value"><input class="js-datetime" type="text" id="js-mail-send-date-{|$orderId|}" name="" value="" placeholder="Укажите дату отправки" /></div>
+            </div>
+            <div class="clear"></div>
+            <div class="element">
+                <textarea name="" id="js-mail-content-{|$orderId|}" placeholder="Сообщение" cols="30" rows="15" style="height: 300px; max-height: 300px;"></textarea>
+            </div>
+            <div class="element">
+                <div class="el-caption">Добавить файл</div>
+                <div class="el-value"><input type="file" id="js-mail-files-{|$orderId|}" multiple /></div>
+            </div>
+            {|if $commentArray|}
+                <div class="element">
+                    <div class="el-caption">Комментарии</div>
+                    <div class="el-value">
+                        {|foreach from=$commentArray item="comment"|}
+                            - {|$comment|}<br>
+                        {|/foreach|}
+                    </div>
+                </div>
+            {|/if|}
+            <div class="clear"></div>
+            <div class="element">
+                <div class="el-comment-cell">
+                    <textarea name="" id="js-issue-content-{|$orderId|}" placeholder="Добавить комментарий к задаче" cols="10" rows="5"></textarea>
+                </div>
+
+                {|if $commentTemplateArray|}
+                    <div class="el-template-cell">
+                        <div class="caption">{|$translate_comment_template|}</div>
+                        <div class="list">
+                            {|foreach from=$commentTemplateArray item="comment"|}
+                                <a href="javascript:void(0);" class="ob-link-dashed" data-text="{|$comment.text|}" onclick="$j('#js-issue-content-{|$orderId|}').val($j('#js-issue-content-{|$orderId|}').val()+$j(this).data('text'));">{|$comment.name|}</a><br>
+                            {|/foreach|}
+                        </div>
+                    </div>
+                {|/if|}
+            </div>
+
+            <input type="submit" onclick="send_email_smart({|$orderId|});"  class="ob-button button-green" value="Сохранить" />
+            <input type="submit" onclick="send_email_smart({|$orderId|}, 1);"  class="ob-button button-green" value="{|if $isClosed|}Не готово{|else|}Готово{|/if|}" />
+            <input type="button" class="ob-button button-cancel" onclick="return popupClose('.js-smart-email-popup');" value="Отмена" />
+        </div>
+    </div>
+</div>
+        
+<script>
+    // выбор времени
+    $j('.js-datetime').each(function (i, e) {
+        var $e = $j(e);
+        var format = $e.data('dateformat');
+        if (!format) {
+            format = 'yy-mm-dd';
+        }
+
+        $e.datetimepicker({
+            dateFormat: format,
+            changeMonth: true,
+            changeYear: true,
+            //showButtonPanel: false,
+            timeText: 'Время',
+            hourText: 'Час',
+            minuteText: 'Минута'
+        });
+    });
+</script>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<help>
+    <item>
+        <id>1</id>
+        <name>Контакты, Copyrights, Title</name>
+        <color>#47a3ad</color>
+        <url>page1.html</url>
+        <parentid>0</parentid>
+    </item>
+
+    <item>
+        <id>2</id>
+        <name>Создание категории</name>
+        <color>#e92828</color>
+        <url>page2.html</url>
+        <parentid>0</parentid>
+    </item>
+
+    <item>
+        <id>3</id>
+        <name>Создание товара</name>
+        <color>#ec8417</color>
+        <url>page3.html</url>
+        <parentid>0</parentid>
+    </item>
+
+    <item>
+        <id>4</id>
+        <name>Импорт товаров</name>
+        <color>#a64307</color>
+        <url>page4.html</url>
+        <parentid>0</parentid>
+    </item>
+
+    <item>
+        <id>5</id>
+        <name>Создание текестовой страницы</name>
+        <color>#b88c14</color>
+        <url>page5.html</url>
+        <parentid>0</parentid>
+    </item>
+
+    <item>
+        <id>6</id>
+        <name>Настройка почты</name>
+        <color>#CD5C5C</color>
+        <url>page6.html</url>
+        <parentid>0</parentid>
+    </item>
+
+    <item>
+        <id>7</id>
+        <name>Фильтры и характеристики</name>
+        <color>#32CD32</color>
+        <url>page7.html</url>
+        <parentid>0</parentid>
+    </item>
+</help>

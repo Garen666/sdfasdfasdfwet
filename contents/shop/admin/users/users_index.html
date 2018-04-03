@@ -1,0 +1,404 @@
+<div class="shop-tabs fixed">
+    {|if $canUserAdd|}
+        <a href="./add/">{|$translate_users_add|}</a>
+    {|/if|}
+    {|if $box|}
+        <a href="/admin/meeting/add/">Создать встречу</a>
+    {|/if|}
+    <div class="clear"></div>
+</div>
+<div class="shop-tabs-place"></div>
+
+<div class="shop-filter-panel">
+    <div class="filter-toggle {|if $filterpanelCookie|}open{|/if|}"></div>
+    <div class="inner-pannel" {|if !$filterpanelCookie|}style="display: none;"{|/if|}>
+        <form class="ob-layer-overflow js-layer-overflow" action="" method="get">
+
+            <div class="element">
+                Способ отображения
+                <select name="mode" class="chzn-select">
+                    <option value="" {|if $control_mode == ''|} selected {|/if|}>Плиткой</option>
+                    <option value="list" {|if $control_mode == 'list'|} selected {|/if|}>Списком</option>
+                </select>
+            </div>
+
+            {|if $groupsArray|}
+                <div class="element ulist">
+                    {|foreach from=$groupsArray item="e" key="parentName"|}
+                        <label {|if $e.level > 0|}class="sub"{|/if|}>
+                            <input type="radio" name="groupid" value="{|$e.id|}" {|if $e.id == $control_groupid|}checked{|/if|}>
+                            <em>{|$e.countNow|}<span style="color: {|if $e.countDiff>0|}green{|elseif $e.countDiff<0|}red{|else|}gray{|/if|};">{|$e.countDiff|}</span></em>
+                            <a href="{|$e.url|}" title="{|$e.description|}">{|$e.name|}</a>
+                        </label>
+                    {|/foreach|}
+                    <label>
+                        <input type="radio" name="groupid" value="" {|if !$control_groupid|}checked{|/if|}>
+                        <a href="./">{|$translate_all|}</a>
+                    </label>
+                    <br />
+                </div>
+            {|/if|}
+
+            <div class="element">
+                <input type="hidden" name="filter31_key" value="namelast" />
+                <input type="hidden" name="filter31_type" value="search" />
+                <input type="text" name="filter31_value" value="{|$control_filter31_value|}" placeholder="Фамилия" />
+            </div>
+
+            <div class="element">
+                <input type="hidden" name="filter32_key" value="name" />
+                <input type="hidden" name="filter32_type" value="search" />
+                <input type="text" name="filter32_value" value="{|$control_filter32_value|}" placeholder="Имя" />
+            </div>
+
+            <div class="element">
+                <input type="hidden" name="filter33_key" value="namemiddle" />
+                <input type="hidden" name="filter33_type" value="search" />
+                <input type="text" name="filter33_value" value="{|$control_filter33_value|}" placeholder="Отчество" />
+            </div>
+
+            <div class="element">
+                <input type="hidden" name="filter6_key" value="company" />
+                <input type="hidden" name="filter6_type" value="search" />
+                <input type="text" name="filter6_value" value="{|$control_filter6_value|}" class="help-hint-filter-login" placeholder="{|$translate_user_company|}" />
+            </div>
+
+            <div class="element">
+                <input type="hidden" name="filter2_key" value="email" />
+                <input type="hidden" name="filter2_type" value="search" />
+                <input type="text" name="filter2_value" value="{|$control_filter2_value|}" class="help-hint-filter-email" placeholder="Email" />
+            </div>
+
+            <div class="element">
+                <input type="hidden" name="filter5_key" value="phone" />
+                <input type="hidden" name="filter5_type" value="search" />
+                <input type="text" name="filter5_value" value="{|$control_filter5_value|}" class="js-phone-formatter help-hint-filter-login" placeholder="{|$translate_user_phone|}" />
+            </div>
+
+            <div class="element">
+                <input type="hidden" name="filter11_key" value="address" />
+                <input type="hidden" name="filter11_type" value="search" />
+                <input type="text" name="filter11_value" value="{|$control_filter11_value|}" class="help-hint-filter-login" placeholder="{|$translate_address_small|}" />
+            </div>
+
+            <div class="element">
+                <input type="hidden" name="filter1_key" value="login" />
+                <input type="hidden" name="filter1_type" value="search" />
+                <input type="text" name="filter1_value" value="{|$control_filter1_value|}" class="help-hint-filter-login" placeholder="{|$translate_login_small|}" />
+            </div>
+
+            <div class="element">
+                <input type="hidden" name="filter4_key" value="tags" />
+                <input type="hidden" name="filter4_type" value="search" />
+                <input type="text" name="filter4_value" value="{|$control_filter4_value|}" class="help-hint-filter-login" placeholder="{|$translate_tags|}" />
+            </div>
+
+            {|if $contractorsArray|}
+                <div class="element">
+                    {|$translate_contractor|}:
+                    <input type="hidden" name="filter15_key" value="contractorid" />
+                    <input type="hidden" name="filter15_type" value="equals" />
+                    <select name="filter15_value" class="chzn-select">
+                        <option value="">{|$translate_all|}</option>
+                        {|foreach from=$contractorsArray item="e"|}
+                            <option value="{|$e.id|}" {|if $control_filter15_value == $e.id|} selected {|/if|}>{|$e.name|}</option>
+                        {|/foreach|}
+                    </select>
+                </div>
+            {|/if|}
+
+            {|if $managerArr|}
+                <div class="element">
+                    {|$translate_manager|}:
+                    <input type="hidden" name="filter17_key" value="managerid" />
+                    <input type="hidden" name="filter17_type" value="equals" />
+                    <select name="filter17_value" class="chzn-select">
+                        <option value="" {|if !$control_filter17_value|} selected  {|/if|}>---</option>
+                        {|foreach from=$managerArr item="e"|}
+                        <option value="{|$e.id|}" {|if $control_filter17_value == $e.id|} selected {|/if|}>{|$e.name|}</option>
+                        {|/foreach|}
+                    </select>
+                </div>
+            {|/if|}
+
+            {|if $sourceArray|}
+                <div class="element">
+                    Источник:
+                    <input type="hidden" name="filter12_key" value="sourceid" />
+                    <input type="hidden" name="filter12_type" value="equals" />
+                    <select name="filter12_value" class="chzn-select">
+                        <option value="">{|$translate_all|}</option>
+                        {|foreach from=$sourceArray item="e"|}
+                            <option value="{|$e.id|}" {|if $control_filter12_value == $e.id|} selected {|/if|}>{|$e.name|}</option>
+                        {|/foreach|}
+                    </select>
+                </div>
+            {|/if|}
+
+            <div class="element">
+                {|$translate_user_access|}:
+                <input type="hidden" name="filter7_key" value="level" />
+                <input type="hidden" name="filter7_type" value="search" />
+                <select name="filter7_value" class="chzn-select">
+                    <option value="" {|if !$control_filter7_value|} selected  {|/if|}>---</option>
+                    <option value="0" {|if $control_filter7_value == "0"|} selected  {|/if|}>{|$translate_user_access_ban|}</option>
+                    <option value="1" {|if $control_filter7_value == "1"|} selected  {|/if|}>{|$translate_user_access_user|}</option>
+                    <option value="2" {|if $control_filter7_value == "2"|} selected  {|/if|}>{|$translate_user_access_manager|}</option>
+                    <option value="3" {|if $control_filter7_value == "3"|} selected  {|/if|}>{|$translate_user_access_admin|}</option>
+                </select>
+            </div>
+
+            <div class="element">
+                {|$translate_user_typesex|}:
+                <select name="typesex" class="chzn-select">
+                    <option value="" {|if !$control_filter7_value|} selected  {|/if|}>---</option>
+                    <option value="man"   {|if "man" == $typesexValue|} selected {|/if|}>{|$translate_user_man|}</option>
+                    <option value="woman"  {|if "woman" == $typesexValue|} selected {|/if|}>{|$translate_user_woman|}</option>
+                    <option value="company" {|if "company" == $typesexValue|} selected {|/if|}>{|$translate_company_little|}</option>
+                </select>
+            </div>
+
+            <div class="element">
+                <input type="hidden" name="filter8_key" value="cdate" />
+                <input type="hidden" name="filter8_type" value="gte" />
+                <input type="text" class="js-date" name="filter8_value" value="{|$control_filter8_value|}" placeholder="{|$translate_user_datereg|} {|$translate_from_small|}" />
+            </div>
+
+            <div class="element">
+                <input type="hidden" name="filter9_key" value="cdate" />
+                <input type="hidden" name="filter9_type" value="lte" />
+                <input type="text" class="js-date" name="filter9_value" value="{|$control_filter9_value|}" placeholder="{|$translate_user_datereg|} {|$translate_to|}" />
+            </div>
+
+            <div class="element">
+                <input type="hidden" name="filter9_key" value="adate" />
+                <input type="hidden" name="filter9_type" value="gte" />
+                <input type="text" class="js-date" name="filter9_value" value="{|$control_filter9_value|}" placeholder="{|$translate_user_dateacvite|} {|$translate_from_small|}" />
+            </div>
+
+            <div class="element">
+                <input type="hidden" name="filter10_key" value="adate" />
+                <input type="hidden" name="filter10_type" value="lte" />
+                <input type="text" class="js-date" name="filter10_value" value="{|$control_filter10_value|}" placeholder="{|$translate_user_dateacvite|} {|$translate_to|}" />
+            </div>
+
+            <input class="ob-button button-orange help-hint-filter-submit" type="submit" value="{|$translate_filter|}" />
+        </form>
+    </div>
+</div>
+
+<div class="shop-result-list">
+    <div class="inner-list {|if $filterpanelCookie|}filter-reserve{|/if|}">
+        {|if $groupName|}
+            <h1>{|$groupName|}</h1>
+            {|if $groupDescription|}
+                {|$groupDescription|}<br />
+            {|/if|}
+            <br />
+        {|/if|}
+
+        <div class="shop-contacts-list">
+            <div class="inner-list-contacts ob-layer-overflow js-layer-overflow {|if $companyArray|@count == 0|}no-company{|/if|}">
+                {|if $companyPreviewID|}
+                    <div class="shop-usermaininfo-block">
+                        <div class="avatar-layer">
+                            <div class="avatar">
+                                <a href="{|$companyPreviewURL|}"><img src="{|$companyPreviewLogo|}" alt="" /></a>
+                            </div>
+                        </div>
+                        <div class="info">
+                            <table class="result">
+                                <tr>
+                                    <td>Компания</td>
+                                    <td><a href="{|$companyPreviewURL|}">{|$companyPreviewName|}</a></td>
+                                </tr>
+                                {|if $companyPreviewManagerName|}
+                                    <tr>
+                                        <td>Менеджер</td>
+                                        <td><a href="{|$companyPreviewManagerURL|}">{|$companyPreviewManagerName|}</a></td>
+                                    </tr>
+                                {|/if|}
+                                {|if $companyPreviewPhoneArray|}
+                                    <tr>
+                                        <td>Телефон</td>
+                                        <td>
+                                            {|foreach from=$companyPreviewPhoneArray item="e"|}
+                                                <span class="nowrap">{|$e|}</span>
+                                            {|/foreach|}
+                                        </td>
+                                    </tr>
+                                {|/if|}
+                                {|if $companyPreviewEmailArray|}
+                                    <tr>
+                                        <td>Email</td>
+                                        <td>
+                                            {|foreach from=$companyPreviewEmailArray item="e"|}
+                                                <a href="mailto:{|$e|}">{|$e|}</a>
+                                            {|/foreach|}
+                                        </td>
+                                    </tr>
+                                {|/if|}
+                                {|if $companyPreviewAddress|}
+                                    <tr>
+                                        <td>Адрес</td>
+                                        <td>{|$companyPreviewAddress|}</td>
+                                    </tr>
+                                {|/if|}
+                                {|if $companyPreviewURLs|}
+                                    <tr>
+                                        <td>Ссылки</td>
+                                        <td>{|$companyPreviewURLs|}</td>
+                                    </tr>
+                                {|/if|}
+                                {|if $companyPreviewInfo|}
+                                    <tr>
+                                        <td>Специализация</td>
+                                        <td>{|$companyPreviewInfo|}</td>
+                                    </tr>
+                                {|/if|}
+                            </table>
+
+                            {|if $companyPreviewTags|}
+                                <div class="tags">{|$companyPreviewTags|}</div>
+                            {|/if|}
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+
+                    {|$block_company|}
+                    {|$block_statistic|}
+                    {|$block_charts|}
+
+                {|else|}
+                    {|$table|}
+                    {|if $userFilterCount|}
+                        <form id="massSend" action="mailing/" method="post">
+                            <div class="ob-details-block single">
+                                <div class="ob-data-element">
+                                    <div class="data-view">
+                                        <div class="el-caption">Количество контактов:</div>
+                                        <div class="el-value">
+                                            {|$userFilterCount|}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <input type="hidden" name="arrUserId" value="{|$arrUserId|}">
+                                <input class="ob-button" id="sendAll" type="submit" name="sendAll" value="{|$translate_users_mailing|}" />
+                                {|if $canSMS|}
+                                    <input class="ob-button" type="submit" name="sendAllSms" value="{|$translate_users_mailing|} SMS" onclick="$j('#massSend').attr('action', 'smsmailing/');" />
+                                {|/if|}
+                            </div>
+                        </form>
+                    {|/if|}
+                {|/if|}
+
+            </div>
+        </div>
+        {|if $companyArray|@count > 0|}
+            <div class="shop-contacts-category ob-layer-overflow js-layer-overflow">
+                {|foreach from=$companyArray item="e"|}
+                    {|if $e.image|}
+                        <a href="{|$e.url|}" {|if $selectedcompany == $e.name|}class="selected"{|/if|}>
+                            {|if $e.image|}
+                                <span class="image"><i><img src="{|$e.image|}" alt="" /></i></span>
+                                <img src="{|$e.image|}" class="big-image" alt="" />
+                            {|/if|}
+                            {|if $e.name|}
+                                {|$e.name|}
+                            {|/if|}
+                            {|if $e.description|}
+                                <span>{|$e.description|}</span>
+                            {|/if|}
+                            {|if $e.urledit|}
+                                <i class="edit" onclick="document.location='{|$e.urledit|}'; return false;"></i>
+                            {|/if|}
+                        </a>
+                    {|else|}
+                        <a href="{|$e.url|}" class="no-logo {|if $selectedcompany == $e.name|}selected{|/if|}">
+                            {|if $e.name|}
+                                {|$e.name|}
+                            {|/if|}
+                            {|if $e.description|}
+                                <span>{|$e.description|}</span>
+                            {|/if|}
+                            {|if $e.urledit|}
+                                <i class="edit" onclick="document.location='{|$e.urledit|}';return false;"></i>
+                            {|/if|}
+                        </a>
+                    {|/if|}
+                {|/foreach|}
+            </div>
+        {|/if|}
+        <div class="clear"></div>
+    </div>
+</div>
+<div class="clear"></div>
+
+<div class="shop-right-sidebar">
+    <div class="toggle"></div>
+
+    <form action="" method="post">
+        <input type="hidden" id="id-user" name="moveids" />
+
+        <div class="element">
+            {|$translate_user_group_change|}:
+            <select class="chzn-select" name="movegroup">
+                <option value="0">---</option>
+                {|foreach from=$groupArr item="e"|}
+                    <option value="{|$e.id|}" {|if $e.id == $control_movegroup|} selected {|/if|}>{|$e.name|}</option>
+                {|/foreach|}
+            </select>
+        </div>
+
+        <div class="element">
+            Добавить контакты в задачу:
+            <input type="hidden" name="arrUserId" value="{|$arrUserId|}">
+            <input type="text" id="orderId" name="orderId" placeholder="Номер задачи">
+        </div>
+
+        <div class="element">
+            {|$translate_user_sign_change|}:
+            <select class="chzn-select" name="changesubscibe">
+                <option value="-1">---</option>
+                <option value="0">{|$translate_user_sign_nosign|}</option>
+                <option value="1">{|$translate_user_sign_sign|}</option>
+            </select>
+        </div>
+        <div class="element">
+            {|$translate_user_level_add|}:
+            <select class="chzn-select" name="level">
+                <option value="-1" selected>---</option>
+                {|foreach from=$levelArr item="e"|}
+                    <option value="{|$e.id|}">{|$e.name|}</option>
+                {|/foreach|}
+            </select>
+        </div>
+        <div class="element">
+            {|$translate_user_manager_add|}:
+            <select class="chzn-select" name="manager" class="chzn-select">
+                <option value="-1" selected>---</option>
+                {|foreach from=$managerArr item="e"|}
+                    <option value="{|$e.id|}">{|$e.name|}</option>
+                {|/foreach|}
+            </select>
+        </div>
+        <div class="element">
+            {|$translate_join|}
+            <input type="checkbox" value="1" name="join">
+        </div>
+
+        <div class="element">
+            <br />
+            <input class="ob-button" type="submit" name="change" value="{|$translate_user_change|}" onclick="return confirm('{|$translate_button_comfirm_change_data|}');" />
+        </div>
+
+        <div class="element">
+            <input class="ob-button" type="submit" name="send" value="{|$translate_user_letter|}" onclick="return confirm('{|$translate_button_comfirm_send_mail|}');" />
+        </div>
+
+        <div class="element">
+            <input type="submit" name="delete" value="{|$translate_delete|}" class="ob-button" onclick="return confirm('{|$translate_button_comfirm_contacts_delete|}');" />
+        </div>
+    </form>
+</div>

@@ -1,0 +1,147 @@
+<div class="shop-filter-panel">
+    <div class="filter-toggle {|if $filterpanelCookie|}open{|/if|}"></div>
+    <div class="inner-pannel" {|if !$filterpanelCookie|}style="display: none;"{|/if|}>
+        <form action="" method="get">
+            <div class="element">
+                Пользователь
+                <select name="managerid" class="chzn-select">
+                    <option value="">{|$translate_all_managers|}</option>
+                    {|foreach from=$managerArray item="e"|}
+                        <option value="{|$e.id|}" {|if $e.id == $control_managerid|} selected {|/if|}>{|$e.name|}</option>
+                    {|/foreach|}
+                </select>
+            </div>
+
+            <div class="element">
+                <input type="text" name="datefrom" value="{|$control_datefrom|}" class="js-date" placeholder="Дата создания от" />
+            </div>
+
+            <div class="element">
+                <input type="text" name="dateto" value="{|$control_dateto|}" class="js-date" placeholder="Дата создания до" />
+            </div>
+
+            <div class="element">
+                Статус:
+                <select name="status" class="chzn-select">
+                    <option value="">{|$translate_all|}</option>
+                    <option value="done" {|if $control_status == 'done'|} selected {|/if|}>Выполненные</option>
+                    <option value="undone" {|if $control_status == 'undone'|} selected {|/if|}>Не выполненные</option>
+                </select>
+            </div>
+
+            <div class="element">
+                <input type="text" name="donefrom" value="{|$control_donefrom|}" class="js-date" placeholder="Дата выполнения от" />
+            </div>
+
+            <div class="element">
+                <input type="text" name="doneto" value="{|$control_doneto|}" class="js-date" placeholder="Дата выполнения до" />
+            </div>
+
+            <input class="ob-button button-orange" type="submit" name="ok" value="{|$translate_filter|}" />
+            <div class="clear"></div>
+            <br />
+
+        </form>
+    </div>
+</div>
+
+<div class="shop-result-list">
+    <div class="inner-list {|if $filterpanelCookie|}filter-reserve{|/if|}">
+        {|if $control_managerid|}
+            <h1>Детализация уведомлений</h1>
+            <table border="0" class="shop-table js-table-fixed">
+                <thead>
+                    <tr>
+                        <td>Пользователь</td>
+                        <td>Уведомление</td>
+                        <td>Приоритет</td>
+                        <td>Дата создания</td>
+                        <td>Рекомендуемая дата выполнения</td>
+                        <td>Дата выполнения</td>
+                        <td>Срок выполнения</td>
+                        <td>Овертайм</td>
+                    </tr>
+                </thead>
+                {|foreach from=$reportArray item="e"|}
+                    <tr {|if $e.rdate|}style="background-color: #dbffd4;"{|elseif $e.priority > 0|}style="background-color: #ffd0d0;"{|/if|}>
+                        <td>
+                            <a href="{|$e.managerURL|}" class="js-contact-preview" data-id="{|$e.managerId|}|}">{|$e.managerName|}</a>
+                        </td>
+                        <td>
+                            <a href="{|$e.url|}">{|$e.content|}</a>
+                        </td>
+                        <td>
+                            {|if $e.priority > 0|}
+                                Высокий
+                            {|/if|}
+                        </td>
+                        <td>{|$e.cdate|}</td>
+                        <td>{|$e.edate|}</td>
+                        <td>{|$e.rdate|}</td>
+                        <td align="right">
+                            {|if not $e.overtime|}
+                                <font color="green">{|$e.rdiff|}</font>
+                            {|else|}
+                                <font color="red">{|$e.rdiff|}</font>
+                            {|/if|}
+                        </td>
+                        <td align="right">
+                            {|if $e.overtime|}
+                                <font color="red">{|$e.overtime|}</font>
+                            {|/if|}
+                        </td>
+                    </tr>
+                {|/foreach|}
+            </table>
+        {|else|}
+
+            {|if $chartArray|}
+                <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+                <script type="text/javascript">
+                google.load("visualization", "1", {packages:["corechart"]});
+                google.setOnLoadCallback(drawChart);
+                function drawChart() {
+                    var data = google.visualization.arrayToDataTable([
+                    ['Пользователь', 'Выполнено', 'Не выполнено'],
+                    {|foreach from=$chartArray item="e" key="managerName"|}
+                        ['{|$managerName|}', {|$e.done+0|}, {|$e.undone+0|}],
+                    {|/foreach|}
+                    ]);
+
+                    var options = {};
+
+                    var chart = new google.visualization.ColumnChart(document.getElementById('chart_div_1'));
+                    chart.draw(data, options);
+                }
+                </script>
+
+                <div id="chart_div_1" style="width: 100%; height: 500px;"></div>
+                <br />
+                <br />
+            {|/if|}
+
+            <h1>Статистика по уведомлениям</h1>
+            <table border="0" class="shop-table js-table-fixed">
+                <thead>
+                    <tr>
+                        <td>Пользователь</td>
+                        <td>Открытых уведомлений</td>
+                        <td>Сделанных уведомлений</td>
+                        <td>Средний срок выполнения (дней)</td>
+                    </tr>
+                </thead>
+                {|foreach from=$managerArray item="e"|}
+                    <tr {|if $e.rdate|}style="background-color: #dbffd4;"{|elseif $e.priority > 0|}style="background-color: #ffd0d0;"{|/if|}>
+                        <td>
+                            <a href="{|$e.url|}">{|$e.name|}</a>
+                        </td>
+                        <td align="right">{|$summaryArray[$e.id].undone+0|}</td>
+                        <td align="right">{|$summaryArray[$e.id].done+0|}</td>
+                        <td align="right">{|$summaryArray[$e.id].avg+0|}</td>
+                    </tr>
+                {|/foreach|}
+            </table>
+        {|/if|}
+    </div>
+</div>
+<div class="clear"></div>

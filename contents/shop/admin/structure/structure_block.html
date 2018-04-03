@@ -1,0 +1,43 @@
+{|foreach from=$roleArray item="r1"|}
+    <li>
+        <div class="role">
+            <strong>{|$r1.name|}</strong>
+            <div class="clear"></div>
+
+            <div>
+                <div class="column">
+                    {|if $r1.description|}
+                        Описание:<br/>
+                        {|$r1.description|}<br/>
+                    {|/if|}
+                </div>
+
+                <div class="column">
+                    {|if $r1.employerArray|}
+                        Сотрудники:<br/>
+                        {|foreach from=$r1.employerArray item="e"|}
+                            <a class="js-contact-preview" data-id="{|$e.id|}" href="{|$e.url|}">{|$e.name|}</a>
+                            <br/>
+                        {|/foreach|}
+                    {|/if|}
+                </div>
+
+                <div class="column">
+                    {|if $r1.workflowArray|}
+                        Бизнес-процессы:<br/>
+                        {|foreach from=$r1.workflowArray item="e"|}
+                            <a href="{|$e.url|}">{|$e.workflow|} / {|$e.status|}</a>
+                            ({|$e.count|})
+                            <br/>
+                        {|/foreach|}
+                    {|/if|}
+                </div>
+                <div class="clear"></div>
+            </div>
+        </div>
+
+        <ul>
+            {|$r1.block_structure|}
+        </ul>
+    </li>
+{|/foreach|}

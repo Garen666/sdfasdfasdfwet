@@ -1,0 +1,172 @@
+<div class="ob-gantt-table">
+    <div class="row header">
+        <div class="issue-block">&nbsp;</div>
+        <div class="value-block">
+            <div class="days-list" style="width: {|$lineWidth|}px;">
+                <div class="month-31">2014-01</div>
+                <div class="month-28">2014-02</div>
+                <div class="month-31">2014-03</div>
+                <div class="month-30">2014-04</div>
+                <div class="month-31">2014-05</div>
+                <div class="month-30">2014-06</div>
+
+                {|foreach from=$monthArray key="name" item="t"|}
+                    <div class="month-{|$t|}">{|$name|}</div>
+                {|/foreach|}
+            </div>
+        </div>
+    </div>
+    <div class="row header">
+        <div class="issue-block no-border">&nbsp;</div>
+        <div class="value-block">
+            <div class="days-list" style="width: {|$lineWidth|}px;">
+                {|foreach from=$dayArray item="e"|}
+                    <div class="day">{|$e|}</div>
+                {|/foreach|}
+            </div>
+        </div>
+    </div>
+
+    <ol class="sortable-rows">
+        {|$block_row|}
+    </ol>
+
+    <div class="row scroll-row">
+        <div class="value-block js-gantt-scroll">
+            <div class="days-list" style="width: {|$lineWidth|}px;">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $j('.js-gantt-scroll').scroll(function() {
+        ganttScroll();
+    });
+
+    $j(window).bind('ready', function() {
+        ganttScroll();
+    });
+
+    $j('.sortable-rows').nestedSortable({
+        forcePlaceholderSize: true,
+        handle: '.issue-block',
+        helper: 'clone',
+        items: 'li',
+        opacity: .6,
+        placeholder: 'placeholder',
+        revert: 120,
+        tabSize: 20,
+        tolerance: 'pointer',
+        toleranceElement: '> div',
+        expandOnHover: 700,
+        maxLevels: 5,
+        isTree: true,
+        expandOnHover: 700,
+        startCollapsed: true,
+        branchClass: 'branched',
+        collapsedClass: 'collapsed',
+        expandedClass: 'expanded',
+        axis: "y",
+        update: ganttScroll()
+    });
+
+    function ganttScroll() {
+        var $scroll = $j('.js-gantt-scroll')
+        var scrollPosition = $scroll.scrollLeft();
+        $j('.js-gantt-value-block').scrollLeft(scrollPosition);
+    }
+
+    $j('.js-expand').click(function(){
+        $j(this).closest('li').toggleClass('collapsed').toggleClass('expanded');
+        setTimeout("cookieFromGantt();", 2000);
+    });
+
+    ganttFromCookie();
+
+    function cookieFromGantt(){
+        var ch = [];
+        $j(".ui-sortable li").each(function(){
+            if($j(this).hasClass("expanded")){
+                ch.push($j(this).data("id"));
+            }
+        });
+        $j.cookie("ganttCookie", ch.join(','));
+    }
+
+    function ganttFromCookie(){
+        if($j.cookie("ganttCookie") == null){
+            return;
+        }
+        var chMap = $j.cookie("ganttCookie").split(',');
+        for (var i in chMap) {
+            //alert(chMap[i]);
+            $j(".ui-sortable li[data-id='"+chMap[i]+"']").toggleClass('collapsed').toggleClass('expanded');
+        }
+    }
+</script>
+<br />
+<br />
+
+<div id="js-datefrom" style="display: none;">{|$dateFrom|}</div>
+<div id="js-dateto" style="display: none;">{|$dateTo|}</div>
+
+<script type="text/javascript">
+    $j(function () {
+        $j('.js-gantt-filter').prependTo('.shop-filter-panel .inner-pannel');
+
+        // выделение задачи
+        $j('.js-gantt-issuename').click(function (event) {
+            var id = $j(this).data('id');
+            $j('.js-parentid').val(id);
+            $j('.js-newname').focus();
+        });
+
+        // перетаскивание задачи
+        $j('.js-issue-line').resizable({
+            grid: 20,
+            handles: 'e', // left
+            stop: function (event, ui) {
+                var width = ui.element.width();
+                var issueID = $j(this).data('id');
+
+                // изменение ширины - это изменение даты окончания задачи
+                $j.ajax({
+                    url: '/admin/gantt/update/',
+                    data: {
+                        id: issueID,
+                        datefrom: $j('#js-datefrom').html(),
+                        dateto: $j('#js-dateto').html(),
+                        width: width
+                    },
+                    success: function (result) {
+
+                    }
+                });
+            }
+        });
+
+        $j('.js-issue-line').draggable({
+            grid: [ 20, 0 ],
+            stop: function (event, ui) {
+                var x = ui.position.left;
+                var issueID = $j(this).data('id');
+
+                // изменение позиции - это изменение даты старта задачи
+                $j.ajax({
+                    url: '/admin/gantt/update/',
+                    data: {
+                        id: issueID,
+                        datefrom: $j('#js-datefrom').html(),
+                        dateto: $j('#js-dateto').html(),
+                        x: x
+                    },
+                    success: function (result) {
+
+                    }
+                });
+            }
+        });
+    });
+</script>

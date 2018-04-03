@@ -1,0 +1,25 @@
+{|$menu|}
+
+<table width="100%" class="shop-table">
+    <thead>
+        <tr>
+            <td>{|$translate_date|}:{|$translate_time_small|}</td>
+            <td>{|$translate_user_small|}</td>
+            <td class="help-hint-history-data-table">{|$translate_motion|}</td>
+        </tr>
+    </thead>
+    {|foreach from=$activityArray item="e"|}
+        <tr valign="top">
+            <td width="150">{|$e.cdate|}</td>
+            <td width="100">
+                <a href="{|$e.user.url|}">{|$e.user.login|}</a>
+            </td>
+            <td>{|$e.content|}</td>
+        </tr>
+    {|/foreach|}
+</table>
+
+<div class="ob-button-fixed">
+    <input type="button" onclick="document.location='/admin/shop/products/'" name="ok" value="&lsaquo; {|$translate_product_list_run|}" class="ob-button" />
+    <a href="/product/{|$productid|}/" target="_blank">{|$translate_review|}</a>
+</div>

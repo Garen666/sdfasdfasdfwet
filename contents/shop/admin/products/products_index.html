@@ -1,0 +1,224 @@
+<div class="shop-tabs fixed">
+    {|if $block_folders|}
+        <a href="/admin/shop/products/list-table/" class="selected"> {|$translate_many_products|}</a>
+    {|else|}
+        <a href="/admin/shop/products/list-table/{|$query|}"> {|$translate_many_products|}</a>
+    {|/if|}
+    {|if $block_table|}
+        <a href="/admin/shop/products/" class="selected" > {|$translate_many_products_inlist|}</a>
+    {|else|}
+        <a href="/admin/shop/products/{|$query|}"> {|$translate_many_products_inlist|}</a>
+    {|/if|}
+    <a href="/admin/shop/products/add/">{|$translate_new_product|}</a>
+    <a href="/admin/shop/category/manage/">{|$translate_category|}</a>
+    <a href="/admin/shop/comments/">{|$translate_many_comments|}</a>
+    <div class="clear"></div>
+</div>
+<div class="shop-tabs-place"></div>
+{|if $message == 'ok'|}
+<div class="shop-message-success">
+    {|$translate_products_added_to_order|}.<br />
+    <a href="{|$urlredirect|}">{|$translate_go_to_order|}...</a>
+</div>
+{|/if|}
+{|* id текущей категории *|}
+<div hidden="" id="js-open-category-id" category-id="{|if $openCategoryId|}{|$openCategoryId|}{|else|}0{|/if|}"></div>
+
+<div class="shop-filter-panel">
+    <div class="filter-toggle {|if $filterpanelCookie|}open{|/if|}"></div>
+    <div class="inner-pannel" {|if !$filterpanelCookie|}style="display: none;"{|/if|}>
+        <form action="" method="get">
+            {|if $block_folders|}
+                <div class="element">
+                    <div class="shop-productexplorer-toggle "></div>
+                </div>
+            {|/if|}
+            <div class="element">
+                <input type="hidden" name="filter1_key" value="id" />
+                <input type="hidden" name="filter1_type" value="equals" />
+                <input type="text" name="filter1_value" value="{|$control_filter1_value|}" placeholder="{|$translate_code_small|}" />
+            </div>
+            <div class="element">
+                <input type="hidden" name="filter2_key" value="barcode"/>
+                <input type="hidden" name="filter2_type" value="equals" />
+                <input type="text" name="filter2_value" value="{|$control_filter2_value|}" id="barcode" placeholder="{|$translate_item_barcode|}" />
+            </div>
+            <div class="element">
+                <input type="hidden" name="filter21_key" value="model"/>
+                <input type="hidden" name="filter21_type" value="equals" />
+                <input type="text" name="filter21_value" value="{|$control_filter21_value|}" id="model" placeholder="Модель" />
+            </div>
+            <div class="element">
+                <input type="hidden" name="filter3_key" value="name" />
+                <input type="hidden" name="filter3_type" value="search" />
+                <input type="text" name="filter3_value" value="{|$control_filter3_value|}" placeholder="{|$translate_title_short|}" />
+            </div>
+            <div class="element">
+                <input type="hidden" name="filter5_key" value="tags" />
+                <input type="hidden" name="filter5_type" value="search" />
+                <input type="text" name="filter5_value" value="{|$control_filter5_value|}" placeholder="{|$translate_tags|}" />
+            </div>
+
+            <div class="element ulist">
+                <label>{|$translate_show_deleted_products|}
+                    <input type="checkbox" class="js-show-products" {|if $control_filter_show_deleted|}checked{|/if|} name="filter_show_deleted" value="{|$control_filter_show_deleted|}" />
+                </label>
+            </div>
+            <div class="element ulist">
+                <label>{|$translate_show_hidden_products|}
+                    <input type="checkbox" class="js-show-products" {|if $control_filter_show_hidden|}checked{|/if|} name="filter_show_hidden" value="{|$control_filter_show_hidden|}" />
+                </label>
+            </div>
+            <div class="element ulist">
+                <label>{|$translate_show_not_synchronize|}
+                    <input type="checkbox" class="js-show-products" {|if $control_filter_show_not_sync|}checked{|/if|} name="filter_show_not_sync" value="{|$control_filter_show_not_sync|}" />
+                </label>
+            </div>
+
+            {|* скрытое поля для фиксации категории *|}
+            <input type="hidden" name="categoryid" value="{|$arg_categoryid|}" />
+
+            <input class="ob-button button-orange" type="submit" value="{|$translate_filter|}" />
+            <div class="clear"></div>
+            <br />
+
+            <h1>{|$translate_many_products|}</h1>
+            <div class="element">
+                <input type="text" name="" placeholder="{|$translate_enter_category_name|}" id="id_search" />
+            </div>
+            <div class="shop-filter-list js-tree-menu">
+                <div class="item js-droppable"  js-data-id="0">
+                    <a href=".">{|$translate_category_list|}</a>
+                </div>
+                <div class="item js-droppable"  js-data-id="0" >
+                    <a href="./?categoryid=0">{|$translate_no_category|}</a>
+                </div>
+                {|foreach from=$categoryArray item="e"|}
+                    {|if $e.level !== 0|}
+                        <div data-parentid="{|$e.parentid|}" class="sub" style="display: none;">
+                    {|/if|}
+                    <div class="item level_{|$e.level|} js-droppable" js-category-id="{|$e.id|}" js-data-id="{|$e.id|}" >
+                        <u data-id="{|$e.id|}">&nbsp;</u>
+                        <a href="{|$e.url|}" {|if $e.selected|}class="selected"{|/if|}>{|$e.name|}</a>
+                    </div>
+                    {|if $e.level !== 0|}
+                        </div>
+                    {|/if|}
+                {|/foreach|}
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="shop-result-list">
+    <div class="inner-list {|if $filterpanelCookie|}filter-reserve{|/if|}">
+        {|if $block_table|}
+            {|$block_table|}
+        {|else|}
+            {|$block_folders|}
+        {|/if|}
+    </div>
+</div>
+<div class="clear"></div>
+
+<div class="shop-right-sidebar">
+    <div class="toggle"></div>
+
+    {|if $allowEdit|}
+        <form action="" method="post" enctype="multipart/form-data">
+            <input type="hidden" id="id-category" name="moveids" />
+            <div class="element double">
+                {|$translate_move_into_category|}:
+                <select class="chzn-select" name="movecategory">
+                    <option value="0">---</option>
+                    {|foreach from=$categoryArray item="e"|}
+                        <option value="{|$e.id|}" {|if $e.id == $control_movecategory|} selected {|/if|}>
+                            {|section name=foo start=0 loop=$e.level|}
+                                &nbsp;&nbsp;&nbsp;
+                            {|/section|}
+                            {|$e.name|}
+                            {|if $e.hidden|}
+                                - {|$translate_hidden1_small|}
+                            {|/if|}
+                        </option>
+                    {|/foreach|}
+                </select>
+            </div>
+
+            <div class="element">
+                {|$translate_sync_not_sync|}
+                <select class="chzn-select" name="changesync">
+                    <option value="notTouch">---</option>
+                    <option value="0">{|$translate_synchronized|}</option>
+                    <option value="1">{|$translate_not_synchronize|}</option>
+                </select>
+            </div>
+
+            <div class="element">
+                <br />
+                {|$translate_open|} / {|$translate_hide|}
+                <select class="chzn-select" name="hide">
+                    <option value="0">---</option>
+                    <option value="unhide">{|$translate_open|}</option>
+                    <option value="hide">{|$translate_hide|}</option>
+                </select>
+            </div>
+
+            <div class="element">
+                {|$translate_delete|} / {|$translate_restore|}
+                <select class="chzn-select" name="delete">
+                    <option value="0">---</option>
+                    <option value="delete">{|$translate_delete|}</option>
+                    <option value="undelete">{|$translate_restore|}</option>
+                </select>
+            </div>
+
+            <div class="element">
+                {|$translate_in_stock|} / {|$translate_out_of_stock|}
+                <select class="chzn-select" name="avail">
+                    <option value="0">---</option>
+                    <option value="setavail">{|$translate_in_stock|}</option>
+                    <option value="setunavail">{|$translate_out_of_stock|}</option>
+                </select>
+            </div>
+
+            <div class="element">
+                Добавить теги
+                <input type="text" name="changeaddtags" value="" />
+            </div>
+
+            <div class="element">
+                Убрать теги
+                <input type="text" name="changeremovetags" value="" />
+            </div>
+
+            <div class="element">
+                Установить изображение
+                <input type="file" name="changeimage" value="" />
+            </div>
+
+            <div class="element double">
+                Установить описание
+                <textarea name="changedescription" rows="2"></textarea>
+            </div>
+
+            <div class="element">
+                <input class="ob-button" type="submit" name="change" value="{|$translate_user_change|}" />
+            </div>
+
+            <div class="element">
+                <input class="ob-button" type="submit" name="createorder" value="{|$translate_create_new_order|}" style="margin-bottom: 5px;" />
+                <label><input type="checkbox" name="gotoorder" />{|$translate_go_to_order|}</label>
+            </div>
+
+            <div class="element">
+                <input type="text" name="orderid" value="" placeholder="id"  />
+            </div>
+            <div class="element">
+                <input class="ob-button" type="submit" name="addexistorder" value="{|$translate_add_to_existing_order|}"  />
+            </div>
+            <div class="element"></div>
+        </form>
+    {|/if|}
+    <div class="clear"></div>
+</div>

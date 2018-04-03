@@ -1,0 +1,155 @@
+{|if $statisticArray|}
+    <div class="shop-tabs fixed">
+        {|foreach from=$statisticArray item="cnt" key="statusID"|}
+            <a href="#status{|$statusID|}">{|$statusNameArray[$statusID].name|}: {|$cnt|}</a>
+        {|/foreach|}
+        <div class="clear"></div>
+    </div>
+    <div class="shop-tabs-place"></div>
+{|/if|}
+
+<form action="" method="get">
+    Сотрудник:
+    <select name="managerid" class="chzn-select" style="width: 300px;">
+        <option value="">---</option>
+        {|foreach from=$managerArray item="e"|}
+            <option value="{|$e.id|}" {|if $control_managerid == $e.id|} selected {|/if|}>{|$e.name|}</option>
+        {|/foreach|}
+    </select>
+
+    Роль:
+    <select name="roleid" class="chzn-select" style="width: 300px;">
+        <option value="">---</option>
+        {|foreach from=$roleArray item="e"|}
+            <option value="{|$e.id|}" {|if $control_roleid == $e.id|} selected {|/if|}>{|$e.name|}</option>
+        {|/foreach|}
+    </select>
+
+    <input class="ob-button button-orange help-hint-filter-submit" type="submit" value="{|$translate_filter|}" />
+</form>
+<br />
+<br />
+
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+    {|foreach from=$issueArray item="e0" key="statusID"|}
+        <tr>
+            <td colspan="4">
+                <h1 id="status{|$statusID|}">{|$statusNameArray[$statusID].name|}</h1>
+                {|$statusNameArray[$statusID].todo|}
+                <br />
+                <br />
+            </td>
+        </tr>
+
+        {|foreach from=$e0 item="e"|}
+            <tr valign="top" class="tmp-line">
+                <td width="50">
+                    <a href="{|$e.url|}">{|$e.name|}</a><br />
+                    {|$e.cdate|}
+                </td>
+                <td width="50%">
+                    {|if $e.clientID|}
+                        <a href="{|$e.clientURL|}" class="js-contact-preview" data-id="{|$e.clientID|}">{|$e.clientName|}</a>
+
+                        {|if $e.clientPhone|}
+                            <a class="ob-link-phone ob-link-dashed js-call-originate js-tooltip" href="javascript:void(0);" data-phone="{|$e.clientPhone|}">{|$e.clientPhone|}</a>
+                        {|/if|}
+
+                        {|if $e.clientEmail|}
+                            <a class="ob-link-email ob-link-dashed js-email-write js-tooltip" href="javascript:void(0);" data-email="{|$e.clientEmail|}">{|$e.clientEmail|}</a>
+                        {|/if|}
+
+                        <br />
+                        <br />
+                    {|/if|}
+
+                    {|if $e.productArray|}
+                        <table border="0" cellpadding="0" cellspacing="0" class="shop-table" width="100%">
+                            {|foreach from=$e.productArray item="p"|}
+                                <tr>
+                                    <td>
+                                        <a href="{|$p.url|}" class="js-product-preview" data-id="{|$p.id|}">{|$p.name|}</a>
+                                        <br />
+
+                                        Код {|$p.id|}
+                                    </td>
+                                    <td>{|$p.price|}&nbsp;{|$p.currency|}</td>
+                                    <td>{|$p.count|}</td>
+                                </tr>
+                            {|/foreach|}
+                            <tfoot>
+                                <tr>
+                                    <td colspan="3">
+                                    Итого: {|$e.productSum|}&nbsp;{|$e.productSumCurrency|}
+                                    Оплачено {|$e.paidSum|}&nbsp;{|$e.productSumCurrency|}
+                                    Баланс {|$e.balanceSum|}&nbsp;{|$e.productSumCurrency|}
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    {|/if|}
+                </td>
+
+                <td width="150">
+                    {|if $e.historyArray|}
+                        {|foreach from=$e.historyArray item="h"|}
+                            &#9745; {|$h|}<br />
+                        {|/foreach|}
+                        <br />
+                    {|/if|}
+
+                    {|if $e.nextStatusArray|}
+                        <div>
+                            {|foreach from=$e.nextStatusArray item="statusName" key="statusID"|}
+                                <a href="#" data-statusid="{|$statusID|}" data-issueid="{|$e.id|}" class="js-todo-status ob-link-dashed {|if $statusID == $e.statusID|} selected {|/if|}">{|$statusName|}</a>
+                                <br />
+                            {|/foreach|}
+                        </div>
+                    {|/if|}
+                </td>
+
+                <td>
+                    {|if $e.comment|}
+                        {|$e.comment|}
+                        <hr />
+                    {|/if|}
+
+                    {|foreach from=$e.commentArray item="c"|}
+                        {|$c.cdate|} @{|$c.name|}: {|$c.content|}
+                        <hr />
+                    {|/foreach|}
+
+                    <a href="javascript:void(0);" class="ob-link-dashed js-add-comment" data-id="{|$e.id|}">Добавить комментарий</a>
+                </td>
+            </tr>
+        {|/foreach|}
+    {|/foreach|}
+</table>
+
+<style>
+a.selected {
+    color: red;
+}
+
+.tmp-line td {
+    border-top: 1px solid gray;
+    padding: 20px;
+}
+</style>
+
+<div class="shop-popup-block js-add-comment-popup"  style="display: none;">
+    <div class="dark"></div>
+    <div class="popupblock">
+        <a href="#" class="close js-add-comment-cancel"></a>
+        <div class="shop-tabs">
+            <span>Добавить комментарий</span>
+        </div>
+        <div class="window-content window-form">
+            <div class="element">
+                <textarea class="js-autosize js-textarea-content"></textarea>
+            </div>
+            <input type="button" value="Сохранить" class="ob-button button-green js-add-comment-button" />
+            <input class="ob-button button-cancel js-add-comment-cancel" type="button" value="{|$translate_cancel|}" />
+        </div>
+    </div>
+</div>

@@ -1,0 +1,51 @@
+<div class="ob-list-usersthumb js-list-usersthumb">
+    {|foreach from=$userArray item="user"|}
+        <div class="ob-list-usersthumb-element js-contact-preview" data-id="{|$user.id|}">
+            <input class="checkbox-id js-checkbox" type="checkbox" name="id[]" value="{|$user.id|}"/>
+            <div class="image"><img src="{|$user.image|}" alt=""/></div>
+            <span><a href="{|$user.url|}">{|if $user.name|}{|$user.name|}{|else|}{|$user.login|}{|/if|}</a></span>
+            {|if $user.company|}<span><a href="{|$user.companyUrl|}">{|$user.company|}</a></span>{|/if|}
+            {|if $user.post|}<span>{|$user.post|}</span>{|/if|}
+        </div>
+    {|/foreach|}
+    <div class="clear"></div>
+    <br>
+    <div class="shop-stepper" style="margin-right: 30px;">
+        {|if count($pagesArray.pagesArray) > 1|}
+            {|if $pagesArray.urlprev|}
+                <a href="{|$pagesArray.urlprev|}" class="prev">&larr; {|$translate_back|}</a>
+                {|if $pagesArray.hellip|} ... {|/if|}
+            {|/if|}
+
+            {|foreach from=$pagesArray.pagesArray item="e"|}
+                <a href="{|$e.url|}" {|if $e.selected|}class="selected"{|/if|}>{|$e.name|}</a>,
+            {|/foreach|}
+
+            {|if $pagesArray.urlnext|}
+                {|if $pagesArray.hellip|} ... {|/if|}
+                <a href="{|$pagesArray.urlnext|}" class="next">{|$translate_next|} &rarr;</a>
+            {|/if|}
+        {|/if|}
+    </div>
+    <div class="clear"></div>
+</div>
+
+<script>
+    animation('.js-list-usersthumb .ob-list-usersthumb-element', 'blind');
+
+    $j(function() {
+        $j('.js-list-usersthumb .ob-list-usersthumb-element').click(function(){
+            $checkbox = $j(this).find('input');
+            if ($checkbox.is(':checked')) {
+                $checkbox.removeAttr('checked');
+                $j(this).removeClass('selected');
+            } else {
+                $checkbox.attr('checked','checked');
+                $j(this).addClass('selected');
+            }
+        });
+        $j('.js-list-usersthumb input').click(function(){
+            $j(this).closest('.ob-list-usersthumb-element').click();
+        });
+    });
+</script>

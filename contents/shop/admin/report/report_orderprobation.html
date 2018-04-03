@@ -1,0 +1,80 @@
+<div class="shop-filter-panel">
+    <div class="filter-toggle {|if $filterpanelCookie|}open{|/if|}"></div>
+    <div class="inner-pannel" {|if !$filterpanelCookie|}style="display: none;"{|/if|}>
+        <form action="" method="get">
+            <div class="ulist-caption">Ожидаемая дата платежа</div>
+            <div class="element">
+                <input type="text" name="datefrom" value="{|$control_datefrom|}" class="js-date" placeholder="Дата платежа от" />
+            </div>
+            <div class="element">
+                <input type="text" name="dateto" value="{|$control_dateto|}" class="js-date" placeholder="Дата платежа до" />
+            </div>
+            <input class="ob-button button-orange" type="submit" name="ok" value="{|$translate_filter|}" />
+            <div class="clear"></div>
+            <br />
+
+        </form>
+    </div>
+</div>
+
+<div class="shop-result-list">
+    <div class="inner-list {|if $filterpanelCookie|}filter-reserve{|/if|}">
+
+        {|if $reportArray|}
+            <h1>Оплаты заказов клиентов</h1>
+
+            <span style="color: green;">Если сумма положительная - то должны деньги нам.</span><br />
+            <span style="color: red;">Если сумма отрицательная - то должны мы.</span><br />
+            <br />
+
+            <table border="0" class="shop-table js-table-fixed" data-fixedcolumns="2" >
+                <thead>
+                <tr>
+                    <td width="30">№</td>
+                    <td>Дата</td>
+                    <td align="right">Сумма</td>
+                    <td align="right">Валюта</td>
+                    <td align="right">Заказ</td>
+                    <td align="right">Клиент</td>
+                </tr>
+                </thead>
+                {|assign var="index" value=1|}
+                {|foreach from=$reportArray item="e"|}
+                <tr>
+                    <td>
+                        {|$index|}
+                        {|assign var="index" value=$index+1|}
+                    </td>
+                    <td>{|$e.pdate|}</td>
+                    <td align="right" style="{|if $e.amount < 0|} color: red; {|else|} color: green; {|/if|}">{|$e.amount|}</td>
+                    <td align="right">{|$e.currency|}</td>
+                    <td align="right">
+                        {|if $e.orderId|}
+                            <a href="{|$e.orderUrl|}" class="js-issue-preview" data-id="{|$e.orderId|}">{|$e.orderName|}</a>
+                        {|else|}
+                            {|$e.orderName|}
+                        {|/if|}
+                    </td>
+                    <td align="right">
+                        {|if $e.userId|}
+                            <a href="{|$e.userUrl|}" class="js-contact-preview" data-id="{|$e.userId|}">{|$e.userName|}</a>
+                        {|else|}
+                            {|$e.userName|}
+                        {|/if|}
+                    </td>
+                </tr>
+                {|/foreach|}
+                <tfoot>
+                    <tr>
+                        <td colspan="2">Итого:</td>
+                        <td align="right" style="{|if $balanceSum < 0|} color: red; {|else|} color: green; {|/if|}">{|$balanceSum|round:2|}</td>
+                        <td align="right">{|$currencyName|}</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                </tfoot>
+            </table>
+        {|/if|}
+    </div>
+</div>
+<div class="clear"></div>

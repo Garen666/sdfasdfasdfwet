@@ -1,0 +1,314 @@
+<div class="shop-filter-panel" {|if $noFilter|} style="display: none;" {|/if|}>
+    <div class="filter-toggle {|if $filterpanelCookie|}open{|/if|}"></div>
+    <div class="inner-pannel" {|if !$filterpanelCookie|}style="display: none;"{|/if|}>
+        <form action="" method="get">
+            <div class="element">
+                Тип события
+                <select name="type" class="chzn-select">
+                    <option value="">Все</option>
+                    <option value="email" {|if $control_type == 'email'|} selected {|/if|}>Email</option>
+                    <option value="call" {|if $control_type == 'call'|} selected {|/if|}>Звонки</option>
+                    <option value="sms" {|if $control_type == 'sms'|} selected {|/if|}>SMS</option>
+                    <option value="meeting" {|if $control_type == 'meeting'|} selected {|/if|}>Встречи</option>
+                    <option value="skype" {|if $control_type == 'skype'|} selected {|/if|}>Skype</option>
+                    <option value="jabber" {|if $control_type == 'jabber'|} selected {|/if|}>Jabber</option>
+                    <option value="whatsapp" {|if $control_type == 'whatsapp'|} selected {|/if|}>WhatsApp</option>
+                    <option value="viber" {|if $control_type == 'viber'|} selected {|/if|}>Viber</option>
+                </select>
+            </div>
+
+            <div class="element">
+                Направление события
+                <select name="direction" class="chzn-select">
+                    <option value="">Все</option>
+                    <option value="in" {|if $control_direction == 'in'|} selected {|/if|}>Входящие</option>
+                    <option value="out" {|if $control_direction == 'out'|} selected {|/if|}>Исходящие</option>
+                    <option value="our" {|if $control_direction == 'our'|} selected {|/if|}>Внутренние</option>
+                </select>
+            </div>
+
+            <div class="element">
+                Источник
+                <select name="sourceid" class="chzn-select">
+                    <option value="">Все</option>
+                    {|foreach from=$sourceArray item="e"|}
+                        <option value="{|$e.id|}" {|if $e.id == $control_sourceid|} selected {|/if|}>{|$e.name|}</option>
+                    {|/foreach|}
+                </select>
+            </div>
+
+            <div class="element">
+                Статус (для звонков)
+                <select name="status" class="chzn-select">
+                    <option value="">Все</option>
+                    <option value="answer" {|if $control_status == 'answer'|} selected {|/if|}>Разговор состоялся</option>
+                    <option value="noanswer" {|if $control_status == 'noanswer'|} selected {|/if|}>Не взяли трубку</option>
+                    <option value="chanunavail" {|if $control_status == 'chanunavail'|} selected {|/if|}>Связь не доступна</option>
+                    <option value="cancel" {|if $control_status == 'cancel'|} selected {|/if|}>Передумал</option>
+                    <option value="busy" {|if $control_status == 'busy'|} selected {|/if|}>Сбросил (занят)</option>
+                    <option value="invalid" {|if $control_status == 'invalid'|} selected {|/if|}>Неверный номер</option>
+                    <option value="transfer" {|if $control_status == 'transfer'|} selected {|/if|}>Переведен</option>
+                    <option value="autotransfer" {|if $control_status == 'autotransfer'|} selected {|/if|}>Переведен автоматически</option>
+                </select>
+            </div>
+
+            <div class="element ulist">
+                <label>
+                    <input type="checkbox" name="showhidden" {|if $control_showhidden|} checked {|/if|} />
+                    Показывать скрытые события
+                </label>
+            </div>
+
+            <div class="element">
+                <input type="text" name="datefrom" value="{|$control_datefrom|}" class="js-date" placeholder="Дата от" />
+            </div>
+
+            <div class="element">
+                <input type="text" name="dateto" value="{|$control_dateto|}" class="js-date" placeholder="Дата до" />
+            </div>
+
+            <div class="element">
+                <input type="text" name="from" value="{|$control_from|}" placeholder="От кого" />
+            </div>
+
+            <div class="element">
+                <input type="text" name="to" value="{|$control_to|}" placeholder="Кому" />
+            </div>
+
+            <div class="element">
+                <input type="text" name="channel" value="{|$control_channel|}" placeholder="Канал" />
+            </div>
+
+            <div class="element">
+                <input type="text" name="subject" value="{|$control_subject|}" placeholder="Тема" />
+            </div>
+
+            <div class="element">
+                <input type="text" name="content" value="{|$control_content|}" placeholder="Содержимое" />
+            </div>
+
+            <input class="ob-button button-orange" type="submit" name="ok" value="{|$translate_filter|}" />
+            <div class="clear"></div>
+            <br />
+        </form>
+    </div>
+</div>
+
+<div class="shop-result-list">
+    <div class="inner-list {|if $filterpanelCookie|}filter-reserve{|/if|} {|if $noFilter|}no-filter{|/if|}">
+
+{|foreach from=$eventArray item="e"|}
+    <div class="shop-activity-element js-activity-element {|if $e.hidden|}hidden{|/if|}">
+        <div class="head">
+            <span class="event-type type-{|$e.type|} {|$e.status|}">&nbsp;</span>
+            <div class="name">
+                <div class="buttons">
+                    <a href="/admin/issue/add/?clientid={|$e.idFrom|}&name={|$e.subject|}&eventid={|$e.id|}">Превратить в задачу</a>
+                    {|if $e.type == 'email'|}
+                        {|if not $e.nameFrom|}
+                            <a href="/admin/shop/users/add/?emails={|$e.from|}" class="shop-link-useradd" title="Создать контакт {|$e.from|}">{|$e.from|}</a>
+                            <a href="/admin/shop/users/addto/?email={|$e.from|}" class="shop-link-addtouser" title="Добавить в контакт {|$e.from|}">{|$e.from|}</a>
+                        {|/if|}
+                        {|if not $e.nameTo|}
+                            <a href="/admin/shop/users/add/?emails={|$e.to|}" class="shop-link-useradd" title="Создать контакт {|$e.to|}">{|$e.to|}</a>
+                            <a href="/admin/shop/users/addto/?email={|$e.to|}" class="shop-link-addtouser" title="Добавить в контакт {|$e.to|}">{|$e.to|}</a>
+                        {|/if|}
+                    {|elseif $e.type == 'call'|}
+                        {|if not $e.nameFrom|}
+                            <a href="/admin/shop/users/add/?phones={|$e.from|}" class="shop-link-useradd" title="Создать контакт {|$e.from|}">{|$e.from|}</a>
+                            <a href="/admin/shop/users/addto/?phone={|$e.from|}" class="shop-link-addtouser" title="Добавить в контакт {|$e.from|}">{|$e.from|}</a>
+                        {|/if|}
+                        {|if not $e.nameTo|}
+                            <a href="/admin/shop/users/add/?phones={|$e.to|}" class="shop-link-useradd" title="Создать контакт {|$e.to|}">{|$e.to|}</a>
+                            <a href="/admin/shop/users/addto/?phone={|$e.to|}" class="shop-link-addtouser" title="Добавить в контакт {|$e.to|}">{|$e.to|}</a>
+                        {|/if|}
+                    {|/if|}
+                    {|if not $e.nameFrom|}
+                        <a href="/admin/ignore/add/?address={|$e.from|}" class="shop-link-delete" title="Игнорировать {|$e.from|}">{|$e.from|}</a>
+                    {|/if|}
+                    {|if not $e.nameTo|}
+                        <a href="/admin/ignore/add/?address={|$e.to|}" class="shop-link-delete" title="Игнорировать {|$e.to|}">{|$e.to|}</a>
+                    {|/if|}
+
+                    {|if $e.accessRating|}
+                        <br />
+                        <div class="ob-block-rating">
+                            <div class="inner" style="width: {|$e.rating*20|}%;"></div>
+                            <div class="rating-values js-block-rating" data-eventid="{|$e.id|}">
+                                <span data-count="1"></span>
+                                <span data-count="2"></span>
+                                <span data-count="3"></span>
+                                <span data-count="4"></span>
+                                <span data-count="5"></span>
+                            </div>
+                            <input name="" type="hidden" value="{|$e.rating|}" />
+                        </div>
+                    {|/if|}
+                </div>
+                {|if $e.nameFrom|}
+                    <a href="{|$e.urlFrom|}" class="js-contact-preview" data-id="{|$e.idFrom|}">{|$e.nameFrom|}</a>
+                {|else|}
+                    <span>{|$e.from|}</span>
+                {|/if|}
+
+                {|if $e.type == 'email'|}
+                    написал письмо
+                {|elseif $e.type == 'call'|}
+                    позвонил
+                {|elseif $e.type == 'meeting'|}
+                    {|if $e.inFuture|}
+                        назначил встречу с
+                    {|else|}
+                        встретился с
+                    {|/if|}
+                {|elseif $e.type == 'skype'|}
+                    связался с
+                {|elseif $e.type == 'jabber'|}
+                    связался с
+                {|elseif $e.type == 'whatsapp'|}
+                    связался с
+                {|elseif $e.type == 'viber'|}
+                    связался с
+                {|else|}
+                    {|$e.type|}
+                {|/if|}
+
+                {|if $e.nameTo|}
+                    <a href="{|$e.urlTo|}" class="js-contact-preview" data-id="{|$e.idTo|}">{|$e.nameTo|}</a>
+                {|else|}
+                    <span>{|$e.to|}</span>
+                {|/if|}
+
+                <div class="email">{|$e.from|} &rarr; {|$e.to|}</div>
+                {|if $e.statusName|}
+                    <div class="email">Статус: {|$e.statusName|}</div>
+                {|/if|}
+                {|if $e.sourceName|}
+                    <div class="email">Источник: {|$e.sourceName|}</div>
+                {|/if|}
+                {|if $e.channel|}
+                    <div class="email">Канал: {|$e.channel|}</div>
+                {|/if|}
+                {|if $e.duration|}
+                    <div class="email">Длительность звонка: {|$e.duration|}</div>
+                {|/if|}
+                {|if $e.replyDiff|}
+                    {|if $e.replyDate|}
+                        <span style="color: green;">Отвечено через {|$e.replyDiff|} ({|$e.replyDate|})</span>
+                    {|else|}
+                        {|if ! $e.filter_replyDiff|}
+                            <span style="color: red;">Нет ответа более {|$e.replyDiff|}</span>
+                        {|/if|}
+                    {|/if|}
+                {|/if|}
+            </div>
+
+            {|if $e.subject|}
+                <div class="subject">{|$e.subject|}</div>
+            {|/if|}
+            {|$e.cdate|}<br />
+            {|if $e.hidden|}
+                <a href="#" class="body-toggle">&nbsp;</a>
+            {|/if|}
+            <div class="clear"></div>
+        </div>
+        <div class="body" {|if $e.hidden|}style="display: none;"{|/if|}>
+            {|if $e.location|}
+                Место: {|$e.location|}<br />
+                <br />
+            {|/if|}
+            {|if $e.content|}
+                {|$e.content|}
+                <br />
+            {|/if|}
+            <a href="{|$e.url|}">Комментарии и стенограмма...</a>
+            {|if !$project_box_events_nocallrecord|}
+                {|if $e.fileSound == 'load'|}
+                    <div>
+                        <a href="#{|$e.id|}" class="js-soundfile-load" data-id="{|$e.id|}">Прослушать запись звонка...</a>
+                    </div>
+                {|elseif $e.fileSound|}
+                    <audio src="{|$e.fileSound|}" controls></audio>
+                    <br />
+                    <a href="{|$e.fileSound|}" download="sound-{|$e.id|}">Скачать звукозапись...</a>
+                {|/if|}
+            {|/if|}
+            {|if $e.attachmentArray|}
+                <div class="attach">
+                    {|foreach from=$e.attachmentArray item="a"|}
+                        <a href="{|$a.url|}" download="{|$a.name|escape:html|}">{|$a.name|}</a> ({|$a.size|} mb)<br />
+                    {|/foreach|}
+                </div>
+            {|/if|}
+            {|if $e.type == 'meeting'|}
+                <br /> <br />
+                <a href="{|$e.meetingUrl|}">Подробнее</a>
+            {|/if|}
+        </div>
+    </div>
+{|/foreach|}
+
+<div class="shop-stepper">
+    {|if $prevPageURL|}
+        <a href="{|$prevPageURL|}">&larr; Назад</a>
+    {|/if|}
+    {|if $nextPageURL|}
+        <a href="{|$nextPageURL|}">Вперед &rarr;</a>
+    {|/if|}
+</div>
+<div class="clear"></div>
+
+<script type="text/javascript">
+    $j(function () {
+        $j('.js-soundfile-load').click(function (event) {
+            var eventID = $j(event.target).data('id');
+            $j.ajax({
+                url: '/admin/shop/event/load/',
+                data: {
+                    id: eventID
+                },
+                success: function (html) {
+                    $j(event.target).closest('div').html(html);
+                }
+            });
+
+            event.preventDefault();
+        });
+
+        $j(document).click(function (event) {
+            var $e = $j(event.target);
+
+            if ($e.is('.js-quote-show')) {
+                $e.next().show();
+                $e.remove();
+
+                event.preventDefault();
+            }
+        });
+
+        // сворачиваем все цитаты
+        $j('blockquote').each(function (i, e) {
+            var $quote = $j(e);
+
+            // сворачиваем цитату
+            $quote.hide();
+
+            // над цитатой добавляем ссылку "Show quote"
+            $quote.before('<a href="#" class="expand js-quote-show">Развернуть<br></a>');
+        });
+
+
+        //toggle hidden content
+        $j('.body-toggle').click(function(){
+            $j(this).closest('.head').next('.body').slideToggle();
+            $j(this).toggleClass('open');
+            return false;
+        });
+
+        animation('.js-activity-element', 'blind');
+    });
+</script>
+
+    </div>
+</div>
+<div class="clear"></div>

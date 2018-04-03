@@ -1,0 +1,29 @@
+<h1>{|$translate_statistics_search|}</h1>
+
+<div class="shop-block">
+    <form action="" method="get" class="shop-filter-line">
+        <label>
+            <span>
+                {|$translate_date|} {|$translate_from_small|}
+                <input type="hidden" name="filter1_key" value="cdate" />
+                <input type="hidden" name="filter1_type" value="gte" />
+                <input type="text" class="js-date" name="filter1_value" value="{|$control_filter1_value|}" />
+            </span>
+        </label>
+
+        <label>
+            <span>
+                {|$translate_to|}
+                <input type="hidden" name="filter2_key" value="cdate" />
+                <input type="hidden" name="filter2_type" value="lte" />
+                <input type="text" class="js-date" name="filter2_value" value="{|$control_filter2_value|}" />
+            </span>
+        </label>
+
+        <label>
+            <input class="ob-button button-orange" type="submit" value="{|$translate_filter|}" name="ok" />
+        </label>
+    </form>
+</div>
+
+{|$table|}

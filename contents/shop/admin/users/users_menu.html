@@ -1,0 +1,72 @@
+<div class="shop-tabs fixed">
+    <a href="/admin/shop/users/">&lsaquo; {|$translate_users|}</a>
+    <a href="{|$urlEdit|}" class="js-type-user-fields {|if $selected == 'edit'|}selected{|/if|}">{|$translate_contact_card|}</a>
+
+    {|if $urlDelete|}
+        <a href="{|$urlDelete|}" >{|$translate_delete|}</a>
+    {|/if|}
+
+    <a href="/admin/shop/users/add/">{|$translate_users_add|}</a>
+
+    {|if $box|}
+        <a href="/admin/meeting/add/?to={|$userid|}">Создать встречу</a>
+    {|/if|}
+    <div class="clear"></div>
+</div>
+<div class="shop-tabs-place"></div>
+
+<div class="ob-block-head">
+    <div class="head-wrap">
+        {|if $image|}
+            <div class="image"><a class="js-colorbox" {|if $bigImage|}href="{|$bigImage|}"{|else|}href="{|$image|}"{|/if|}><img src="{|$image|}" alt=""/></a></div>
+        {|/if|}
+
+        <div class="info">
+            <div class="caption">
+                <div class="tag">#{|$id|}</div>
+                <h1>{|$name|}</h1>
+                <div class="description">{|$description|}</div>
+                <div class="clear"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="navigation js-ui-navigation">
+        <a href="{|$urlEdit|}" class="js-type-user-fields {|if $selected == 'edit'|}selected{|/if|}">{|$translate_contact_card|}</a>
+        <a href="{|$urlEdit|}" class="js-type-company-fields {|if $selected == 'edit'|}selected{|/if|}" style="display: none;">{|$translate_company_card|}</a>
+
+        {|if $urlEvent|}
+            <a href="{|$urlEvent|}" {|if $selected == 'event'|} class="selected" {|/if|}>События</a>
+        {|/if|}
+        
+        {|foreach from=$moduleTabArray item="e"|}
+            <a href="{|$e.url|}" {|if $selected == $e.moduleName|} class="selected" {|/if|} >{|$e.name|}</a>
+        {|/foreach|}
+
+        {|if $urlIssue|}
+            <a href="{|$urlIssue|}" {|if $selected == 'issue'|} class="selected" {|/if|}>Задачи</a>
+        {|/if|}
+
+        {|if $urlGraphics|}
+            <a href="{|$urlGraphics|}" {|if $selected == 'graphics'|} class="selected" {|/if|}>Статистика</a>
+        {|/if|}
+
+        {|if $urlLegal|}
+            <a href="{|$urlLegal|}" {|if $selected == 'legal'|} class="selected" {|/if|}>Юридические реквизиты</a>
+        {|/if|}
+
+        {|if $urlPermissions|}
+            <a href="{|$urlPermissions|}" {|if $selected == 'permissions'|} class="selected" {|/if|}>{|$translate_permissions|}</a>
+        {|/if|}
+    </div>
+</div>
+
+<script>
+    // инициализация просмотра картинок
+    $j('.js-colorbox').colorbox({
+        maxWidth: '95%',
+        maxHeight: '95%',
+        current: false,
+        returnFocus: false
+    });
+</script>

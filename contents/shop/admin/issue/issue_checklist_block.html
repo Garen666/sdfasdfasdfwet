@@ -1,0 +1,22 @@
+<div class="ob-checklist-block">
+    <div class="checklist-caption">Чек-лист</div>
+
+    <textarea name="checklistadd" class="js-autosize" placeholder="Добавить в чек-лист"></textarea>
+
+    {|if $checklistArray|}
+        <div class="ob-progressbar">
+            <span style="width: {|$checklistProgress|}%;"></div>
+        </div>
+        Выполнено {|$checklistProgress|}%
+        <br />
+        <br />
+    {|/if|}
+
+    {|foreach from=$checklistArray item="e"|}
+        <label>
+            <input type="checkbox" name="checklist{|$e.id|}" value="1" {|if $e.closed|} checked {|/if|} />
+            {|$e.name|}
+        </label>
+        <br />
+    {|/foreach|}
+</div>

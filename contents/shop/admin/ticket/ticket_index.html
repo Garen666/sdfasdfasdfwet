@@ -1,0 +1,51 @@
+<div class="shop-tabs fixed">
+    <a href="" class="selected">Support ticket</a>
+    <div class="clear"></div>
+</div>
+<div class="shop-tabs-place"></div>
+
+{|if !$message == 'ok'|}
+    <div class="shop-message-info">
+        {|$translate_you_send_question_to_support|}.
+    </div>
+{|/if|}
+
+{|if $message == 'ok'|}
+    <div class="shop-message-success">
+        {|$translate_requests_sent_success|}.<br />
+    </div>
+{|/if|}
+
+{|if $message == 'error'|}
+    <div class="shop-message-error">
+        {|$translate_send_error|}.<br />
+        {|foreach from=$errorsArray item="e"|}
+            {|if $e == 'email'|}
+                {|$translate_profile_error_mail|}.<br />
+            {|/if|}
+            {|if $e == 'name'|}
+                {|$translate_enter_name|}.<br />
+            {|/if|}
+            {|if $e == 'message'|}
+                {|$translate_text_error|}.<br />
+            {|/if|}
+        {|/foreach|}
+    </div>
+{|/if|}
+
+<form action="" method="post">
+    <strong>{|$translate_your_name|}:</strong><br/>
+    <input type="text" name="name" value="{|$control_name|}" style="width: 300px;" /><br/>
+    <br/>
+
+    <strong>E-mail:</strong><br/>
+    <input type="text" name="email" value="{|$control_email|}" style="width: 300px;" /><br/>
+    <br/>
+
+    <strong>{|$translate_message|}:</strong><br/>
+    <textarea name="message" style="width: 99%; height: 80px;">{|$control_message|}</textarea>
+    <br/>
+    <br/>
+
+    <input type="submit" name="ok" value="{|$translate_send_request_to_technical_support|}" class="ob-button button-green" />
+</form>

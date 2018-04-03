@@ -1,0 +1,210 @@
+<div class="shop-filter-panel">
+    <div class="filter-toggle {|if $filterpanelCookie|}open{|/if|}"></div>
+    <div class="inner-pannel" {|if !$filterpanelCookie|}style="display: none;"{|/if|}>
+        <form action="" method="get">
+            <div class="element">
+                Способ отображения
+                <select name="mode" class="chzn-select">
+                    <option value="" {|if $control_mode == ''|} selected {|/if|}>Списком</option>
+                    <option value="calendar" {|if $control_mode == 'calendar'|} selected {|/if|}>Календарем</option>
+                    <option value="gantt" {|if $control_mode == 'gantt'|} selected {|/if|}>Диаграммой Ганта</option>
+                    <option value="stage" {|if $control_mode == 'stage'|} selected {|/if|}>Статистикой этапов</option>
+                    <option value="funnel" {|if $control_mode == 'funnel'|} selected {|/if|}>Воронкой</option>
+                    {|if $isBox|}
+                        <option value="status" {|if $control_mode == 'status'|} selected {|/if|}>Статусами</option>
+                        <option value="mind" {|if $control_mode == 'mind'|} selected {|/if|}>Mind map</option>
+                    {|/if|}
+                </select>
+            </div>
+
+            <div class="element">
+                Ответственный
+                <select name="filtermanagerid" class="chzn-select">
+                    <option value="">{|$translate_all_managers|}</option>
+                    {|foreach from=$managerArray item="e"|}
+                        <option value="{|$e.id|}" {|if $e.id == $control_filtermanagerid|} selected {|/if|}>{|$e.name|}</option>
+                    {|/foreach|}
+                </select>
+            </div>
+
+            <div class="element">
+                {|$translate_client_small|}:
+                <input type="hidden" name="filterclientid" value="{|$control_filterclientid|}" class="js-select2 js-select2-clientid" data-type="user" style="width: 200px;" />
+                <script type="text/javascript">
+                    $j(function () {
+                        var tags = [
+                            {|foreach from=$filterClientArray item="p" name="foreach1"|}
+                                {'id':{|$p.id|}, 'text':'{|$p.text|}'}
+                                {|if !$smarty.foreach.foreach1.last|},{|/if|}
+                            {|/foreach|}
+                        ];
+
+                        $j(".js-select2-clientid").select2('data', tags);
+                    });
+                </script>
+            </div>
+
+            {|if $customOrderNumber|}
+                <div class="element">
+                    <input type="text" name="filternumber" value="{|$control_filternumber|}" placeholder="Номер заказа" />
+                </div>
+            {|/if|}
+
+            <div class="element">
+                <input type="text" name="filtername" value="{|$control_filtername|}" placeholder="Название" />
+            </div>
+
+            <div class="element">
+                <input type="text" name="filterid" value="{|$control_filterid|}" placeholder="Код" />
+            </div>
+
+            <div class="element">
+                <input type="text" class="js-date" name="filtercdatefrom" value="{|$control_filtercdatefrom|}" placeholder="Дата создания от" />
+            </div>
+
+            <div class="element">
+                <input type="text" class="js-date" name="filtercdateto" value="{|$control_filtercdateto|}" placeholder="Дата создания до" />
+            </div>
+
+            {|if $mode != 'funnel'|}
+                <div class="element ulist">
+                    <label>
+                        <input type="checkbox" name="filtershowclosed" value="1" {|if $control_filtershowclosed|}checked{|/if|}>
+                        Показывать закрытые
+                    </label>
+                </div>
+            {|/if|}
+
+            {|$block_workflow_filter|}
+
+            {|if $managerArray|}
+                <div class="element">
+                    Автор задачи:
+                    <select name="filterauthorid" class="chzn-select">
+                        <option value="">{|$translate_all_managers|}</option>
+                        {|foreach from=$managerArray item="e"|}
+                            <option value="{|$e.id|}" {|if $e.id == $control_filterauthorid|} selected {|/if|}>{|$e.name|}</option>
+                        {|/foreach|}
+                    </select>
+                </div>
+            {|/if|}
+
+            <div class="element">
+                <input type="text" name="filterproductname" value="{|$control_filterproductname|}" class="help-hint-filter-login" placeholder="Наименование продукта" />
+            </div>
+
+            <div class="element">
+                <input type="text" name="filterproductid" value="{|$control_filterproductid|}" class="help-hint-filter-login" placeholder="Код продукта" />
+            </div>
+
+            <div class="element">
+                <input type="text" name="filterproductserial" value="{|$control_filterproductserial|}" class="help-hint-filter-login" placeholder="Серийный номер продукта" />
+            </div>
+
+            <input class="ob-button button-orange" type="submit" value="{|$translate_filter|}" />
+
+            <div class="clear"></div>
+        </form>
+    </div>
+</div>
+
+<div class="shop-result-list">
+    <div class="inner-list {|if $filterpanelCookie|}filter-reserve{|/if|}">
+        {|if $block_show_custom |}
+            {|$block_show_custom|}
+        {|else|}
+            {|$table|}
+
+            {|if $dataCount|}
+                <div class="ob-details-block">
+                    <div class="wrap double">
+                        <div class="part">
+                            <div class="ob-data-element">
+                                <div class="data-view">
+                                    <div class="el-caption">Количество задач:</div>
+                                    <div class="el-value">{|$dataCount|}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <form id="massSend" action="/admin/shop/users/mailing/" method="post">
+                    <input type="hidden" name="arrUserId" value="{|$arrUserId|}">
+                    <input class="ob-button" id="sendAll" type="submit" name="sendAll" value="{|$translate_users_mailing|}" />
+                    {|if $canSMS|}
+                        <input class="ob-button" type="submit" name="sendAllSms" value="{|$translate_users_mailing|} SMS" onclick="$j('#massSend').attr('action', '/admin/shop/users/smsmailing/');" />
+                    {|/if|}
+                </form>
+            {|/if|}
+        {|/if|}
+        <div class="js-table-footer"></div>
+    </div>
+</div>
+<div class="clear"></div>
+
+<div class="shop-right-sidebar" >
+    <div class="toggle"></div>
+
+    <form action="" method="post" >
+        <input type="hidden" id="id-issue" name="moveids" />
+
+        {|if $managerArray|}
+            <div class="element double">
+                Назначить на:
+                <select class="chzn-select" name="manager">
+                    <option value="">---</option>
+                    {|foreach from=$managerArray item="e"|}
+                        <option value="{|$e.id|}">{|$e.name|}</option>
+                    {|/foreach|}
+                </select>
+            </div>
+        {|/if|}
+
+        {|if $statusArray || $statusCategoryArray|}
+            <div class="element">
+                {|$translate_cgange_status|}:
+                <select class="chzn-select" name="status">
+                    <option value="">---</option>
+                    {|foreach from=$statusArray item="e"|}
+                        <option value="{|$e.id|}" >{|$e.name|}</option>
+                    {|/foreach|}
+                    {|foreach from=$statusCategoryArray key="key" item="s"|}
+                        <optgroup label="{|$key|}">
+                            {|foreach from=$s item="s2"|}
+                                <option value="{|$s2.id|}" >{|$s2.name|}</option>
+                            {|/foreach|}
+                        </optgroup>
+                    {|/foreach|}
+                </select>
+            </div>
+        {|/if|}
+
+        <div class="element">
+            Дата завершения:
+            <input type="text" name="dueDate" class="js-datetime">
+        </div>
+
+        <div class="element">
+            <label>
+                <input type="radio" name="action" value="open" />
+                Открыть задачи
+            </label>
+            <br />
+            <label>
+                <input type="radio" name="action" value="closed" />
+                Закрыть задачи
+            </label>
+        </div>
+        <div class="clear"></div>
+
+        <div class="element">
+            <input class="ob-button" type="submit" name="change" value="{|$translate_user_change|}" onclick="return confirm('{|$translate_button_comfirm_change_data|}');" />
+        </div>
+
+        <div class="element">
+            <input class="ob-button" type="submit" name="delete" value="{|$translate_delete|}"  onclick="return confirm('{|$translate_button_comfirm_order_delete|}');" />
+        </div>
+        <div class="element"></div>
+    </form>
+</div>

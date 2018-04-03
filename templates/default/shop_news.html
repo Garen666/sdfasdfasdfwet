@@ -1,0 +1,23 @@
+<div class="os-caption-block">{|$translate_site_news|}</div>
+
+{|if $newsArray|}
+    <div class="os-news-block">
+        {|foreach from=$newsArray item="e"|}
+            <div class="element">
+                {|if $e.image|}
+                    <div class="image"><img src="{|$e.image|}" alt="" /></div>
+                {|/if|}
+                <div class="text {|if !$e.image|}no-image{|/if|}">
+                    <a href="{|$e.url|}">{|$e.name|}</a>
+                    <div class="date">{|$e.date|}</div>
+                    {|$e.contentPreview|}
+                </div>
+                <div class="clear"></div>
+            </div>
+        {|/foreach|}
+    </div>
+{|else|}
+    <div class="os-message-notice">
+        {|$translate_no_news|}.
+    </div>
+{|/if|}

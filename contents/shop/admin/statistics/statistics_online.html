@@ -1,0 +1,44 @@
+<div class="shop-tabs fixed">
+    <a href="" class="selected">{|$translate_users_online|}</a>
+    <div class="clear"></div>
+</div>
+<div class="shop-tabs-place"></div>
+
+{|if $message == 'ban'|}
+    <div class="shop-message-success">
+        {|$translate_users_get_ban|}!
+    </div>
+{|/if|}
+
+{|if $message == 'kick'|}
+    <div class="shop-message-success">
+        {|$translate_users_get_kick|}!
+    </div>
+{|/if|}
+
+<table class="shop-table sortable">
+    <thead>
+        <tr>
+            <th>{|$translate_login_small|}</th>
+            <th>e-mail</th>
+            <th>ip</th>
+            <th>id session</th>
+            <th>{|$translate_session_date|}</th>
+            <th>{|$translate_last_active_time|}</th>
+            <th>{|$translate_ban|}</th>
+            <th>{|$translate_kick|}</th>
+        </tr>
+    </thead>
+    {|foreach from=$usersArray item="u"|}
+        <tr>
+            <td><a href="{|$u.url|}" class="js-contact-preview" data-id="{|$u.id|}">{|$u.login|}</a></td>
+            <td>{|$u.email|}</td>
+            <td>{|$u.ip|}</td>
+            <td>{|$u.sid|}</td>
+            <td>{|$u.sdate|}</td>
+            <td>{|$u.adate|}</td>
+            <td><a href="?ban={|$u.id|}">{|$translate_give_ban|}</a></td>
+            <td><a href="?kick={|$u.id|}">{|$translate_kick|}</a></td>
+        </tr>
+    {|/foreach|}
+</table>
