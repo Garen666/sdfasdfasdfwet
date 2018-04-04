@@ -25,3 +25,25 @@
         <br>
     {|/foreach|}
 </div>
+
+<div>
+    <a href="sale/">Продать {|$buyName|}</a>
+</div>
+
+<div>
+ <table>
+     <tr>
+         {|foreach from=$gameFilterNameArray item="gfm"|}
+            {|if !$gfm.additionally|}
+                <th>{|$gfm.name|}</th>
+            {|/if|}
+         {|/foreach|}
+
+         {|if $mustDescription|}
+            <th>Описание</th>
+         {|/if|}
+         <th>Продавец</th>
+         <th>Цена</th>
+     </tr>
+ </table>
+</div>

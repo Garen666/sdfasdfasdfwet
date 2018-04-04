@@ -506,5 +506,15 @@ Engine::GetContentDataSource()->registerContent('shop-lot-type', array(
     'cache' => array('ttl' => 3600, 'type' => 'page', 'modifiers' => array('url', 'no-auth')),
 ), 'override');
 
+Engine::GetContentDataSource()->registerContent('lot-type-sale', array(
+    'url' => '/lot/type/{id}/sale/',
+    'filehtml' => dirname(__FILE__).'/shop/lot_type_sale.html',
+    'filephp' => dirname(__FILE__).'/shop/lot_type_sale.php',
+    'filejs' => dirname(__FILE__).'/shop/lot_type_sale.js',
+    'moveto' => 'shop-tpl',
+    'moveas' => 'content',
+    'cache' => array('ttl' => 3600, 'type' => 'page', 'modifiers' => array('url', 'no-auth')),
+), 'override');
+
 
 

@@ -99,6 +99,7 @@ if (PackageLoader::Get()->getMode('development') && isset($connection)) {
     $table->addIndexPrimary('id');
     $table->addField('name', 'varchar(255)');
     $table->addField('gameId', 'int(11)');
+    $table->addField('additionally', 'tinyint(1)');
     $table->addField('hidden', 'tinyint(1)');
     $table->addField('deleted', 'tinyint(1)');
 
@@ -113,7 +114,7 @@ if (PackageLoader::Get()->getMode('development') && isset($connection)) {
     $table->addIndexPrimary('id');
     $table->addField('gameId', 'int(11)');
     $table->addField('gameFilterId', 'int(11)');
-    $table->addField('value', 'varchar(255)');
+    $table->addField('value', 'varchar(100)');
 
     // типы лотов в играх
     $table = SQLObject_Config::Get()->addClass('XLotType', 'lotType');
@@ -122,10 +123,13 @@ if (PackageLoader::Get()->getMode('development') && isset($connection)) {
     $table->addField('name', 'varchar(255)');
     $table->addField('gameId', 'int(11)');
     $table->addField('sort', 'int(11)');
-    $table->addField('hidden', 'tinyint(1)'); // cкрытая категория
-    $table->addField('deleted', 'tinyint(1)'); // cкрытая категория
-    $table->addField('url', 'varchar(100)'); // category url
-    $table->addField('description', 'varchar(500)'); // category url
+    $table->addField('hidden', 'tinyint(1)');
+    $table->addField('deleted', 'tinyint(1)');
+    $table->addField('mustDescription', 'tinyint(1)');
+    $table->addField('url', 'varchar(100)');
+    $table->addField('buyText', 'varchar(100)');
+    $table->addField('type', 'varchar(20)');
+    $table->addField('description', 'varchar(500)');
 
     $table = SQLObject_Config::Get()->addClass('XLotFilter', 'lotFilter');
     $table->addField('id', 'int(11)', 'auto_increment');
@@ -133,8 +137,19 @@ if (PackageLoader::Get()->getMode('development') && isset($connection)) {
     $table->addField('name', 'varchar(255)');
     $table->addField('gameId', 'int(11)');
     $table->addField('lotTypeId', 'int(11)');
-    $table->addField('hidden', 'tinyint(1)'); // cкрытая категория
-    $table->addField('deleted', 'tinyint(1)'); // cкрытая категория
+    $table->addField('active', 'tinyint(1)');
+    $table->addField('price', 'decimal(10,4)');
+    $table->addField('count', 'int(11)');
+    $table->addField('filterId1', 'int(11)');
+    $table->addField('filterValue1', 'varchar(100)');
+    $table->addField('filterId2', 'int(11)');
+    $table->addField('filterValue2', 'varchar(100)');
+    $table->addField('filterId3', 'int(11)');
+    $table->addField('filterValue3', 'varchar(100)');
+    $table->addField('filterId4', 'int(11)');
+    $table->addField('filterValue4', 'varchar(100)');
+    $table->addField('filterId5', 'int(11)');
+    $table->addField('filterValue5', 'varchar(100)');
 
 
 
@@ -164,26 +179,6 @@ if (PackageLoader::Get()->getMode('development') && isset($connection)) {
     $table->addField('time', 'int(11)');
     $table->addField('show', 'tinyint(1)');
 
-
-
-    // лоты в играх
-    /*$table = SQLObject_Config::Get()->addClass('XLot', 'lots');
-    $table->addField('id', 'int(11)', 'auto_increment');
-    $table->addIndexPrimary('id');
-    $table->addField('name', 'varchar(255)');
-    $table->addField('description', 'text');
-    $table->addField('gameId', 'int(11)');
-    $table->addField('lotTypeId', 'int(11)');
-    $table->addField('hidden', 'tinyint(1)'); // cкрытая категория
-    $table->addField('deleted', 'tinyint(1)'); // cкрытая категория
-    $table->addField('url', 'varchar(100)'); // category url
-    $table->addField('seodescription', 'varchar(255)'); // seo описание
-    $table->addField('seotitle', 'varchar(255)'); // seo title
-    $table->addField('seoh1', 'varchar(255)'); // seo h1 title у товара
-    $table->addField('seocontent', 'text'); // seo текст
-    $table->addField('seokeywords', 'varchar(255)'); */// seo ключевые слова
-
-    // лоты игроков
     $table = SQLObject_Config::Get()->addClass('XLot', 'lots');
     $table->addField('id', 'int(11)', 'auto_increment');
     $table->addIndexPrimary('id');

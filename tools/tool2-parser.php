@@ -40,7 +40,7 @@ foreach ($r[3] as $i => $item) {
 
         preg_match_all('/<a href="(.*)">.*<\/a>/iusU', $r2[0][$key], $rr);
 
-        sleep(5);
+        sleep(35);
         $contents2 = file_get_contents($rr[1][0]);
         preg_match_all('/<div class="form-group">\s*<label>(.*)<\/label>\s*<select class="form-control.*" name=".*">(.*)<\/select>\s*<\/div>/iusU', $contents2, $rrr);
         preg_match_all('/<div class="form-group lot-field" data-id=".*">\s*<label.*>(.*)<\/label>\s*<select class="form-control.*" name=".*">(.*)<\/select>\s*<\/div>/iusU', $contents2, $rrr2);
@@ -94,6 +94,7 @@ foreach ($r[3] as $i => $item) {
             $gameFilter->setName($value2);
             $gameFilter->setGameId($game->getId());
             if (!$gameFilter->select()) {
+                $gameFilter->setAdditionally(1);
                 $gameFilter->insert();
             }
 

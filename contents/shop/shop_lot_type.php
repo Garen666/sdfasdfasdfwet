@@ -44,7 +44,8 @@ class shop_lot_type extends Engine_Class {
             while ($x = $gameFilter->getNext()) {
                 $gameFilterNameArray[] = array(
                     'id' => $x->getId(),
-                    'name' => $x->getName()
+                    'name' => $x->getName(),
+                    'additionally' => $x->getAdditionally()
                 );
             }
 
@@ -61,8 +62,14 @@ class shop_lot_type extends Engine_Class {
             $this->setValue('gameFilterNameArray', $gameFilterNameArray);
             $this->setValue('gameFilterValueArray', $gameFilterValueArray);
 
+            $buyName = $lotType->getBuyText();
+            if (!$buyName) {
+                $buyName = $lotType->getName();
+            }
 
+            $this->setValue('buyName', $buyName);
             $this->setValue('description', $lotType->getDescription());
+            $this->setValue('mustDescription', $lotType->getMustDescription());
 
 
             Engine::GetHTMLHead()->setTitle(
