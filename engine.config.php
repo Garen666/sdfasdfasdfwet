@@ -26,7 +26,6 @@ if (!$template) {
 
 // регистрируем контенты в движке
 include(dirname(__FILE__).'/contents/contents_global.php');
-include(dirname(__FILE__).'/contents/shop/api/contents_api.php');
 include(dirname(__FILE__).'/contents/shop/admin/contents_admin.php');
 include(dirname(__FILE__).'/contents/shop/admin/orders/contents_orders.php');
 include(dirname(__FILE__).'/contents/shop/admin/products/contents_products.php');

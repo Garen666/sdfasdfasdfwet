@@ -25,7 +25,6 @@ class admin_shop_tpl extends Engine_Class {
         PackageLoader::Get()->registerCSSFile('/_css/jquery-ui.css');
 
         // подключение JS API и SelectWindow
-        PackageLoader::Get()->registerJSFile('/contents/shop/api/api.js');
         PackageLoader::Get()->registerJSFile('/contents/shop/admin/selectwindow/selectwindow.js');
 
         $isBox = Engine::Get()->getConfigFieldSecure('project-box');
