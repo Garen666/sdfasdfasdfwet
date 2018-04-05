@@ -137,19 +137,12 @@ if (PackageLoader::Get()->getMode('development') && isset($connection)) {
     $table->addField('name', 'varchar(255)');
     $table->addField('gameId', 'int(11)');
     $table->addField('lotTypeId', 'int(11)');
-    $table->addField('active', 'tinyint(1)');
-    $table->addField('price', 'decimal(10,4)');
-    $table->addField('count', 'int(11)');
-    $table->addField('filterId1', 'int(11)');
-    $table->addField('filterValue1', 'varchar(100)');
-    $table->addField('filterId2', 'int(11)');
-    $table->addField('filterValue2', 'varchar(100)');
-    $table->addField('filterId3', 'int(11)');
-    $table->addField('filterValue3', 'varchar(100)');
-    $table->addField('filterId4', 'int(11)');
-    $table->addField('filterValue4', 'varchar(100)');
-    $table->addField('filterId5', 'int(11)');
-    $table->addField('filterValue5', 'varchar(100)');
+    $table->addField('hidden', 'tinyint(1)');
+    $table->addField('deleted', 'tinyint(1)');
+
+
+
+
 
 
 
@@ -185,6 +178,26 @@ if (PackageLoader::Get()->getMode('development') && isset($connection)) {
     $table->addField('userId', 'int(11)');
     $table->addField('gameId', 'int(11)');
     $table->addField('lotTypeId', 'int(11)');
+    $table->addField('active', 'tinyint(1)');
+    $table->addField('price', 'decimal(10,4)');
+    $table->addField('count', 'int(11)');
+    $table->addField('filterId1', 'int(11)');
+    $table->addField('filterValue1', 'varchar(100)');
+    $table->addField('filterId2', 'int(11)');
+    $table->addField('filterValue2', 'varchar(100)');
+    $table->addField('filterId3', 'int(11)');
+    $table->addField('filterValue3', 'varchar(100)');
+    $table->addField('filterId4', 'int(11)');
+    $table->addField('filterValue4', 'varchar(100)');
+    $table->addField('filterId5', 'int(11)');
+    $table->addField('filterValue5', 'varchar(100)');
+
+    $table = SQLObject_Config::Get()->addClass('XLotTypeMinSum', 'lotTypeMinSum');
+    $table->addField('id', 'int(11)', 'auto_increment');
+    $table->addIndexPrimary('id');
+    $table->addField('userId', 'int(11)');
+    $table->addField('lotTypeId', 'int(11)');
+    $table->addField('sum', 'int(11)');
 
 
 

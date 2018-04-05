@@ -15,6 +15,20 @@
 class Shop {
 
     /**
+    * @return LotService
+    */
+    public function getLotService() {
+        return ServiceUtils::Get()->getService('lot');
+    }
+
+    /**
+     * @param string $service
+     */
+    public function setLotService($service) {
+        ServiceUtils::Get()->setService('lot', $service);
+    }
+
+    /**
      * @return Shop_GameService
      */
     public function getGameService() {
@@ -238,6 +252,7 @@ class Shop {
         $this->setGameService('Shop_GameService');
         $this->setLotTypeService('LotTypeService');
         $this->setChatService('ChatService');
+        $this->setLotService('LotService');
 
     }
 

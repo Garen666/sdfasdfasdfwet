@@ -833,7 +833,7 @@ class SQLObject {
      *
      * @return int
      */
-    public function getCount($fKey = false) {
+    public function getCountDB($fKey = false) {
         // строим запрос
         $query = $this->_makeQuery(array('COUNT(*) as sqlobjectCount'), '', '');
 

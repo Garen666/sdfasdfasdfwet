@@ -8,7 +8,7 @@
         <div>
             <label>Минимальная сумма заказа</label>
             <br>
-            <input type="text" value="0" name="">
+            <input type="text" value="{|$minSum|}" name="minsum">
             <br>
             <table>
                 <tr>
@@ -23,7 +23,7 @@
                 {|foreach from=$lineArray item="line"|}
                     <tr>
                         <td>
-                            <input class="js-checkbox-active" type="checkbox">
+                            <input class="js-checkbox-active" type="checkbox" {|if $line.active|} checked {|/if|}>
                             <input type="hidden" class="js-input-active" name="active[]" value="0" style="display: none;">
                         </td>
                         {|foreach from=$gameFilterNameArray key="key" item="gfn"|}
@@ -32,8 +32,8 @@
                                 <input type="hidden" name="filter{|$key|}[]" value="{|$line[$key].value|}" style="display: none;">
                             </td>
                         {|/foreach|}
-                        <td><input name="price[]" type="text"></td>
-                        <td><input name="count[]" type="text"></td>
+                        <td><input type="text" name="price[]" value="{|$line.price|}"></td>
+                        <td><input type="text" name="count[]" value="{|$line.count|}"></td>
                     </tr>
                 {|/foreach|}
             </table>

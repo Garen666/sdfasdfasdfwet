@@ -122,12 +122,12 @@ class SEOService {
         }
 
         // все теги товаров
-        $tags = new ShopProductTag();
+        /*$tags = new ShopProductTag();
         while ($x = $tags->getNext()) {
             // публикуем URL в sitemap
             $url = $x->makeURL();
             $sitemap->addURL($url, 1, 'daily');
-        }
+        }*/
 
         if (!$path) {
             $path = PackageLoader::Get()->getProjectPath().'/media/sitemap/'.Engine::Get()->getProjectHost().'/';

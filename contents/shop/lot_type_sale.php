@@ -5,6 +5,9 @@ class lot_type_sale extends Engine_Class {
 
         try {
             $lotType = Shop::Get()->getLotTypeService()->getLotTypeByID($this->getArgument('id'));
+            $user = $this->getUser();
+            $game = $lotType->getGame();
+
 
             // скрытые товары показываем только админу
             if ($lotType->getHidden()) {
@@ -24,10 +27,66 @@ class lot_type_sale extends Engine_Class {
 
 
             if ($this->getArgumentSecure('save')) {
-                print_r($this->getArguments());exit;
+
+
+                if ($lotType->getType() == "money") {
+                    Shop::Get()->getLotService()->updateMinSum($user->getId(), $lotType->getId(), $this->getArgumentSecure('minsum'));
+
+                    $gameFilter = $lotType->getAllFilterName();
+                    $gameFilterNameArray = array();
+                    while ($x = $gameFilter->getNext()) {
+                        $gameFilterNameArray[$x->getId()] = $x->getId();
+                    }
+
+
+                    ksort($gameFilterNameArray);
+
+                    $filters = array();
+                    $filters[0] = array();
+
+                    $filtersId = array();
+                    $filtersId[0] = array();
+
+                    foreach ($gameFilterNameArray as $filterId) {
+                        $filters[] = $this->getArgumentSecure('filter'.$filterId);
+                        $filtersId[] = $filterId;
+                    }
+
+                    $actives = $this->getArgumentSecure('active');
+                    $prices = $this->getArgumentSecure('price');
+                    $counts = $this->getArgumentSecure('count');
+
+                    foreach ($actives as $key => $value) {
+
+                        Shop::Get()->getLotService()->addLot(
+                            $user->getId(),
+                            $game->getId(),
+                            $lotType->getId(),
+                            $value,
+                            @$prices[$key],
+                            @$counts[$key],
+                            @$filtersId[1],
+                            @$filters[1][$key],
+                            @$filtersId[2],
+                            @$filters[2][$key],
+                            @$filtersId[3],
+                            @$filters[3][$key],
+                            @$filtersId[4],
+                            @$filters[4][$key],
+                            @$filtersId[5],
+                            @$filters[5][$key]
+                        );
+                    }
+                } else {
+
+                }
+
+
+
+
             }
 
-            $game = $lotType->getGame();
+
 
             $this->setValue("gameName", $game->makeName());
             $this->setValue("lotType", $lotType->getType());
@@ -48,6 +107,7 @@ class lot_type_sale extends Engine_Class {
                 }
 
                 $gameFilterNameArrayClone = $gameFilterNameArray;
+
 
                 $gameFilterValue = $game->getAllFilterValue();
                 $gameFilterValueArray = array();
@@ -71,15 +131,35 @@ class lot_type_sale extends Engine_Class {
                         $lineArray[] = array($filter1 => array('value' => $value2["value"]));
                     }
                 } else if (count($gameFilterNameArray) == 2) {
+                    ksort($gameFilterNameArrayClone);
+
                     $filter1 = array_shift($gameFilterNameArrayClone)["id"];
                     $filter2 = array_shift($gameFilterNameArrayClone)["id"];
+
+                    $lots = Shop::Get()->getLotService()->getLots3($user->getId(), $game->getId(), $lotType->getId());
+                    $lotsArray = array();
+
+                    while ($x = $lots->getNext()) {
+                        $lotsArray[$x->getFilterId1()][$x->getFilterValue1()][$x->getFilterId2()][$x->getFilterValue2()] = array(
+                            'price' => $x->getPrice(),
+                            'count' => $x->getCount(),
+                            'active' => $x->getActive()
+                        );
+                    }
 
                     $arr = array();
                     foreach ($gameFilterValueArray[$filter1] as $key1 => $value1) {
                         foreach ($gameFilterValueArray[$filter2] as $key2 => $value2) {
                             $lineArray[] = array(
-                                $filter1 => array('value' => $value1['value']),
-                                $filter2 => array('value' => $value2['value'])
+                                $filter1 => array(
+                                    'value' => $value1['value']
+                                ),
+                                $filter2 => array(
+                                    'value' => $value2['value']
+                                ),
+                                'count' => @$lotsArray[$filter1][$value1['value']][$filter2][$value2['value']]['count'],
+                                'price' => @$lotsArray[$filter1][$value1['value']][$filter2][$value2['value']]['price'],
+                                'active' => @$lotsArray[$filter1][$value1['value']][$filter2][$value2['value']]['active'],
                             );
 
 
@@ -90,6 +170,12 @@ class lot_type_sale extends Engine_Class {
 
                 }
                 $this->setValue('lineArray', $lineArray);
+
+
+                $this->setValue('minSum', Shop::Get()->getLotService()->getMinSum($user->getId(), $lotType->getId()));
+
+
+
             } else {
 
             }

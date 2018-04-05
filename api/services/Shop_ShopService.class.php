@@ -88,20 +88,21 @@ class Shop_ShopService extends ServiceUtils_AbstractService {
      * @return ShopProductTag
      */
     public function getProductTagByURL($url) {
-        $url = trim($url);
+        throw new ServiceUtils_Exception();
+        /*$url = trim($url);
         if (!$url) {
             throw new ServiceUtils_Exception();
         }
-        return $this->getObjectByField('url', $url, 'ShopProductTag', false);
+        return $this->getObjectByField('url', $url, 'ShopProductTag', false);*/
     }
 
     /**
      * @return ShopProductTag
      */
     public function getProductTagByID($id) {
-        try {
+        /*try {
             return $this->getObjectByID($id, 'ShopProductTag');
-        } catch (Exception $e) {}
+        } catch (Exception $e) {}*/
         throw new ServiceUtils_Exception('Shop-object by id not found');
     }
 
@@ -3823,7 +3824,7 @@ class Shop_ShopService extends ServiceUtils_AbstractService {
             SQLObject::TransactionStart();
 
             // получаем массив всех FCV по данному товару
-            $tmp = new XShopProduct2Tag();
+            /*$tmp = new XShopProduct2Tag();
             $tmp->setProductid($product->getId());
             $tagIDArray = array();
             while ($x = $tmp->getNext()) {
@@ -3864,7 +3865,7 @@ class Shop_ShopService extends ServiceUtils_AbstractService {
             // удаляем все не актуальные tag
             foreach ($tagIDArray as $object) {
                 $object->delete();
-            }
+            }*/
 
             SQLObject::TransactionCommit();
         } catch (Exception $ge) {
