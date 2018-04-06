@@ -237,68 +237,6 @@ class calendar_block extends Engine_Class {
             $managerIdEmployer = $this->getUser()->getId();
         }
 
-        // этапы
-        $employer = new XShopOrderEmployer();
-        if ($managerIdEmployer) {
-            $employer->setManagerid($managerIdEmployer);
-        }
-        $employer->addWhere('term', $dateMonthStart, '>=');
-        $employer->addWhere('term', $dateMonthEnd.' 23:59:59', '<=');
-        $employer->setOrder('term', 'ASC');
-
-        while ($em = $employer->getNext()) {
-            try{
-                $emStatus = Shop::Get()->getShopService()->getStatusByID($em->getStatusid());
-
-                $subIssue = Shop::Get()->getShopService()->getOrdersAll($this->getUser(), true);
-                $subIssue->setParentid($em->getOrderid());
-                $subIssue->setParentstatusid($em->getStatusid());
-
-                $allClosed = true;
-                $subIssueCount = 0;
-                while ($sub = $subIssue->getNext()) {
-                    $subIssueCount++;
-                    if ($sub->getDateclosed() == '0000-00-00 00:00:00') {
-                        $allClosed = false;
-                        break;
-                    }
-                }
-
-                $d2 = DateTime_Object::FromString($em->getTerm())->setFormat('Y-m-d')->__toString();
-
-                $time = DateTime_Formatter::TimeISO8601($em->getTerm());
-                if ($time == '00:00') {
-                    $time = false;
-                }
-
-                try{
-                    $emOrder = Shop::Get()->getShopService()->getOrderByID($em->getOrderid());
-                } catch (Exception $e2) {
-                    $emOrder = false;
-                }
-
-                $employerArray = array(
-                    'employerId' => $em->getId(),
-                    'statusName' => $emStatus->makeName(),
-                    'statusId' => $emStatus->getId(),
-                    'id' => $em->getOrderid(),
-                    'name' => $emOrder ? $emOrder->makeName():$em->getId(),
-                    'closed' => $emOrder ? $emOrder->isClosed():false,
-                    'url' => $emOrder ? $emOrder->makeURLEdit():false,
-                    'time' => $time,
-                    'colour' => $emStatus->getColour(),
-                    'allClosed' => $subIssueCount ? $allClosed:false,
-                    'fireIssue' => $em->getTerm() < DateTime_Object::Now() ? true:false
-                );
-
-                $weekArray[date("W", strtotime($d2))][$d2][] = $employerArray;
-                $monthArray[$d2][] = $employerArray;
-
-            } catch (Exception $e2) {
-
-            }
-
-        }
 
 
         // Встреча

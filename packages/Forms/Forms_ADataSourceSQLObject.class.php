@@ -148,7 +148,7 @@ abstract class Forms_ADataSourceSQLObject extends Forms_ADataSource {
 
         $sqlobject->setLimit($limitFrom, $limitCount);
         if ($count) {
-            return $sqlobject->getCount();
+            return $sqlobject->getCountDB();
         }
 
         if ($sortBy) {

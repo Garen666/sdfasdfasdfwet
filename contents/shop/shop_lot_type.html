@@ -43,7 +43,25 @@
             <th>Описание</th>
          {|/if|}
          <th>Продавец</th>
+         <th>Наличие</th>
          <th>Цена</th>
      </tr>
+
+     {|foreach from=$lotsArray item="lot"|}
+         <tr>
+             {|foreach from=$gameFilterNameArray item="gfm"|}
+                 {|if !$gfm.additionally|}
+                    <td>{|$lot.filters[$gfm.id]|}</td>
+                 {|/if|}
+             {|/foreach|}
+             {|if $mustDescription|}
+                <td>{|$lot.description|}</td>
+             {|/if|}
+             <td>{|$lot.userName|}</td>
+             <td>{|$lot.count|}</td>
+             <td>{|$lot.price|}</td>
+         </tr>
+     {|/foreach|}
+
  </table>
 </div>

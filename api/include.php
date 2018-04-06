@@ -176,6 +176,7 @@ if (PackageLoader::Get()->getMode('development') && isset($connection)) {
     $table->addField('id', 'int(11)', 'auto_increment');
     $table->addIndexPrimary('id');
     $table->addField('userId', 'int(11)');
+    $table->addField('userName', 'varchar(100)');
     $table->addField('gameId', 'int(11)');
     $table->addField('lotTypeId', 'int(11)');
     $table->addField('active', 'tinyint(1)');
@@ -191,6 +192,8 @@ if (PackageLoader::Get()->getMode('development') && isset($connection)) {
     $table->addField('filterValue4', 'varchar(100)');
     $table->addField('filterId5', 'int(11)');
     $table->addField('filterValue5', 'varchar(100)');
+    $table->addField('description', 'varchar(600)');
+
 
     $table = SQLObject_Config::Get()->addClass('XLotTypeMinSum', 'lotTypeMinSum');
     $table->addField('id', 'int(11)', 'auto_increment');

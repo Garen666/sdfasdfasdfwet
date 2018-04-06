@@ -72,6 +72,32 @@ class shop_lot_type extends Engine_Class {
             $this->setValue('mustDescription', $lotType->getMustDescription());
 
 
+            $lotsArray = array();
+
+            $lots = Shop::Get()->getLotService()->getLots2($game->getId(), $lotType->getId());
+            $lots->setActive(1);
+
+            while ($x = $lots->getNext()) {
+                $lotsArray[] = array(
+                    'id' => $x->getId(),
+                    'price' => $x->getPrice(),
+                    'count' => $x->getCount(),
+                    'userId' => $x->getUserId(),
+                    'userName' => $x->getUserName(),
+                    'description' => $x->getDescription(),
+                    'filters' => array(
+                        $x->getFilterId1() => $x->getFilterValue1(),
+                        $x->getFilterId2() => $x->getFilterValue2(),
+                        $x->getFilterId3() => $x->getFilterValue3(),
+                        $x->getFilterId4() => $x->getFilterValue4(),
+                        $x->getFilterId5() => $x->getFilterValue5(),
+                    )
+                );
+            }
+
+            $this->setValue('lotsArray', $lotsArray);
+
+
             Engine::GetHTMLHead()->setTitle(
                 htmlspecialchars($game->getName() . " " .$lotType->getName())
             );

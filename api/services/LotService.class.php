@@ -34,6 +34,15 @@ class LotService extends ServiceUtils_AbstractService {
         }
     }
 
+    public function getLots2($gameId, $lotTypeId) {
+        $lot = new Lot();
+
+        $lot->setGameId($gameId);
+        $lot->setLotTypeId($lotTypeId);
+
+        return $lot;
+    }
+
     public function getLots3($userId, $gameId, $lotTypeId) {
         $lot = new Lot();
 
@@ -45,7 +54,7 @@ class LotService extends ServiceUtils_AbstractService {
     }
 
     public function addLot(
-        $userId, $gameId, $lotTypeId, $active, $price, $count,
+        $userId, $userName, $gameId, $lotTypeId, $active, $price, $count,
         $filterId1, $filterValue1,
         $filterId2, $filterValue2,
         $filterId3, $filterValue3,
@@ -75,6 +84,7 @@ class LotService extends ServiceUtils_AbstractService {
                 $lot->setActive($active);
                 $lot->setPrice($price);
                 $lot->setCount($count);
+                $lot->setUserName($userName);
                 $lot->update();
             }
 
@@ -83,6 +93,7 @@ class LotService extends ServiceUtils_AbstractService {
                 $lot->setActive($active);
                 $lot->setPrice($price);
                 $lot->setCount($count);
+                $lot->setUserName($userName);
                 $lot->insert();
             }
         }

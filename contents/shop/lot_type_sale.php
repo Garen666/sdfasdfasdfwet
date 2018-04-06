@@ -60,6 +60,7 @@ class lot_type_sale extends Engine_Class {
 
                         Shop::Get()->getLotService()->addLot(
                             $user->getId(),
+                            $user->makeName(),
                             $game->getId(),
                             $lotType->getId(),
                             $value,

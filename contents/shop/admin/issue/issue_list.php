@@ -255,7 +255,7 @@ class issue_list extends Engine_Class {
         $table->addField($field);
 
         $this->setValue('table', $table->render());
-        $this->setValue('dataCount', $datasource->getSQLObject()->getCount());
+        $this->setValue('dataCount', $datasource->getSQLObject()->getCountDB());
 
         // получаем id всех отсортированных пользователей
         $connection = ConnectionManager::Get()->getConnectionDatabase();
