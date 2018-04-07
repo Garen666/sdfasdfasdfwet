@@ -27,6 +27,14 @@ class LotType extends XLotType {
         );
     }
 
+    public function makeUrlSale() {
+        if ($this->getType() == 'money') {
+            return Engine::Get()->GetLinkMaker()->makeURLByContentIDParam('lot-type-sale', $this->getId(), 'id');
+        } else {
+            return Engine::Get()->GetLinkMaker()->makeURLByContentIDParam('lot-type-sale-other', $this->getId(), 'id');
+        }
+    }
+
     public function getAllFilterName() {
         $gameFilter = new XGameFilter();
         $gameFilter->addWhereQuery('`id` IN(SELECT `gameFilterId` FROM `gameLotTypeFilter` WHERE `lotTypeId` = '.$this->getId().')');
@@ -60,7 +68,7 @@ class LotType extends XLotType {
             return $fullurl.$url;
         } else {
             return $fullurl.Engine::GetLinkMaker()->makeURLByContentIDParam(
-                'shop-lot-type',
+                'lot-type',
                 $this->getId()
             );
         }

@@ -30,16 +30,11 @@ class lot_type_sale extends Engine_Class {
 
 
                 if ($lotType->getType() == "money") {
-                    Shop::Get()->getLotService()->updateMinSum($user->getId(), $lotType->getId(), $this->getArgumentSecure('minsum'));
-
-                    $gameFilter = $lotType->getAllFilterName();
-                    $gameFilterNameArray = array();
-                    while ($x = $gameFilter->getNext()) {
-                        $gameFilterNameArray[$x->getId()] = $x->getId();
-                    }
-
-
-                    ksort($gameFilterNameArray);
+                    Shop::Get()->getLotService()->updateMinSum(
+                        $user->getId(),
+                        $lotType->getId(),
+                        $this->getArgumentSecure('minsum')
+                    );
 
                     $filters = array();
                     $filters[0] = array();
@@ -47,9 +42,12 @@ class lot_type_sale extends Engine_Class {
                     $filtersId = array();
                     $filtersId[0] = array();
 
-                    foreach ($gameFilterNameArray as $filterId) {
-                        $filters[] = $this->getArgumentSecure('filter'.$filterId);
-                        $filtersId[] = $filterId;
+
+                    foreach ($this->getArguments() as $key => $value) {
+                        if (strpos($key, 'filter') === 0) {
+                            $filters[] = $value;
+                            $filtersId[] = str_replace('filter', '', $key);
+                        }
                     }
 
                     $actives = $this->getArgumentSecure('active');
@@ -66,6 +64,8 @@ class lot_type_sale extends Engine_Class {
                             $value,
                             @$prices[$key],
                             @$counts[$key],
+                            '',
+                            '',
                             @$filtersId[1],
                             @$filters[1][$key],
                             @$filtersId[2],

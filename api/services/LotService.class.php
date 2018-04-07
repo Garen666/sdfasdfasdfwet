@@ -54,19 +54,42 @@ class LotService extends ServiceUtils_AbstractService {
     }
 
     public function addLot(
-        $userId, $userName, $gameId, $lotTypeId, $active, $price, $count,
+        $userId, $userName, $gameId, $lotTypeId, $active, $price, $count, $descriptionShort, $description,
         $filterId1, $filterValue1,
         $filterId2, $filterValue2,
         $filterId3, $filterValue3,
         $filterId4, $filterValue4,
         $filterId5, $filterValue5
     ) {
+
+        $filtersArray = array(
+            $filterId1 => $filterValue1,
+            $filterId2 => $filterValue2,
+            $filterId3 => $filterValue3,
+            $filterId4 => $filterValue4,
+            $filterId5 => $filterValue5,
+        );
+
+        foreach ($filtersArray as $key => $value) {
+            if (!$key) {
+                unset($filtersArray[$key]);
+            }
+        }
+
+        ksort($filtersArray);
+
         $lot = new Lot();
         $lot->setUserId($userId);
         $lot->setGameId($gameId);
         $lot->setLotTypeId($lotTypeId);
 
-        $lot->setFilterId1($filterId1);
+        $index = 1;
+        foreach ($filtersArray as $key => $value) {
+            $lot->setField('filterId' . $index, $key);
+            $lot->setField('filterValue' . $index, $value);
+            $index++;
+        }
+        /*$lot->setFilterId1($filterId1);
         $lot->setFilterValue1($filterValue1);
         $lot->setFilterId2($filterId2);
         $lot->setFilterValue2($filterValue2);
@@ -75,12 +98,14 @@ class LotService extends ServiceUtils_AbstractService {
         $lot->setFilterId4($filterId4);
         $lot->setFilterValue4($filterValue4);
         $lot->setFilterId5($filterId5);
-        $lot->setFilterValue5($filterValue5);
+        $lot->setFilterValue5($filterValue5);*/
 
         if ($lot->select()) {
             if (!$active && !$price && !$count) {
                 $lot->delete();
             } else {
+                $lot->setDescription($description);
+                $lot->setDescriptionShort($descriptionShort);
                 $lot->setActive($active);
                 $lot->setPrice($price);
                 $lot->setCount($count);
@@ -90,6 +115,8 @@ class LotService extends ServiceUtils_AbstractService {
 
         } else {
             if ($active || $price || $count) {
+                $lot->setDescription($description);
+                $lot->setDescriptionShort($descriptionShort);
                 $lot->setActive($active);
                 $lot->setPrice($price);
                 $lot->setCount($count);

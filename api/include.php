@@ -192,6 +192,7 @@ if (PackageLoader::Get()->getMode('development') && isset($connection)) {
     $table->addField('filterValue4', 'varchar(100)');
     $table->addField('filterId5', 'int(11)');
     $table->addField('filterValue5', 'varchar(100)');
+    $table->addField('descriptionShort', 'varchar(255)');
     $table->addField('description', 'varchar(600)');
 
 

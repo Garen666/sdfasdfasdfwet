@@ -1,0 +1,48 @@
+<div class="os-popup-block js-popup-sale-other" style="display: none;">
+    <div class="dark" onclick="popupClose('.js-popup-sale-other');"></div>
+    <div class="popup-block">
+        <div class="head">
+            <a href="javascript: void(0);" class="close" onclick="popupClose('.js-popup-sale-other');">&nbsp;</a>
+            Добавление предложения
+        </div>
+        <form method="post">
+            <div class="body">
+                <table>
+                    {|foreach from=$gameFilterNameArray item="gfn"|}
+                        <tr>
+                            <td>{|$gfn.name|}</td>
+                            <td>
+                                <select name="filter{|$gfn.id|}">
+                                    <option value="0">---</option>
+                                    {|foreach from=$gameFilterValueArray[$gfn.id] item="gfv"|}
+                                        <option value="{|$gfv.value|}">{|$gfv.value|}</option>
+                                    {|/foreach|}
+                                </select>
+                            </td>
+                        </tr>
+                    {|/foreach|}
+                    <tr>
+                        <td>Краткое описание</td>
+                        <td><input name="descriptionshort" type="text" /></td>
+                    </tr>
+                    <tr>
+                        <td>Описание</td>
+                        <td><input name="description" type="text"></td>
+                    </tr>
+                    <tr>
+                        <td>Цена</td>
+                        <td><input name="price" type="text"></td>
+                    </tr>
+                    <tr>
+                        <td>Активное</td>
+                        <td><input name="active" type="checkbox" value="1"></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="foot">
+                <input type="button" value="Сохранить" class="os-submit js-popup-sale-other-save" />
+                <div class="clear"></div>
+            </div>
+        </form>
+    </div>
+</div>

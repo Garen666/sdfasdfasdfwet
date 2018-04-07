@@ -412,11 +412,11 @@ Engine::GetContentDataSource()->registerContent('shop-game', array(
     'moveas' => 'content',
 ), 'override');
 
-Engine::GetContentDataSource()->registerContent('shop-lot-type', array(
+Engine::GetContentDataSource()->registerContent('lot-type', array(
     'url' => '/lot/type/{id}/',
-    'filehtml' => dirname(__FILE__).'/shop/shop_lot_type.html',
-    'filephp' => dirname(__FILE__).'/shop/shop_lot_type.php',
-    'filejs' => dirname(__FILE__).'/shop/shop_lot_type.js',
+    'filehtml' => dirname(__FILE__).'/shop/lot_type.html',
+    'filephp' => dirname(__FILE__).'/shop/lot_type.php',
+    'filejs' => dirname(__FILE__).'/shop/lot_type.js',
     'moveto' => 'shop-tpl',
     'moveas' => 'content',
     'cache' => array('ttl' => 3600, 'type' => 'page', 'modifiers' => array('url', 'no-auth')),
@@ -430,6 +430,27 @@ Engine::GetContentDataSource()->registerContent('lot-type-sale', array(
     'moveto' => 'shop-tpl',
     'moveas' => 'content',
     'cache' => array('ttl' => 3600, 'type' => 'page', 'modifiers' => array('url', 'no-auth')),
+), 'override');
+
+Engine::GetContentDataSource()->registerContent('lot-type-sale-other', array(
+    'url' => '/lot/type/{id}/sale/other/',
+    'filehtml' => dirname(__FILE__).'/shop/lot_type_sale_other.html',
+    'filephp' => dirname(__FILE__).'/shop/lot_type_sale_other.php',
+    'filejs' => dirname(__FILE__).'/shop/lot_type_sale_other.js',
+    'moveto' => 'shop-tpl',
+    'moveas' => 'content',
+    'cache' => array('ttl' => 3600, 'type' => 'page', 'modifiers' => array('url', 'no-auth')),
+), 'override');
+
+Engine::GetContentDataSource()->registerContent('lot-type-sale-other-popup-ajax', array(
+    'url' => '/lot/type/{id}/sale/other/popup/ajax/',
+    'filehtml' => dirname(__FILE__).'/shop/lot_type_sale_other_popup_ajax.html',
+    'filephp' => dirname(__FILE__).'/shop/lot_type_sale_other_popup_ajax.php',
+), 'override');
+
+Engine::GetContentDataSource()->registerContent('lot-type-sale-other-popup-save-ajax', array(
+    'url' => '/lot/type/{id}/sale/other/popup/save/ajax/',
+    'filephp' => dirname(__FILE__).'/shop/lot_type_sale_other_popup_save_ajax.php',
 ), 'override');
 
 

@@ -1,5 +1,5 @@
 <?php
-class shop_lot_type extends Engine_Class {
+class lot_type extends Engine_Class {
 
     public function process() {
         try {
@@ -96,6 +96,7 @@ class shop_lot_type extends Engine_Class {
             }
 
             $this->setValue('lotsArray', $lotsArray);
+            $this->setValue('saleUrl', $lotType->makeUrlSale());
 
 
             Engine::GetHTMLHead()->setTitle(
