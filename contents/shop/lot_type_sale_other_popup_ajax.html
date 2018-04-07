@@ -15,7 +15,7 @@
                                 <select name="filter{|$gfn.id|}">
                                     <option value="0">---</option>
                                     {|foreach from=$gameFilterValueArray[$gfn.id] item="gfv"|}
-                                        <option value="{|$gfv.value|}">{|$gfv.value|}</option>
+                                        <option value="{|$gfv.value|}" {|if $lotFilterSelected[$gfn.id] == $gfv.value|} selected {|/if|}>{|$gfv.value|}</option>
                                     {|/foreach|}
                                 </select>
                             </td>
@@ -23,24 +23,28 @@
                     {|/foreach|}
                     <tr>
                         <td>Краткое описание</td>
-                        <td><input name="descriptionshort" type="text" /></td>
+                        <td><input name="descriptionshort" type="text"  value="{|$descriptionShort|}"/></td>
                     </tr>
                     <tr>
                         <td>Описание</td>
-                        <td><input name="description" type="text"></td>
+                        <td><input name="description" type="text" value="{|$description|}"></td>
                     </tr>
                     <tr>
                         <td>Цена</td>
-                        <td><input name="price" type="text"></td>
+                        <td><input name="price" type="text" value="{|$price|}"></td>
                     </tr>
                     <tr>
                         <td>Активное</td>
-                        <td><input name="active" type="checkbox" value="1"></td>
+                        <td><input name="active" type="checkbox" value="1" {|if $active|} checked {|/if|}></td>
                     </tr>
                 </table>
             </div>
             <div class="foot">
                 <input type="button" value="Сохранить" class="os-submit js-popup-sale-other-save" />
+                {|if $lotId|}
+                    <input type="button button-red" value="Удалить" class="os-submit js-popup-sale-other-delete" />
+                {|/if|}
+                <input type="hidden" id="js-lot-id" name="lotId" value="{|$lotId|}">
                 <div class="clear"></div>
             </div>
         </form>

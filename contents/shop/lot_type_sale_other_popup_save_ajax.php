@@ -3,6 +3,11 @@ class lot_type_sale_other_popup_save_ajax extends Engine_Class {
 
     public function process() {
         try {
+            if ($this->getArgumentSecure('deleted')) {
+                Shop::Get()->getLotService()->deletedLot($this->getArgumentSecure('deleted'));
+                exit;
+            }
+
             $data = $this->getArgumentSecure('data');
 
 
@@ -27,8 +32,8 @@ class lot_type_sale_other_popup_save_ajax extends Engine_Class {
             Shop::Get()->getLotService()->addLot(
                 $user->getId(),
                 $user->makeName(),
-                $lotType->getId(),
                 $lotType->getGameId(),
+                $lotType->getId(),
                 @$argumentsArray['active'],
                 @$argumentsArray['price'],
                 @$argumentsArray['count'],

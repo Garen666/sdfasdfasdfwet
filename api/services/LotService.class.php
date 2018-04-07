@@ -53,6 +53,11 @@ class LotService extends ServiceUtils_AbstractService {
         return $lot;
     }
 
+    public function deletedLot($lotId) {
+        $lot = $this->getLotByID($lotId);
+        $lot->delete();
+    }
+
     public function addLot(
         $userId, $userName, $gameId, $lotTypeId, $active, $price, $count, $descriptionShort, $description,
         $filterId1, $filterValue1,

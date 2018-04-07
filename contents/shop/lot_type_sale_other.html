@@ -2,6 +2,40 @@
 <h3>{|$description|}</h3>
 <a href="{|$lotTypeUrl|}">Вернутся назад</a>
 
+<div>
+    <table>
+        <tr>
+            {|foreach from=$gameFilterNameArray item="gfm"|}
+            {|if !$gfm.additionally|}
+            <th>{|$gfm.name|}</th>
+            {|/if|}
+            {|/foreach|}
+
+            {|if $mustDescription|}
+            <th>Описание</th>
+            {|/if|}
+            <th>Наличие</th>
+            <th>Цена</th>
+        </tr>
+
+        {|foreach from=$lotsArray item="lot"|}
+            <tr class="js-lot-item" data-id="{|$lot.id|}">
+                {|foreach from=$gameFilterNameArray item="gfm"|}
+                    {|if !$gfm.additionally|}
+                        <td>{|$lot.filters[$gfm.id]|}</td>
+                    {|/if|}
+                {|/foreach|}
+                {|if $mustDescription|}
+                    <td>{|$lot.description|}</td>
+                {|/if|}
+                <td>{|$lot.count|}</td>
+                <td>{|$lot.price|}</td>
+            </tr>
+        {|/foreach|}
+
+    </table>
+</div>
+
 <form id="js-lot-save" method="post">
     <button type="button" class="js-button-add">Добавить предложение</button>
 

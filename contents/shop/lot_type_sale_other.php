@@ -26,6 +26,52 @@ class lot_type_sale_other extends Engine_Class {
                 exit();
             }*/
 
+            $gameFilter = $lotType->getAllFilterName();
+            $gameFilterNameArray = array();
+            while ($x = $gameFilter->getNext()) {
+                $gameFilterNameArray[] = array(
+                    'id' => $x->getId(),
+                    'name' => $x->getName(),
+                    'additionally' => $x->getAdditionally()
+                );
+            }
+
+            $gameFilterValue = $game->getAllFilterValue();
+            $gameFilterValueArray = array();
+
+            while ($x = $gameFilterValue->getNext()) {
+                $gameFilterValueArray[$x->getGameFilterId()][] = array(
+                    'id' => $x->getId(),
+                    'value' => $x->getValue()
+                );
+            }
+
+            $this->setValue('gameFilterNameArray', $gameFilterNameArray);
+            $this->setValue('gameFilterValueArray', $gameFilterValueArray);
+
+            $lots = Shop::Get()->getLotService()->getLots3($user->getId(), $game->getId(), $lotType->getId());
+
+            while ($x = $lots->getNext()) {
+                $lotsArray[] = array(
+                    'id' => $x->getId(),
+                    'price' => $x->getPrice(),
+                    'count' => $x->getCount(),
+                    'userId' => $x->getUserId(),
+                    'userName' => $x->getUserName(),
+                    'description' => $x->getDescription(),
+                    'filters' => array(
+                        $x->getFilterId1() => $x->getFilterValue1(),
+                        $x->getFilterId2() => $x->getFilterValue2(),
+                        $x->getFilterId3() => $x->getFilterValue3(),
+                        $x->getFilterId4() => $x->getFilterValue4(),
+                        $x->getFilterId5() => $x->getFilterValue5(),
+                    )
+                );
+
+                $this->setValue('lotsArray', $lotsArray);
+
+            }
+
 
             if ($this->getArgumentSecure('save')) {
 
