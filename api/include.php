@@ -224,6 +224,13 @@ if (PackageLoader::Get()->getMode('development') && isset($connection)) {
     $table->addField('orderId', 'int(11)');
     $table->addField('sum', 'decimal(15,2)');
 
+    // Способы оплаты
+    $table = SQLObject_Config::Get()->addClass('XPaymentList', 'paymentsList');
+    $table->addField('id', 'int(11)', 'auto_increment');
+    $table->addIndexPrimary('id');
+    $table->addField('name', 'varchar(255)');
+    $table->addField('hidden', 'tinyint(1)');
+
 
 
 
@@ -768,10 +775,6 @@ $language = Engine::Get()->getConfigFieldSecure('site-language');
 // задаем перевода для пакетов
 DateTime_Translate::Get()->setLanguage($language);
 Forms_Translate::Get()->setLanguage($language);
-
-// загружаем переводы для shop'a
-$phpFile = PackageLoader::Get()->getProjectPath().'/media/translate/'.$language.'.php';
-Shop::Get()->getTranslateService()->addTranslateFromPHP($phpFile);
 
 // добавляем cron-события
 Events::Get()->addEvent('afterCronMinute', new Events_Event());

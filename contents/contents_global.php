@@ -453,5 +453,22 @@ Engine::GetContentDataSource()->registerContent('lot-type-sale-other-popup-save-
     'filephp' => dirname(__FILE__).'/shop/lot_type_sale_other_popup_save_ajax.php',
 ), 'override');
 
+Engine::GetContentDataSource()->registerContent('lot-order', array(
+    'url' => '/lot/{id}/order/',
+    'filehtml' => dirname(__FILE__).'/shop/lot_order.html',
+    'filephp' => dirname(__FILE__).'/shop/lot_order.php',
+    'filejs' => dirname(__FILE__).'/shop/lot_order.js',
+    'moveto' => 'shop-tpl',
+    'moveas' => 'content',
+    'cache' => array('ttl' => 3600, 'type' => 'page', 'modifiers' => array('url', 'no-auth')),
+), 'override');
+
+
+Engine::GetContentDataSource()->registerContent('send-message-ajax', array(
+    'url' => '/send/message/ajax/',
+    'filehtml' => dirname(__FILE__).'/shop/send_message_ajax.html',
+    'filephp' => dirname(__FILE__).'/shop/send_message_ajax.php',
+), 'override');
+
 
 

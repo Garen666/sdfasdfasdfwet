@@ -48,7 +48,7 @@
      </tr>
 
      {|foreach from=$lotsArray item="lot"|}
-         <tr>
+         <tr class="js-tr-lot-list" data-href="/lot/{|$lot.id|}/order/">
              {|foreach from=$gameFilterNameArray item="gfm"|}
                  {|if !$gfm.additionally|}
                     <td>{|$lot.filters[$gfm.id]|}</td>

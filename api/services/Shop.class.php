@@ -29,6 +29,34 @@ class Shop {
     }
 
     /**
+     * @return PaymentService
+     */
+    public function getPaymentService() {
+        return ServiceUtils::Get()->getService('payment');
+    }
+
+    /**
+     * @param string $service
+     */
+    public function setPaymentService($service) {
+        ServiceUtils::Get()->setService('payment', $service);
+    }
+
+    /**
+     * @return FilterService
+     */
+    public function getFilterService() {
+        return ServiceUtils::Get()->getService('filter');
+    }
+
+    /**
+     * @param string $service
+     */
+    public function setFilterService($service) {
+        ServiceUtils::Get()->setService('filter', $service);
+    }
+
+    /**
      * @return Shop_GameService
      */
     public function getGameService() {
@@ -184,21 +212,6 @@ class Shop {
     }
 
     /**
-     * @return Shop_BlockService
-     */
-    public function getBlockService() {
-        return ServiceUtils::Get()->getService('block');
-    }
-
-    /**
-     * @param string $service
-     */
-    public function setBlockService($service) {
-        return ServiceUtils::Get()->setService('block', $service);
-    }
-
-
-    /**
      * @return SEOService
      */
     public function getSEOService() {
@@ -210,20 +223,6 @@ class Shop {
      */
     public function setSEOService($service) {
         return ServiceUtils::Get()->setService('seo', $service);
-    }
-
-    /**
-     * @return Shop_TranslateFormService
-     */
-    public function getTranslateService() {
-        return ServiceUtils::Get()->getService('translate');
-    }
-
-    /**
-     * @param string $service
-     */
-    public function setTranslateService($service) {
-        return ServiceUtils::Get()->setService('translate', $service);
     }
 
     /**
@@ -246,13 +245,13 @@ class Shop {
         $this->setTextpageService('Shop_TextPageService');
         $this->setCurrencyService('Shop_CurrencyService');
         $this->setGuestbookService('Shop_GuestBookService');
-        $this->setBlockService('Shop_BlockService');
         $this->setSEOService('SEOService');
-        $this->setTranslateService('Shop_TranslateService');
         $this->setGameService('Shop_GameService');
         $this->setLotTypeService('LotTypeService');
         $this->setChatService('ChatService');
         $this->setLotService('LotService');
+        $this->setFilterService('FilterService');
+        $this->setPaymentService('PaymentService');
 
     }
 

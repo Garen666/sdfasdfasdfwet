@@ -15,18 +15,7 @@ class lot_type_sale_other_popup_ajax extends Engine_Class {
             $this->setValue('count', $lot->getCount());
             $this->setValue('active', $lot->getActive());
 
-            $lotFilterSelected = array();
-
-            for ($i = 1; $i<=5; $i++) {
-                $filterId = $lot->getField('filterId'.$i);
-                $filterValue = $lot->getField('filterValue'.$i);
-
-                if ($filterId && $filterValue) {
-                    $lotFilterSelected[$filterId] = $filterValue;
-                }
-            }
-
-            $this->setValue('lotFilterSelected', $lotFilterSelected);
+            $this->setValue('lotFilterSelected', $lot->getFiltersArray());
         }
 
         $gameFilter = $lotType->getAllFilterName();

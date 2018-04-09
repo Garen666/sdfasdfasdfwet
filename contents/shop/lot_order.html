@@ -1,0 +1,61 @@
+<h1>Оформление заказа</h1>
+
+<table>
+    <tr>
+        <td>Продавец</td>
+        <td>{|$lotUserName|}</td>
+    </tr>
+    <tr>
+        <td>Игра</td>
+        <td>{|$gameName|}</td>
+    </tr>
+    <tr>
+        <td>Валюта</td>
+        <td>{|$lotTypeName|}</td>
+    </tr>
+    {|foreach from=$filtersArray item="filter"|}
+        <tr>
+            <td>{|$filter.name|}</td>
+            <td>{|$filter.value|}</td>
+        </tr>
+    {|/foreach|}
+    <tr>
+        <td>Наличие</td>
+        <td>{|$lotCount|}</td>
+    </tr>
+</table>
+
+<br>
+Способ оплаты:
+<br>
+<select>
+    <option value="">---</option>
+    {|foreach from=$paymentsArray item="payment"|}
+        <option value="{|$payment.id|}">{|$payment.name|}</option>
+    {|/foreach|}
+</select>
+
+<br>
+<br>
+Заплачу / Получу:
+<br>
+<input type="text"> <=> <input type="text">
+<br>
+<br>
+Имя персонажа:
+<br>
+<input type="text">
+<br>
+<br>
+<button type="button">Купить</button>
+<div>
+    <div>Чат</div>
+    <div>
+        <div></div>
+        <div>
+            <textarea placeholder="Введите сообщение"></textarea>
+            <br>
+            <button id="js-send-message">Отпрвить</button>
+        </div>
+    </div>
+</div>

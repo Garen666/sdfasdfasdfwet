@@ -40,8 +40,6 @@ class Shop_ContentValueObserver implements Events_IEventObserver {
         }
 
         $contentObject->setValue('currency', $this->_currency);
-
-        $contentObject->addValuesArray(Shop::Get()->getTranslateService()->getTranslateArray());
     }
 
     private $_currency = false;
